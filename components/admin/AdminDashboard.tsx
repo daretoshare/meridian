@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { adminLogout } from '@/actions/admin'
 import RegistrationsTable from './RegistrationsTable'
 import ScheduleManager from './ScheduleManager'
-import EventCalendarView from './EventCalendarView'
+import EventScheduleView from './EventScheduleView'
 import type { RegistrationWithDetails, EventWithCount, Event } from '@/types/database'
 import type { SiteContent, ContentLocation } from '@/lib/content'
 import {
@@ -145,7 +145,7 @@ export default function AdminDashboard({ user, site, locations, registrations, e
           ) : activeTab === 'schedule' ? (
             <ScheduleManager events={events} locations={locations} />
           ) : (
-            <EventCalendarView events={events} registrations={registrations} />
+            <EventScheduleView events={events} registrations={registrations} />
           )}
         </div>
       </main>

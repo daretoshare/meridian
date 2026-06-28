@@ -32,6 +32,28 @@ export async function adminLogout() {
   redirect('/admin/login')
 }
 
+export interface NewEvent {
+  name: string
+  age_group: string
+  slot_time: string
+  location: string
+  max_participants: number
+  description: string
+}
+
+export async function createEvent(event: NewEvent) {
+  const supabase = await createAdminSupabaseClient() as any
+  // Generate a sequential-style ID based on timestamp
+  const id = `e${Date.now().toString(16).padStart(8, '0')}-0000-0000-0000-${Math.random().toString(16).slice(2).padStart(12, '0')}`
+  const { error } = await supabase
+    .from('events')
+    .insert({ ...event, id, is_active: true })
+
+  if (error) return { success: false, message: error.message }
+  revalidatePath('/admin')
+  return { success: true, message: 'Event created.', id }
+}
+
 export interface EventEdits {
   slot_time?: string
   location?: string
