@@ -3,6 +3,7 @@
 import { createAdminSupabaseClient, createServerSupabaseClient } from '@/lib/supabaseServer'
 import { adminLoginSchema } from '@/lib/validations'
 import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 
 export async function adminLogin(formData: FormData) {
   const raw = {
@@ -48,6 +49,7 @@ export async function updateEvent(eventId: string, updates: EventEdits) {
     .eq('id', eventId)
 
   if (error) return { success: false, message: error.message }
+  revalidatePath('/admin')
   return { success: true, message: 'Event updated.' }
 }
 
@@ -63,5 +65,6 @@ export async function updateRegistrationStatus(
     .eq('id', registrationId)
 
   if (error) return { success: false, message: error.message }
+  revalidatePath('/admin')
   return { success: true, message: 'Status updated.' }
 }
