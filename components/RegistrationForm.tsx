@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useMemo } from 'react'
+import { useState, useTransition, useMemo, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registrationSchema, type RegistrationFormData } from '@/lib/validations'
@@ -40,12 +40,18 @@ export default function RegistrationForm({ events, site }: Props) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
     defaultValues: { event_ids: [] },
   })
+
+  // Keep the hidden event_ids field in sync so Zod validation sees the real selection
+  useEffect(() => {
+    setValue('event_ids', selectedEvents, { shouldValidate: false })
+  }, [selectedEvents, setValue])
 
   // Build a map of eventId → activity name for conflict detection
   const eventCategoryMap = useMemo(
@@ -68,7 +74,7 @@ export default function RegistrationForm({ events, site }: Props) {
   const onSubmit = (data: RegistrationFormData) => {
     startTransition(async () => {
       setResult(null)
-      const res = await registerForEvents({ ...data, event_ids: selectedEvents })
+      const res = await registerForEvents(data)
       setResult(res)
       if (res.success) {
         reset()
