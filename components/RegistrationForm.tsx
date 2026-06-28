@@ -39,6 +39,7 @@ export default function RegistrationForm({ events, site }: Props) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([])
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [submittedVals, setSubmittedVals] = useState<Partial<RegistrationFormData>>({})
 
   const {
     register,
@@ -68,7 +69,7 @@ export default function RegistrationForm({ events, site }: Props) {
   }
 
   const downloadReceiptPDF = (regs: RegistrationSummary[]) => {
-    const vals = getValues()
+    const vals = submittedVals
     const now = new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
     const rows = regs.map((r) => `
       <tr>
@@ -157,11 +158,13 @@ export default function RegistrationForm({ events, site }: Props) {
       return
     }
     setFieldErrors({})
+    const snapshot = getValues()
     startTransition(async () => {
       setResult(null)
       const res = await registerForEvents(parsed.data)
       setResult(res)
       if (res.success) {
+        setSubmittedVals(snapshot)
         reset()
         setSelectedEvents([])
       }
