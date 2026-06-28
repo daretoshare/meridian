@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useTransition, useMemo, useEffect } from 'react'
+import { useState, useTransition, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { registrationSchema, type RegistrationFormData } from '@/lib/validations'
 import { registerForEvents } from '@/actions/register'
 import type { Event } from '@/types/database'
@@ -37,21 +36,16 @@ export default function RegistrationForm({ events, site }: Props) {
   const [result, setResult] = useState<{ success: boolean; message: string; detail?: string } | null>(null)
   const [selectedEvents, setSelectedEvents] = useState<string[]>([])
 
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
   const {
     register,
-    handleSubmit,
-    setValue,
+    getValues,
     formState: { errors },
     reset,
   } = useForm<RegistrationFormData>({
-    resolver: zodResolver(registrationSchema),
     defaultValues: { event_ids: [] },
   })
-
-  // Keep the hidden event_ids field in sync so Zod validation sees the real selection
-  useEffect(() => {
-    setValue('event_ids', selectedEvents, { shouldValidate: false })
-  }, [selectedEvents, setValue])
 
   // Build a map of eventId → activity name for conflict detection
   const eventCategoryMap = useMemo(
@@ -71,10 +65,21 @@ export default function RegistrationForm({ events, site }: Props) {
     })
   }
 
-  const onSubmit = (data: RegistrationFormData) => {
+  const handleSubmitClick = () => {
+    const raw = { ...getValues(), event_ids: selectedEvents }
+    const parsed = registrationSchema.safeParse(raw)
+    if (!parsed.success) {
+      const errs: Record<string, string> = {}
+      for (const [key, msgs] of Object.entries(parsed.error.flatten().fieldErrors)) {
+        errs[key] = (msgs as string[])[0] ?? 'Invalid'
+      }
+      setFieldErrors(errs)
+      return
+    }
+    setFieldErrors({})
     startTransition(async () => {
       setResult(null)
-      const res = await registerForEvents(data)
+      const res = await registerForEvents(parsed.data)
       setResult(res)
       if (res.success) {
         reset()
@@ -91,7 +96,7 @@ export default function RegistrationForm({ events, site }: Props) {
   }, {})
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
       {/* ── Personal Details ── */}
       <section>
         <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -109,7 +114,7 @@ export default function RegistrationForm({ events, site }: Props) {
               placeholder="Rajesh Kumar"
               className="input-field"
             />
-            {errors.full_name && <FieldError message={errors.full_name.message!} />}
+            {(fieldErrors.full_name || errors.full_name) && <FieldError message={fieldErrors.full_name ?? errors.full_name!.message!} />}
           </div>
 
           {/* Tower */}
@@ -126,7 +131,7 @@ export default function RegistrationForm({ events, site }: Props) {
                 </option>
               ))}
             </select>
-            {errors.tower && <FieldError message={errors.tower.message!} />}
+            {(fieldErrors.tower || errors.tower) && <FieldError message={fieldErrors.tower ?? errors.tower!.message!} />}
           </div>
 
           {/* Apartment Number */}
@@ -141,7 +146,7 @@ export default function RegistrationForm({ events, site }: Props) {
               className="input-field"
             />
             <p className="text-xs text-slate-400 mt-1">5 or 6 digits, starting with 5 or 6</p>
-            {errors.apartment_number && <FieldError message={errors.apartment_number.message!} />}
+            {(fieldErrors.apartment_number || errors.apartment_number) && <FieldError message={fieldErrors.apartment_number ?? errors.apartment_number!.message!} />}
           </div>
 
           {/* Phone */}
@@ -161,7 +166,7 @@ export default function RegistrationForm({ events, site }: Props) {
                 className="input-field rounded-l-none"
               />
             </div>
-            {errors.phone_number && <FieldError message={errors.phone_number.message!} />}
+            {(fieldErrors.phone_number || errors.phone_number) && <FieldError message={fieldErrors.phone_number ?? errors.phone_number!.message!} />}
           </div>
 
           {/* Email */}
@@ -176,7 +181,7 @@ export default function RegistrationForm({ events, site }: Props) {
               placeholder="rajesh@example.com"
               className="input-field"
             />
-            {errors.email && <FieldError message={errors.email.message!} />}
+            {(fieldErrors.email || errors.email) && <FieldError message={fieldErrors.email ?? errors.email!.message!} />}
           </div>
         </div>
       </section>
@@ -281,8 +286,9 @@ export default function RegistrationForm({ events, site }: Props) {
 
       {/* ── Submit ── */}
       <button
-        type="submit"
-        disabled={isPending || selectedEvents.length === 0 || events.length === 0}
+        type="button"
+        onClick={handleSubmitClick}
+        disabled={isPending || events.length === 0}
         className="
           w-full py-3.5 px-6 rounded-xl font-semibold text-white
           bg-gradient-to-r from-orange-500 to-orange-600
