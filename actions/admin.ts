@@ -77,6 +77,28 @@ export async function updateEvent(eventId: string, updates: EventEdits) {
   return { success: true, message: 'Event updated.' }
 }
 
+export async function deleteEvent(eventId: string) {
+  const supabase = await createAdminSupabaseClient() as any
+
+  // Block deletion if registrations exist — suggest hiding instead
+  const { count } = await supabase
+    .from('registrations')
+    .select('id', { count: 'exact', head: true })
+    .eq('event_id', eventId)
+
+  if (count && count > 0) {
+    return {
+      success: false,
+      message: `Cannot delete — ${count} registration(s) exist for this event. Use the toggle to hide it instead.`,
+    }
+  }
+
+  const { error } = await supabase.from('events').delete().eq('id', eventId)
+  if (error) return { success: false, message: error.message }
+  revalidatePath('/admin')
+  return { success: true, message: 'Event deleted.' }
+}
+
 export async function updateRegistrationStatus(
   registrationId: string,
   status: 'confirmed' | 'waitlisted' | 'cancelled'

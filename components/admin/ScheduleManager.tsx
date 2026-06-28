@@ -1,13 +1,13 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { updateEvent, createEvent } from '@/actions/admin'
+import { updateEvent, createEvent, deleteEvent } from '@/actions/admin'
 import type { EventEdits } from '@/actions/admin'
 import type { EventWithCount } from '@/types/database'
 import type { ContentLocation } from '@/lib/content'
 import {
   Edit2, Check, X, MapPin, Clock, Users, AlertTriangle,
-  FileText, ToggleLeft, ToggleRight, ChevronDown, Plus, Info,
+  FileText, ToggleLeft, ToggleRight, ChevronDown, Plus, Info, Trash2,
 } from 'lucide-react'
 
 const AGE_GROUPS = ['children', 'teens', 'adults', 'seniors', 'all'] as const
@@ -45,6 +45,9 @@ export default function ScheduleManager({ events, locations }: Props) {
   const [newEvent, setNewEvent] = useState({ ...BLANK_NEW })
   const [addError, setAddError]   = useState<string | null>(null)
   const [addSuccess, setAddSuccess] = useState(false)
+
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   // ── Edit existing ──────────────────────────────────────────────────────────
   const startEdit = (event: EventWithCount) => {
@@ -87,15 +90,43 @@ export default function ScheduleManager({ events, locations }: Props) {
   const set = (field: keyof EditState, value: string | number | boolean) =>
     setEditValues(v => ({ ...v, [field]: value }))
 
+  // ── Delete ─────────────────────────────────────────────────────────────────
+  const handleDelete = (eventId: string) => {
+    setDeleteError(null)
+    startTransition(async () => {
+      const res = await deleteEvent(eventId)
+      if (res.success) {
+        setConfirmDeleteId(null)
+      } else {
+        setDeleteError(res.message)
+        setConfirmDeleteId(null)
+      }
+    })
+  }
+
   // ── Add new event ──────────────────────────────────────────────────────────
   const setNew = (field: keyof typeof BLANK_NEW, value: string | number) =>
     setNewEvent(v => ({ ...v, [field]: value }))
 
   const submitNew = () => {
     if (!newEvent.name.trim())      { setAddError('Event name is required.'); return }
+    if (!newEvent.event_date)       { setAddError('Date is required.'); return }
     if (!newEvent.slot_time.trim()) { setAddError('Time slot is required.'); return }
     if (!newEvent.location.trim())  { setAddError('Location is required.'); return }
     if (newEvent.max_participants < 1) { setAddError('Capacity must be at least 1.'); return }
+
+    // Client-side duplicate check
+    const duplicate = events.find(
+      e => e.name.trim().toLowerCase() === newEvent.name.trim().toLowerCase() &&
+           e.age_group === newEvent.age_group &&
+           (e as any).event_date === newEvent.event_date
+    )
+    if (duplicate) {
+      setAddError(
+        `"${newEvent.name}" for ${newEvent.age_group} already exists on this date (${duplicate.slot_time}). Each age group can only have one slot per day.`
+      )
+      return
+    }
     setAddError(null)
     startTransition(async () => {
       const res = await createEvent({
@@ -292,6 +323,69 @@ export default function ScheduleManager({ events, locations }: Props) {
         </div>
       )}
 
+      {/* ── Delete error banner ── */}
+      {deleteError && (
+        <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
+          <AlertTriangle size={15} className="shrink-0 mt-0.5" />
+          <span>{deleteError}</span>
+          <button onClick={() => setDeleteError(null)} className="ml-auto text-red-400 hover:text-red-600"><X size={14} /></button>
+        </div>
+      )}
+
+      {/* ── Delete confirmation modal ── */}
+      {confirmDeleteId && (() => {
+        const target = events.find(e => e.id === confirmDeleteId)
+        const regCount = target?.registrations[0]?.count ?? 0
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 max-w-sm w-full space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                  <Trash2 size={18} className="text-red-600" />
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-800">Delete event?</p>
+                  <p className="text-sm text-slate-500 mt-0.5">
+                    {target?.name} · {target?.age_group} · {(target as any)?.event_date ?? 'no date'}
+                  </p>
+                </div>
+              </div>
+
+              {regCount > 0 ? (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800 flex items-start gap-2">
+                  <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+                  <span>
+                    This event has <strong>{regCount} registration(s)</strong>. It cannot be deleted — use the toggle to hide it instead.
+                  </span>
+                </div>
+              ) : (
+                <p className="text-sm text-slate-500">
+                  This event has no registrations and will be permanently removed. This cannot be undone.
+                </p>
+              )}
+
+              <div className="flex gap-2 justify-end">
+                <button
+                  onClick={() => setConfirmDeleteId(null)}
+                  className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                {regCount === 0 && (
+                  <button
+                    onClick={() => handleDelete(confirmDeleteId)}
+                    disabled={isPending}
+                    className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 disabled:opacity-50 rounded-lg transition-colors"
+                  >
+                    {isPending ? 'Deleting…' : 'Delete permanently'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
       {/* ── Existing events grid ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {events.map((event) => {
@@ -334,9 +428,18 @@ export default function ScheduleManager({ events, locations }: Props) {
                     {isActive ? <ToggleRight size={20} className="text-green-500" /> : <ToggleLeft size={20} />}
                   </button>
                   {!isEditingThis ? (
-                    <button onClick={() => startEdit(event)} className="p-2 rounded-lg text-slate-400 hover:text-orange-500 hover:bg-orange-50 transition-colors">
-                      <Edit2 size={16} />
-                    </button>
+                    <>
+                      <button onClick={() => startEdit(event)} className="p-2 rounded-lg text-slate-400 hover:text-orange-500 hover:bg-orange-50 transition-colors" title="Edit">
+                        <Edit2 size={16} />
+                      </button>
+                      <button
+                        onClick={() => { setConfirmDeleteId(event.id); setDeleteError(null) }}
+                        className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                        title="Delete event"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </>
                   ) : (
                     <div className="flex gap-1">
                       <button onClick={() => saveEdit(event.id)} disabled={isPending}
