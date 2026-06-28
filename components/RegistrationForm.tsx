@@ -1,0 +1,309 @@
+'use client'
+
+import { useState, useTransition, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { registrationSchema, type RegistrationFormData } from '@/lib/validations'
+import { registerForEvents } from '@/actions/register'
+import type { Event } from '@/types/database'
+import type { SiteContent } from '@/lib/content'
+import { CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail } from 'lucide-react'
+
+const AGE_GROUP_LABELS: Record<string, string> = {
+  children: 'Children (4–12)',
+  teens: 'Teens (13–18)',
+  adults: 'Adults (19–59)',
+  seniors: 'Seniors (60+)',
+  all: 'All Ages',
+}
+
+const AGE_GROUP_COLORS: Record<string, string> = {
+  children: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+  teens: 'bg-blue-100 text-blue-800 border-blue-200',
+  adults: 'bg-green-100 text-green-800 border-green-200',
+  seniors: 'bg-purple-100 text-purple-800 border-purple-200',
+  all: 'bg-orange-100 text-orange-800 border-orange-200',
+}
+
+const TOWERS = Array.from({ length: 16 }, (_, i) => `Tower ${i + 1}`)
+
+interface Props {
+  events: Event[]
+  site: SiteContent
+}
+
+export default function RegistrationForm({ events, site }: Props) {
+  const [isPending, startTransition] = useTransition()
+  const [result, setResult] = useState<{ success: boolean; message: string; detail?: string } | null>(null)
+  const [selectedEvents, setSelectedEvents] = useState<string[]>([])
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<RegistrationFormData>({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: { event_ids: [] },
+  })
+
+  // Build a map of eventId → activity name for conflict detection
+  const eventCategoryMap = useMemo(
+    () => Object.fromEntries(events.map((e) => [e.id, e.name])),
+    [events]
+  )
+
+  const toggleEvent = (id: string) => {
+    const category = eventCategoryMap[id]
+    setSelectedEvents((prev) => {
+      if (prev.includes(id)) {
+        // Deselect
+        return prev.filter((e) => e !== id)
+      }
+      // Select: replace any existing pick in the same category, then add this one
+      return [...prev.filter((e) => eventCategoryMap[e] !== category), id]
+    })
+  }
+
+  const onSubmit = (data: RegistrationFormData) => {
+    startTransition(async () => {
+      setResult(null)
+      const res = await registerForEvents({ ...data, event_ids: selectedEvents })
+      setResult(res)
+      if (res.success) {
+        reset()
+        setSelectedEvents([])
+      }
+    })
+  }
+
+  // Group events by activity name for display
+  const groupedEvents = events.reduce<Record<string, Event[]>>((acc, event) => {
+    if (!acc[event.name]) acc[event.name] = []
+    acc[event.name].push(event)
+    return acc
+  }, {})
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      {/* ── Personal Details ── */}
+      <section>
+        <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <User size={20} className="text-orange-500" />
+          {site.form_section_personal}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Full Name */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Full Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register('full_name')}
+              placeholder="Rajesh Kumar"
+              className="input-field"
+            />
+            {errors.full_name && <FieldError message={errors.full_name.message!} />}
+          </div>
+
+          {/* Tower */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              <Home size={14} className="inline mr-1 text-slate-500" />
+              Tower <span className="text-red-500">*</span>
+            </label>
+            <select {...register('tower')} className="input-field">
+              <option value="">Select tower…</option>
+              {TOWERS.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+            {errors.tower && <FieldError message={errors.tower.message!} />}
+          </div>
+
+          {/* Apartment Number */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Apartment Number <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register('apartment_number')}
+              placeholder="50123"
+              maxLength={6}
+              className="input-field"
+            />
+            <p className="text-xs text-slate-400 mt-1">5 or 6 digits, starting with 5 or 6</p>
+            {errors.apartment_number && <FieldError message={errors.apartment_number.message!} />}
+          </div>
+
+          {/* Phone */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              <Phone size={14} className="inline mr-1 text-slate-500" />
+              Mobile Number <span className="text-red-500">*</span>
+            </label>
+            <div className="flex">
+              <span className="inline-flex items-center px-3 border border-r-0 border-slate-300 rounded-l-lg bg-slate-50 text-slate-500 text-sm">
+                +91
+              </span>
+              <input
+                {...register('phone_number')}
+                placeholder="9876543210"
+                maxLength={10}
+                className="input-field rounded-l-none"
+              />
+            </div>
+            {errors.phone_number && <FieldError message={errors.phone_number.message!} />}
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              <Mail size={14} className="inline mr-1 text-slate-500" />
+              Email Address <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register('email')}
+              type="email"
+              placeholder="rajesh@example.com"
+              className="input-field"
+            />
+            {errors.email && <FieldError message={errors.email.message!} />}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Event Selection ── */}
+      <section>
+        <h2 className="text-lg font-semibold text-slate-800 mb-1 flex items-center gap-2">
+          <Calendar size={20} className="text-orange-500" />
+          {site.form_section_events}
+        </h2>
+        <p className="text-sm text-slate-500 mb-4">{site.form_events_hint}</p>
+
+        {events.length === 0 ? (
+          <div className="text-center py-12 rounded-xl border-2 border-dashed border-slate-200 text-slate-400">
+            <Calendar size={32} className="mx-auto mb-3 opacity-40" />
+            <p className="font-medium">{site.form_events_empty_title}</p>
+            <p className="text-sm mt-1">{site.form_events_empty_hint}</p>
+          </div>
+        ) : (
+          Object.entries(groupedEvents).map(([activityName, activityEvents]) => (
+            <div key={activityName} className="mb-6">
+              <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-3">
+                {activityName}
+              </h3>
+              <p className="text-xs text-slate-400 mb-3 italic">
+                Pick one age group — selecting another will replace your current choice.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {activityEvents.map((event) => {
+                  const isSelected = selectedEvents.includes(event.id)
+                  const categoryHasOtherSelected =
+                    !isSelected &&
+                    selectedEvents.some((id) => eventCategoryMap[id] === activityName)
+                  return (
+                    <button
+                      key={event.id}
+                      type="button"
+                      onClick={() => toggleEvent(event.id)}
+                      className={`
+                        relative text-left p-4 rounded-xl border-2 transition-all duration-150
+                        ${isSelected
+                          ? 'border-orange-400 bg-orange-50 shadow-sm'
+                          : categoryHasOtherSelected
+                          ? 'border-slate-200 bg-slate-50 opacity-60 hover:opacity-100 hover:border-slate-300'
+                          : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
+                        }
+                      `}
+                    >
+                      {isSelected && (
+                        <CheckCircle
+                          size={18}
+                          className="absolute top-3 right-3 text-orange-500"
+                        />
+                      )}
+                      <div className="flex items-start gap-2 flex-wrap mb-2">
+                        <span
+                          className={`text-xs font-medium px-2 py-0.5 rounded-full border ${AGE_GROUP_COLORS[event.age_group]}`}
+                        >
+                          {AGE_GROUP_LABELS[event.age_group]}
+                        </span>
+                      </div>
+                      <p className="text-sm font-medium text-slate-700">{event.slot_time}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{event.location}</p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        Max {event.max_participants} participants
+                      </p>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          ))
+        )}
+
+        {events.length > 0 && selectedEvents.length === 0 && (
+          <p className="text-sm text-red-500 mt-1">Please select at least one event.</p>
+        )}
+      </section>
+
+      {/* ── Result Banner ── */}
+      {result && (
+        <div
+          className={`flex items-start gap-3 p-4 rounded-xl border ${
+            result.success
+              ? 'bg-green-50 border-green-200 text-green-800'
+              : 'bg-red-50 border-red-200 text-red-800'
+          }`}
+        >
+          {result.success ? (
+            <CheckCircle size={20} className="shrink-0 mt-0.5" />
+          ) : (
+            <AlertCircle size={20} className="shrink-0 mt-0.5" />
+          )}
+          <div>
+            <p className="text-sm font-medium">{result.message}</p>
+            {result.detail && (
+              <p className="text-xs mt-1 opacity-75 font-mono">{result.detail}</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── Submit ── */}
+      <button
+        type="submit"
+        disabled={isPending || selectedEvents.length === 0 || events.length === 0}
+        className="
+          w-full py-3.5 px-6 rounded-xl font-semibold text-white
+          bg-gradient-to-r from-orange-500 to-orange-600
+          hover:from-orange-600 hover:to-orange-700
+          disabled:opacity-50 disabled:cursor-not-allowed
+          transition-all duration-150 shadow-md hover:shadow-lg
+          flex items-center justify-center gap-2
+        "
+      >
+        {isPending ? (
+          <>
+            <Loader2 size={18} className="animate-spin" />
+            Registering…
+          </>
+        ) : (
+          `Register for ${selectedEvents.length || 0} Event${selectedEvents.length !== 1 ? 's' : ''}`
+        )}
+      </button>
+    </form>
+  )
+}
+
+function FieldError({ message }: { message: string }) {
+  return (
+    <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+      <AlertCircle size={12} />
+      {message}
+    </p>
+  )
+}
