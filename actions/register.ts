@@ -125,6 +125,13 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
 }
 
 export async function getActiveEvents() {
-  const { getContentEvents } = await import('@/lib/content')
-  return getContentEvents(true)
+  const supabase = await createAdminSupabaseClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (supabase as any)
+    .from('events')
+    .select('id, name, age_group, event_date, slot_time, max_participants, location, description, is_active')
+    .eq('is_active', true)
+    .order('event_date', { ascending: true, nullsFirst: false })
+    .order('slot_time', { ascending: true })
+  return data ?? []
 }
