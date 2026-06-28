@@ -88,12 +88,23 @@ export default function RegistrationForm({ events, site }: Props) {
     })
   }
 
-  // Group events by activity name for display
-  const groupedEvents = events.reduce<Record<string, Event[]>>((acc, event) => {
-    if (!acc[event.name]) acc[event.name] = []
-    acc[event.name].push(event)
-    return acc
-  }, {})
+  // Group events: date → activity name → slots, sorted chronologically
+  const eventsByDate = useMemo(() => {
+    const byDate: Record<string, Record<string, Event[]>> = {}
+    for (const e of events) {
+      const day = (e as any).event_date ?? 'unscheduled'
+      if (!byDate[day]) byDate[day] = {}
+      if (!byDate[day][e.name]) byDate[day][e.name] = []
+      byDate[day][e.name].push(e)
+    }
+    return Object.entries(byDate).sort(([a], [b]) => a.localeCompare(b))
+  }, [events])
+
+  function formatEventDate(iso: string): string {
+    if (iso === 'unscheduled') return 'Date TBD'
+    const d = new Date(iso + 'T00:00:00')
+    return d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })
+  }
 
   return (
     <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
@@ -201,16 +212,28 @@ export default function RegistrationForm({ events, site }: Props) {
             <p className="text-sm mt-1">{site.form_events_empty_hint}</p>
           </div>
         ) : (
-          Object.entries(groupedEvents).map(([activityName, activityEvents]) => (
-            <div key={activityName} className="mb-6">
-              <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-3">
-                {activityName}
-              </h3>
-              <p className="text-xs text-slate-400 mb-3 italic">
-                Pick one age group — selecting another will replace your current choice.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {activityEvents.map((event) => {
+          eventsByDate.map(([date, activitiesOnDay]) => (
+            <div key={date} className="mb-8">
+              {/* Day header */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-2 bg-slate-800 text-white text-sm font-semibold px-3 py-1.5 rounded-lg">
+                  <Calendar size={14} />
+                  {formatEventDate(date)}
+                </div>
+                <div className="flex-1 h-px bg-slate-200" />
+              </div>
+
+              {/* Activities on this day */}
+              {Object.entries(activitiesOnDay).map(([activityName, activityEvents]) => (
+                <div key={activityName} className="mb-6">
+                  <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-1">
+                    {activityName}
+                  </h3>
+                  <p className="text-xs text-slate-400 mb-3 italic">
+                    Pick one age group — selecting another will replace your current choice.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {activityEvents.map((event) => {
                   const isSelected = selectedEvents.includes(event.id)
                   const categoryHasOtherSelected =
                     !isSelected &&
@@ -251,7 +274,9 @@ export default function RegistrationForm({ events, site }: Props) {
                     </button>
                   )
                 })}
-              </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ))
         )}
