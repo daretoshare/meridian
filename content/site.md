@@ -5,11 +5,11 @@ society_subtitle: Housing Society
 admin_label: Admin
 
 # ─── Nav / Hero ────────────────────────────────────────────────
-event_badge: "Independence Day 2026 · August 15"
+event_badge: "Independence Day 2026"
 hero_heading: "Celebrate Together at Meridian Park"
 hero_subtext: >
   Register for Independence Day events — painting, chess, badminton, and more.
-  One form, multiple events.
+  One form, multiple events
 
 # ─── Stats Strip ───────────────────────────────────────────────
 stat_activities_label: Activities
