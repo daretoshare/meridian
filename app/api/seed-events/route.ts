@@ -27,10 +27,15 @@ export async function POST(request: Request) {
       .neq('id', e.id)
   }
 
+  // Strip any YAML-only fields (e.g. category) that have no DB column
+  const dbRows = events.map(({ id, name, age_group, event_date, slot_time, max_participants, location, description, is_active }: any) => ({
+    id, name, age_group, event_date, slot_time, max_participants, location, description, is_active,
+  }))
+
   // Upsert canonical events by stable ID
   const { error: upsertError } = await db
     .from('events')
-    .upsert(events, { onConflict: 'id', ignoreDuplicates: false })
+    .upsert(dbRows, { onConflict: 'id', ignoreDuplicates: false })
 
   if (upsertError) {
     return NextResponse.json({ error: upsertError.message, code: upsertError.code }, { status: 500 })

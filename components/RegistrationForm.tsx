@@ -6,7 +6,7 @@ import { registrationSchema, type RegistrationFormData } from '@/lib/validations
 import { registerForEvents } from '@/actions/register'
 import type { Event } from '@/types/database'
 import type { SiteContent } from '@/lib/content'
-import { CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail, ExternalLink } from 'lucide-react'
+import { CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail, ExternalLink, FileText } from 'lucide-react'
 import Link from 'next/link'
 import type { RegistrationSummary } from '@/actions/register'
 
@@ -65,6 +65,84 @@ export default function RegistrationForm({ events, site }: Props) {
       // Select: replace any existing pick in the same category, then add this one
       return [...prev.filter((e) => eventCategoryMap[e] !== category), id]
     })
+  }
+
+  const downloadReceiptPDF = (regs: RegistrationSummary[]) => {
+    const vals = getValues()
+    const now = new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
+    const rows = regs.map((r) => `
+      <tr>
+        <td class="mono">${r.id.slice(0, 8).toUpperCase()}</td>
+        <td>${r.event_name}<br/><small>${r.age_group}</small></td>
+        <td>${r.event_date ? new Date(r.event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</td>
+        <td>${r.slot_time}</td>
+        <td>${r.location}</td>
+      </tr>`).join('')
+
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Meridian Park — Registration Receipt</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; font-size: 12px; color: #1e293b; padding: 32px; }
+    .header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .logo { width: 40px; height: 40px; background: linear-gradient(135deg,#f97316,#ea580c);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: 700; font-size: 14px; }
+    h1 { font-size: 18px; font-weight: 700; }
+    .sub { font-size: 11px; color: #64748b; }
+    .badge { display: inline-block; background: #dcfce7; color: #16a34a; font-size: 11px;
+             font-weight: 600; padding: 3px 10px; border-radius: 20px; margin: 12px 0 16px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px;
+                 background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; }
+    .info-item label { display: block; font-size: 10px; color: #94a3b8; text-transform: uppercase;
+                       letter-spacing: .05em; margin-bottom: 2px; }
+    .info-item span { font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #f1f5f9; text-align: left; padding: 7px 10px; font-size: 10px;
+         text-transform: uppercase; letter-spacing: .05em; border-bottom: 2px solid #e2e8f0; }
+    td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    tr:nth-child(even) td { background: #fafafa; }
+    .mono { font-family: monospace; font-weight: 700; font-size: 13px; color: #0f172a; }
+    small { display: block; color: #64748b; font-size: 10px; text-transform: capitalize; }
+    .footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #e2e8f0;
+              font-size: 10px; color: #94a3b8; display: flex; justify-content: space-between; }
+    @media print { body { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">MP</div>
+    <div>
+      <h1>Meridian Park — Registration Receipt</h1>
+      <p class="sub">Independence Day Celebrations 2025 &nbsp;·&nbsp; Generated ${now}</p>
+    </div>
+  </div>
+  <span class="badge">✓ Registration Confirmed</span>
+  <div class="info-grid">
+    <div class="info-item"><label>Name</label><span>${vals.full_name ?? ''}</span></div>
+    <div class="info-item"><label>Email</label><span>${vals.email ?? ''}</span></div>
+    <div class="info-item"><label>Tower / Apartment</label><span>${vals.block ?? ''} / ${vals.apartment_number ?? ''}</span></div>
+    <div class="info-item"><label>Phone</label><span>${vals.phone_number ?? ''}</span></div>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Reg ID</th><th>Event</th><th>Date</th><th>Time</th><th>Venue</th></tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="footer">
+    <span>Keep this receipt. Use your Reg ID to check status at the society portal.</span>
+    <span>Meridian Park · Independence Day 2025</span>
+  </div>
+  <script>window.onload = () => { window.print() }</script>
+</body>
+</html>`
+
+    const win = window.open('', '_blank')
+    if (win) { win.document.write(html); win.document.close() }
   }
 
   const handleSubmitClick = () => {
@@ -347,12 +425,18 @@ export default function RegistrationForm({ events, site }: Props) {
             </table>
           </div>
 
-          {/* Status page link */}
-          <div className="px-5 py-3 bg-green-50 border-t border-green-100 flex items-center justify-between">
-            <p className="text-xs text-green-700">Want to check or track your registration status?</p>
+          {/* Footer: download + status link */}
+          <div className="px-5 py-3 bg-green-50 border-t border-green-100 flex flex-col sm:flex-row items-start sm:items-center gap-3 justify-between">
+            <button
+              type="button"
+              onClick={() => downloadReceiptPDF(result!.registrations!)}
+              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-green-700 hover:bg-green-800 text-white rounded-lg transition-colors"
+            >
+              <FileText size={12} /> Download Receipt (PDF)
+            </button>
             <Link href="/status"
               className="flex items-center gap-1.5 text-xs font-medium text-green-700 hover:text-green-900 underline underline-offset-2">
-              View status page <ExternalLink size={11} />
+              Check registration status <ExternalLink size={11} />
             </Link>
           </div>
         </div>
