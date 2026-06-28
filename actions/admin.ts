@@ -35,6 +35,7 @@ export async function adminLogout() {
 export interface NewEvent {
   name: string
   age_group: string
+  event_date: string
   slot_time: string
   location: string
   max_participants: number
@@ -55,6 +56,7 @@ export async function createEvent(event: NewEvent) {
 }
 
 export interface EventEdits {
+  event_date?: string
   slot_time?: string
   location?: string
   max_participants?: number

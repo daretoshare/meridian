@@ -5,6 +5,7 @@
 # it links to registrations stored in the database.
 #
 # age_group options: children | teens | adults | seniors | all
+# event_date: YYYY-MM-DD  (the day the event takes place)
 # is_active: set to false to hide an event without deleting it
 #
 # ─────────────────────────────────────────────────────────────────────────────
@@ -13,6 +14,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000001"
     name: Painting Competition
     age_group: children
+    event_date: "2025-08-13"
     slot_time: "09:00 AM – 10:30 AM"
     max_participants: 25
     location: Clubhouse Hall 1
@@ -22,6 +24,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000002"
     name: Painting Competition
     age_group: teens
+    event_date: "2025-08-13"
     slot_time: "11:00 AM – 12:30 PM"
     max_participants: 25
     location: Clubhouse Hall 1
@@ -31,6 +34,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000003"
     name: Chess Tournament
     age_group: adults
+    event_date: "2025-08-14"
     slot_time: "10:00 AM – 01:00 PM"
     max_participants: 16
     location: Clubhouse Hall 2
@@ -40,6 +44,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000004"
     name: Chess Tournament
     age_group: seniors
+    event_date: "2025-08-14"
     slot_time: "03:00 PM – 05:00 PM"
     max_participants: 16
     location: Clubhouse Hall 2
@@ -49,6 +54,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000005"
     name: Badminton (Singles)
     age_group: teens
+    event_date: "2025-08-14"
     slot_time: "07:00 AM – 09:00 AM"
     max_participants: 20
     location: Badminton Court 1
@@ -58,6 +64,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000006"
     name: Badminton (Singles)
     age_group: adults
+    event_date: "2025-08-14"
     slot_time: "07:00 AM – 09:00 AM"
     max_participants: 20
     location: Badminton Court 2
@@ -67,6 +74,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000007"
     name: Badminton (Doubles)
     age_group: adults
+    event_date: "2025-08-15"
     slot_time: "05:00 PM – 07:00 PM"
     max_participants: 24
     location: Badminton Court 1
@@ -76,6 +84,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000008"
     name: Cultural Programme
     age_group: all
+    event_date: "2025-08-15"
     slot_time: "06:30 PM – 09:00 PM"
     max_participants: 200
     location: Main Lawn
@@ -85,6 +94,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000009"
     name: Tug of War
     age_group: all
+    event_date: "2025-08-15"
     slot_time: "04:00 PM – 05:00 PM"
     max_participants: 40
     location: Main Lawn
@@ -94,6 +104,7 @@ events:
   - id: "e1000001-0000-0000-0000-000000000010"
     name: Independence Day Quiz
     age_group: teens
+    event_date: "2025-08-15"
     slot_time: "02:00 PM – 03:30 PM"
     max_participants: 30
     location: Clubhouse Hall 1
@@ -106,7 +117,8 @@ events:
   ─────────────────────
   Copy any block above, paste at the end of the list, and:
   1. Give it a new unique id  (increment the last digits, e.g. ...000011)
-  2. Fill in name, age_group, slot_time, max_participants, location, description
+  2. Fill in name, age_group, event_date (YYYY-MM-DD), slot_time,
+     max_participants, location, description
   3. Set is_active: true
   4. Run:  npm run sync-events
      This pushes the new event to Supabase so registrations can reference it.
@@ -115,8 +127,8 @@ events:
   ──────────────────────────────────────────────────────────
   Set  is_active: false  and run  npm run sync-events
 
-  HOW TO CHANGE SLOT TIME OR LOCATION
-  ────────────────────────────────────
+  HOW TO CHANGE SLOT TIME, DATE, OR LOCATION
+  ────────────────────────────────────────────
   Edit the values here, then run  npm run sync-events
   Changes will also reflect in the Admin › Schedule Manager.
 -->

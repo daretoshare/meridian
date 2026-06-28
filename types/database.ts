@@ -21,6 +21,7 @@ export interface Database {
           id: string
           name: string
           age_group: AgeGroup
+          event_date: string | null
           slot_time: string
           max_participants: number
           location: string

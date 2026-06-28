@@ -27,14 +27,14 @@ interface Props {
 type EditState = Required<EventEdits>
 
 const BLANK_NEW = {
-  name: '', age_group: 'all', slot_time: '', location: '',
+  name: '', age_group: 'all', event_date: '', slot_time: '', location: '',
   max_participants: 30, description: '',
 }
 
 export default function ScheduleManager({ events, locations }: Props) {
   const [editingId, setEditingId]   = useState<string | null>(null)
   const [editValues, setEditValues] = useState<EditState>({
-    slot_time: '', location: '', max_participants: 0, description: '', is_active: true,
+    event_date: '', slot_time: '', location: '', max_participants: 0, description: '', is_active: true,
   })
   const [isPending, startTransition] = useTransition()
   const [savedId, setSavedId]       = useState<string | null>(null)
@@ -51,6 +51,7 @@ export default function ScheduleManager({ events, locations }: Props) {
     setEditingId(event.id)
     setErrorMsg(null)
     setEditValues({
+      event_date:       event.event_date ?? '',
       slot_time:        event.slot_time,
       location:         event.location,
       max_participants: event.max_participants,
@@ -188,6 +189,19 @@ export default function ScheduleManager({ events, locations }: Props) {
                 min={1}
                 value={newEvent.max_participants}
                 onChange={e => setNew('max_participants', Number(e.target.value))}
+                className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              />
+            </div>
+
+            {/* Date */}
+            <div>
+              <label className="block text-xs font-medium text-slate-500 mb-1.5">
+                Date <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="date"
+                value={newEvent.event_date}
+                onChange={e => setNew('event_date', e.target.value)}
                 className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
               />
             </div>
@@ -340,6 +354,12 @@ export default function ScheduleManager({ events, locations }: Props) {
               {isEditingThis ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 mb-1.5">Date</label>
+                      <input type="date" value={editValues.event_date ?? ''}
+                        onChange={e => set('event_date', e.target.value)}
+                        className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                    </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1.5 flex items-center gap-1"><Clock size={12} /> Time Slot</label>
                       <input value={editValues.slot_time} onChange={e => set('slot_time', e.target.value)}
