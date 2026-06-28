@@ -4,7 +4,7 @@ import { createAdminSupabaseClient } from '@/lib/supabaseServer'
 import { registrationSchema } from '@/lib/validations'
 import type { RegistrationFormData } from '@/lib/validations'
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = true // always show DB errors until form is confirmed working
 
 export type ActionResult =
   | { success: true; message: string; registeredCount: number }
