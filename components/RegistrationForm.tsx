@@ -124,7 +124,7 @@ export default function RegistrationForm({ events, site }: Props) {
   <div class="info-grid">
     <div class="info-item"><label>Name</label><span>${vals.full_name ?? ''}</span></div>
     <div class="info-item"><label>Email</label><span>${vals.email ?? ''}</span></div>
-    <div class="info-item"><label>Tower / Apartment</label><span>${vals.block ?? ''} / ${vals.apartment_number ?? ''}</span></div>
+    <div class="info-item"><label>Tower / Apartment</label><span>${vals.tower ?? ''} / ${vals.apartment_number ?? ''}</span></div>
     <div class="info-item"><label>Phone</label><span>${vals.phone_number ?? ''}</span></div>
   </div>
   <table>
