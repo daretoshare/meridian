@@ -51,6 +51,9 @@ locations:
   - name: Amphitheatre
     capacity: "Open ground"
 
+  - name: Society Premises
+    capacity: "Entire society grounds"
+
 
 ---
 
