@@ -67,6 +67,10 @@ export default function RegistrationForm({ events, site }: Props) {
 
   const handleSubmitClick = () => {
     const raw = { ...getValues(), event_ids: selectedEvents }
+
+    // Immediate feedback — confirms the click handler fired
+    setResult({ success: false, message: `Validating… (${selectedEvents.length} event(s) selected, fields: ${JSON.stringify(raw)})` })
+
     const parsed = registrationSchema.safeParse(raw)
     if (!parsed.success) {
       const errs: Record<string, string> = {}
@@ -74,11 +78,12 @@ export default function RegistrationForm({ events, site }: Props) {
         errs[key] = (msgs as string[])[0] ?? 'Invalid'
       }
       setFieldErrors(errs)
+      setResult({ success: false, message: `Validation failed: ${JSON.stringify(parsed.error.flatten().fieldErrors)}` })
       return
     }
     setFieldErrors({})
+    setResult({ success: false, message: 'Validation passed — calling server action…' })
     startTransition(async () => {
-      setResult(null)
       const res = await registerForEvents(parsed.data)
       setResult(res)
       if (res.success) {
