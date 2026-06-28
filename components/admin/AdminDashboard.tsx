@@ -5,11 +5,13 @@ import Link from 'next/link'
 import { adminLogout } from '@/actions/admin'
 import RegistrationsTable from './RegistrationsTable'
 import ScheduleManager from './ScheduleManager'
+import EventCalendarView from './EventCalendarView'
 import type { RegistrationWithDetails, EventWithCount, Event } from '@/types/database'
 import type { SiteContent, ContentLocation } from '@/lib/content'
 import {
   LayoutDashboard,
   Calendar,
+  BarChart2,
   LogOut,
   Users,
   CheckCircle,
@@ -27,7 +29,7 @@ interface Props {
   events: EventWithCount[]
 }
 
-type Tab = 'registrations' | 'schedule'
+type Tab = 'registrations' | 'schedule' | 'overview'
 
 export default function AdminDashboard({ user, site, locations, registrations, events }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('registrations')
@@ -125,6 +127,12 @@ export default function AdminDashboard({ user, site, locations, registrations, e
             icon={<Calendar size={15} />}
             label={site.admin_tab_schedule}
           />
+          <TabButton
+            active={activeTab === 'overview'}
+            onClick={() => setActiveTab('overview')}
+            icon={<BarChart2 size={15} />}
+            label="Event Overview"
+          />
         </div>
 
         {/* Tab Content */}
@@ -134,8 +142,10 @@ export default function AdminDashboard({ user, site, locations, registrations, e
               registrations={registrations}
               events={events as unknown as Event[]}
             />
-          ) : (
+          ) : activeTab === 'schedule' ? (
             <ScheduleManager events={events} locations={locations} />
+          ) : (
+            <EventCalendarView events={events} registrations={registrations} />
           )}
         </div>
       </main>
