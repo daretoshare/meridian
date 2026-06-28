@@ -1,7 +1,7 @@
 import { getActiveEvents } from '@/actions/register'
 import { getSiteContent } from '@/lib/content'
 import RegistrationForm from '@/components/RegistrationForm'
-import { Flag, Shield } from 'lucide-react'
+import { Flag, Shield, ClipboardList } from 'lucide-react'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -26,13 +26,22 @@ export default async function HomePage() {
               <p className="text-xs text-slate-500">{site.society_subtitle}</p>
             </div>
           </div>
-          <Link
-            href="/admin"
-            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
-          >
-            <Shield size={14} />
-            {site.admin_label}
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/status"
+              className="flex items-center gap-1.5 text-sm text-orange-600 hover:text-orange-800 font-medium transition-colors"
+            >
+              <ClipboardList size={14} />
+              Check Registration Status
+            </Link>
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
+            >
+              <Shield size={14} />
+              {site.admin_label}
+            </Link>
+          </div>
         </div>
       </header>
 
