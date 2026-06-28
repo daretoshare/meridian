@@ -119,34 +119,37 @@ export default function SetupClient({ checks, allOk, migrationSql, serviceRoleKe
           ))}
         </div>
 
-        {/* ── Step 1: Seed events (can do automatically) ── */}
-        {needsSeed && (
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-3">
+        {/* ── Sync Events (always visible) ── */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-3">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-orange-100 text-orange-700 font-bold text-xs flex items-center justify-center shrink-0">1</span>
+              <Database size={16} className="text-orange-500" />
               <h2 className="font-semibold text-slate-800">Sync events to database</h2>
             </div>
-            <p className="text-sm text-slate-500 ml-8">
-              The events in <code className="bg-slate-100 px-1 rounded text-xs">content/events.md</code> need to be pushed to Supabase so the registration form can link registrations to the correct event IDs.
-            </p>
-            <div className="ml-8">
-              <button
-                onClick={seedEvents}
-                disabled={seeding}
-                className="flex items-center gap-2 px-4 py-2.5 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
-              >
-                {seeding
-                  ? <><Loader2 size={15} className="animate-spin" /> Syncing…</>
-                  : <><Database size={15} /> Sync Events Now</>}
-              </button>
-              {seedResult && (
-                <p className={`text-xs mt-2 ${seedResult.ok ? 'text-green-600' : 'text-red-600'}`}>
-                  {seedResult.message}
-                </p>
-              )}
-            </div>
+            {!needsSeed && (
+              <span className="flex items-center gap-1 text-xs text-green-600 font-medium">
+                <CheckCircle size={13} /> IDs present
+              </span>
+            )}
           </div>
-        )}
+          <p className="text-sm text-slate-500">
+            Push all events from <code className="bg-slate-100 px-1 rounded text-xs">content/events.md</code> into Supabase with stable UUIDs. Run this whenever you add or change events in the markdown file.
+          </p>
+          <button
+            onClick={seedEvents}
+            disabled={seeding}
+            className="flex items-center gap-2 px-4 py-2.5 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+          >
+            {seeding
+              ? <><Loader2 size={15} className="animate-spin" /> Syncing…</>
+              : <><Database size={15} /> Sync Events Now</>}
+          </button>
+          {seedResult && (
+            <p className={`text-xs ${seedResult.ok ? 'text-green-600' : 'text-red-600'}`}>
+              {seedResult.message}
+            </p>
+          )}
+        </div>
 
         {/* ── Step 2: RLS policy fix (needs SQL editor) ── */}
         {needsSql && (
