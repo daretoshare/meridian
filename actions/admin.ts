@@ -101,16 +101,22 @@ export async function deleteEvent(eventId: string) {
 
 export async function updateRegistrationStatus(
   registrationId: string,
-  status: 'confirmed' | 'waitlisted' | 'cancelled'
+  status: 'confirmed' | 'waitlisted' | 'cancelled',
+  reason?: string
 ) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const supabase = await createAdminSupabaseClient() as any
+  const update: Record<string, unknown> = { status }
+  if (status === 'confirmed') update.reason = null
+  else if (reason !== undefined) update.reason = reason.trim() || null
+
   const { error } = await supabase
     .from('registrations')
-    .update({ status })
+    .update(update)
     .eq('id', registrationId)
 
   if (error) return { success: false, message: error.message }
   revalidatePath('/admin')
+  revalidatePath('/status')
   return { success: true, message: 'Status updated.' }
 }

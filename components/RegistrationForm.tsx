@@ -6,7 +6,9 @@ import { registrationSchema, type RegistrationFormData } from '@/lib/validations
 import { registerForEvents } from '@/actions/register'
 import type { Event } from '@/types/database'
 import type { SiteContent } from '@/lib/content'
-import { CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail } from 'lucide-react'
+import { CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail, ExternalLink } from 'lucide-react'
+import Link from 'next/link'
+import type { RegistrationSummary } from '@/actions/register'
 
 const AGE_GROUP_LABELS: Record<string, string> = {
   children: 'Children (4–12)',
@@ -33,7 +35,7 @@ interface Props {
 
 export default function RegistrationForm({ events, site }: Props) {
   const [isPending, startTransition] = useTransition()
-  const [result, setResult] = useState<{ success: boolean; message: string; detail?: string } | null>(null)
+  const [result, setResult] = useState<{ success: boolean; message: string; detail?: string; registrations?: RegistrationSummary[] } | null>(null)
   const [selectedEvents, setSelectedEvents] = useState<string[]>([])
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -286,25 +288,72 @@ export default function RegistrationForm({ events, site }: Props) {
         )}
       </section>
 
-      {/* ── Result Banner ── */}
-      {result && (
-        <div
-          className={`flex items-start gap-3 p-4 rounded-xl border ${
-            result.success
-              ? 'bg-green-50 border-green-200 text-green-800'
-              : 'bg-red-50 border-red-200 text-red-800'
-          }`}
-        >
-          {result.success ? (
-            <CheckCircle size={20} className="shrink-0 mt-0.5" />
-          ) : (
-            <AlertCircle size={20} className="shrink-0 mt-0.5" />
-          )}
+      {/* ── Result ── */}
+      {result && !result.success && (
+        <div className="flex items-start gap-3 p-4 rounded-xl border bg-red-50 border-red-200 text-red-800">
+          <AlertCircle size={20} className="shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-medium">{result.message}</p>
-            {result.detail && (
-              <p className="text-xs mt-1 opacity-75 font-mono">{result.detail}</p>
-            )}
+            {result.detail && <p className="text-xs mt-1 opacity-75 font-mono">{result.detail}</p>}
+          </div>
+        </div>
+      )}
+
+      {result?.success && result.registrations && result.registrations.length > 0 && (
+        <div className="rounded-xl border border-green-200 bg-green-50 overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center gap-3 px-5 py-4 bg-green-100 border-b border-green-200">
+            <CheckCircle size={22} className="text-green-600 shrink-0" />
+            <div className="flex-1">
+              <p className="font-semibold text-green-800">{result.message}</p>
+              <p className="text-xs text-green-600 mt-0.5">
+                Save your registration IDs below — you'll need them to check your status.
+              </p>
+            </div>
+          </div>
+
+          {/* Registration table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-green-50 border-b border-green-200 text-xs text-green-700 uppercase tracking-wide">
+                  <th className="px-4 py-2 text-left font-semibold">Registration ID</th>
+                  <th className="px-4 py-2 text-left font-semibold">Event</th>
+                  <th className="px-4 py-2 text-left font-semibold">Date</th>
+                  <th className="px-4 py-2 text-left font-semibold">Time</th>
+                  <th className="px-4 py-2 text-left font-semibold">Venue</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-green-100">
+                {result.registrations.map((r) => (
+                  <tr key={r.id} className="hover:bg-green-50/60">
+                    <td className="px-4 py-3 font-mono text-xs text-green-800 font-semibold whitespace-nowrap">
+                      {r.id.slice(0, 8).toUpperCase()}
+                    </td>
+                    <td className="px-4 py-3">
+                      <p className="font-medium text-slate-700">{r.event_name}</p>
+                      <p className="text-xs text-slate-400 capitalize">{r.age_group}</p>
+                    </td>
+                    <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">
+                      {r.event_date
+                        ? new Date(r.event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+                        : '—'}
+                    </td>
+                    <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">{r.slot_time}</td>
+                    <td className="px-4 py-3 text-slate-500 text-xs">{r.location}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Status page link */}
+          <div className="px-5 py-3 bg-green-50 border-t border-green-100 flex items-center justify-between">
+            <p className="text-xs text-green-700">Want to check or track your registration status?</p>
+            <Link href="/status"
+              className="flex items-center gap-1.5 text-xs font-medium text-green-700 hover:text-green-900 underline underline-offset-2">
+              View status page <ExternalLink size={11} />
+            </Link>
           </div>
         </div>
       )}

@@ -37,6 +37,7 @@ export interface Database {
           profile_id: string
           event_id: string
           status: RegistrationStatus
+          reason: string | null
           created_at: string
         }
         Insert: Omit<Database['public']['Tables']['registrations']['Row'], 'id' | 'created_at'>

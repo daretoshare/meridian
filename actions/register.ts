@@ -6,8 +6,17 @@ import type { RegistrationFormData } from '@/lib/validations'
 
 const isDev = true // always show DB errors until form is confirmed working
 
+export interface RegistrationSummary {
+  id: string
+  event_name: string
+  age_group: string
+  event_date: string | null
+  slot_time: string
+  location: string
+}
+
 export type ActionResult =
-  | { success: true; message: string; registeredCount: number }
+  | { success: true; message: string; registeredCount: number; registrations: RegistrationSummary[] }
   | { success: false; errors: Record<string, string[]> | null; message: string; detail?: string }
 
 export async function registerForEvents(formData: RegistrationFormData): Promise<ActionResult> {
@@ -74,7 +83,7 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
       supabase
         .from('registrations')
         .insert({ profile_id: profile.id, event_id, status: 'confirmed' })
-        .select('id')
+        .select('id, event_id')
         .single()
     )
   )
@@ -117,10 +126,28 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
 
   const skippedNote = skippedCount > 0 ? ` (${skippedCount} already registered — skipped)` : ''
 
+  // Build summary rows with event details
+  const registrationSummaries: RegistrationSummary[] = succeeded
+    .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
+    .map((r) => {
+      const regId   = r.value.data?.id ?? ''
+      const eventId = r.value.data?.event_id ?? ''
+      const evt     = allEvents.find((e) => e.id === eventId)
+      return {
+        id:         regId,
+        event_name: evt?.name ?? '',
+        age_group:  evt?.age_group ?? '',
+        event_date: evt?.event_date ?? null,
+        slot_time:  evt?.slot_time ?? '',
+        location:   evt?.location ?? '',
+      }
+    })
+
   return {
     success: true,
     message: `Successfully registered for ${registeredCount} event${registeredCount !== 1 ? 's' : ''}!${skippedNote}`,
     registeredCount,
+    registrations: registrationSummaries,
   }
 }
 

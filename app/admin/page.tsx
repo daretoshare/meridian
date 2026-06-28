@@ -21,7 +21,7 @@ export default async function AdminPage() {
   const { data: registrations } = await adminClient
     .from('registrations')
     .select(`
-      id, profile_id, event_id, status, created_at,
+      id, profile_id, event_id, status, reason, created_at,
       profiles ( full_name, block, apartment_number, phone_number, email ),
       events ( name, age_group, slot_time, location )
     `)
