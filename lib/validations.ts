@@ -35,7 +35,7 @@ export const registrationSchema = z.object({
     .max(200, 'Email too long'),
 
   event_ids: z
-    .array(z.string().uuid('Invalid event ID'))
+    .array(z.string().min(1))
     .min(1, 'Please select at least one event'),
 })
 
