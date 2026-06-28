@@ -88,5 +88,12 @@ export default async function SetupPage() {
     'utf-8'
   )
 
-  return <SetupClient checks={checks} allOk={allOk} migrationSql={migrationSql} />
+  return (
+    <SetupClient
+      checks={checks}
+      allOk={allOk}
+      migrationSql={migrationSql}
+      serviceRoleKey={process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''}
+    />
+  )
 }

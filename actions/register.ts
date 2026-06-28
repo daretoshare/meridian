@@ -1,6 +1,6 @@
 'use server'
 
-import { createServerSupabaseClient } from '@/lib/supabaseServer'
+import { createAdminSupabaseClient } from '@/lib/supabaseServer'
 import { registrationSchema } from '@/lib/validations'
 import type { RegistrationFormData } from '@/lib/validations'
 
@@ -42,7 +42,9 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
     seenCategories.add(category)
   }
 
-  const supabase = await createServerSupabaseClient()
+  // Service role key used here — this is server-side code only, never exposed to the client.
+  // It bypasses RLS, which is correct: the server action is the trust boundary.
+  const supabase = await createAdminSupabaseClient()
 
   // 3. Upsert profile
   const { data: profile, error: profileError } = await supabase
