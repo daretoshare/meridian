@@ -2,10 +2,8 @@
  * Syncs events from content/events.md → Supabase.
  * Run with:  npm run sync-events
  *
- * What it does:
- *   - Upserts every event (matched by id) — safe to run multiple times
- *   - Sets is_active=false for any event in Supabase whose id is NOT in the file
- *     (so old registrations are preserved, the event just disappears from the form)
+ * Safe to run multiple times — uses upsert by stable event ID.
+ * Sets is_active=false for any event in Supabase whose id is NOT in the file.
  */
 
 import * as fs from 'fs'
@@ -17,7 +15,7 @@ import * as dotenv from 'dotenv'
 dotenv.config({ path: path.join(process.cwd(), '.env.local') })
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const SERVICE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 if (!SUPABASE_URL || !SERVICE_KEY) {
   console.error('❌  Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env.local')
@@ -29,41 +27,49 @@ const supabase = createClient(SUPABASE_URL, SERVICE_KEY)
 async function main() {
   const raw = fs.readFileSync(path.join(process.cwd(), 'content', 'events.md'), 'utf-8')
   const { data } = matter(raw)
-  const events: Array<{
-    id: string
-    name: string
-    age_group: string
-    slot_time: string
-    max_participants: number
-    location: string
-    description: string
-    is_active: boolean
-  }> = data.events ?? []
+  const allEvents: any[] = data.events ?? []
 
-  if (events.length === 0) {
+  if (allEvents.length === 0) {
     console.log('⚠️  No events found in content/events.md')
     return
   }
 
-  console.log(`📋  Syncing ${events.length} events from content/events.md …`)
+  console.log(`📋  Found ${allEvents.length} events in content/events.md`)
 
-  // Upsert all events from the file
-  const { error: upsertError } = await supabase.from('events').upsert(events, {
-    onConflict: 'id',
-    ignoreDuplicates: false,
-  })
+  // Only pass known DB columns — strip YAML-only fields (e.g. category)
+  const dbRows = allEvents.map((e: any) => ({
+    id:                e.id,
+    name:              e.name,
+    age_group:         e.age_group,
+    event_date:        e.event_date ?? null,
+    slot_time:         e.slot_time,
+    max_participants:  e.max_participants,
+    location:          e.location,
+    description:       e.description ?? '',
+    is_active:         e.is_active ?? true,
+    registration_type: e.registration_type ?? 'competitive',
+    is_team:           e.is_team ?? false,
+  }))
+
+  console.log(`⬆️   Upserting ${dbRows.length} events …`)
+
+  const { error: upsertError } = await supabase
+    .from('events')
+    .upsert(dbRows, { onConflict: 'id', ignoreDuplicates: false })
 
   if (upsertError) {
     console.error('❌  Upsert failed:', upsertError.message)
     process.exit(1)
   }
 
-  console.log(`✅  Upserted ${events.length} events`)
+  console.log(`✅  Upserted ${dbRows.length} events`)
 
-  // Deactivate any event in Supabase that's no longer in the file
-  const fileIds = events.map((e) => e.id)
+  // Deactivate any DB event whose id is no longer in events.md
+  const fileIds = dbRows.map((e) => e.id)
   const { data: dbEvents } = await supabase.from('events').select('id')
-  const staleIds = (dbEvents ?? []).map((e: { id: string }) => e.id).filter((id: string) => !fileIds.includes(id))
+  const staleIds = (dbEvents ?? [])
+    .map((e: { id: string }) => e.id)
+    .filter((id: string) => !fileIds.includes(id))
 
   if (staleIds.length > 0) {
     const { error: deactivateError } = await supabase
@@ -74,7 +80,7 @@ async function main() {
     if (deactivateError) {
       console.warn('⚠️  Could not deactivate stale events:', deactivateError.message)
     } else {
-      console.log(`🔕  Deactivated ${staleIds.length} event(s) no longer in the file`)
+      console.log(`🔕  Deactivated ${staleIds.length} stale event(s) not in events.md`)
     }
   }
 
