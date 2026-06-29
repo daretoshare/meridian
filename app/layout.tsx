@@ -7,6 +7,10 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Meridian Park – Independence Day 2026',
   description: 'Register for Independence Day events at Meridian Park Housing Society.',
+  icons: {
+    icon: '/mplogo.png',
+    apple: '/mplogo.png',
+  },
 }
 
 export default function RootLayout({

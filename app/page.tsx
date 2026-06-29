@@ -3,6 +3,7 @@ import { getSiteContent } from '@/lib/content'
 import RegistrationForm from '@/components/RegistrationForm'
 import { Flag, Shield, ClipboardList } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,9 +19,13 @@ export default async function HomePage() {
       <header className="border-b border-white/80 bg-white/70 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-sm">
-              <span className="text-white font-bold text-sm">MP</span>
-            </div>
+            <Image
+              src="/mplogo.png"
+              alt="Meridian Park Logo"
+              width={36}
+              height={36}
+              className="rounded-lg shadow-sm object-contain"
+            />
             <div>
               <p className="font-bold text-slate-800 leading-tight">{site.society_name}</p>
               <p className="text-xs text-slate-500">{site.society_subtitle}</p>

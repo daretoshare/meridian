@@ -30,7 +30,7 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
     }
   }
 
-  const { full_name, tower, apartment_number, phone_number, email, event_ids } = parsed.data
+  const { full_name, tower, apartment_number, phone_number, email, event_ids, team_name } = parsed.data
 
   // 2. Server-side: enforce max one event per activity category
   const { getContentEvents } = await import('@/lib/content')
@@ -78,11 +78,17 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
   }
 
   // 4. Register for each selected event
+  const teamEventIds = new Set(allEvents.filter((e) => (e as any).is_team).map((e) => e.id))
   const results = await Promise.allSettled(
     event_ids.map((event_id) =>
-      supabase
+      (supabase as any)
         .from('registrations')
-        .insert({ profile_id: profile.id, event_id, status: 'confirmed' })
+        .insert({
+          profile_id: profile.id,
+          event_id,
+          status: 'confirmed',
+          team_name: teamEventIds.has(event_id) && team_name ? team_name : null,
+        })
         .select('id, event_id')
         .single()
     )
@@ -156,7 +162,7 @@ export async function getActiveEvents() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (supabase as any)
     .from('events')
-    .select('id, name, age_group, event_date, slot_time, max_participants, location, description, is_active')
+    .select('id, name, age_group, event_date, slot_time, max_participants, location, description, is_active, registration_type, is_team')
     .eq('is_active', true)
     .order('event_date', { ascending: true, nullsFirst: false })
     .order('slot_time', { ascending: true })

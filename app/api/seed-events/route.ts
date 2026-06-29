@@ -27,9 +27,11 @@ export async function POST(request: Request) {
       .neq('id', e.id)
   }
 
-  // Strip any YAML-only fields (e.g. category) that have no DB column
-  const dbRows = events.map(({ id, name, age_group, event_date, slot_time, max_participants, location, description, is_active }: any) => ({
+  // Strip any YAML-only fields; only pass known DB columns
+  const dbRows = events.map(({ id, name, age_group, event_date, slot_time, max_participants, location, description, is_active, registration_type, is_team }: any) => ({
     id, name, age_group, event_date, slot_time, max_participants, location, description, is_active,
+    registration_type: registration_type ?? 'competitive',
+    is_team: is_team ?? false,
   }))
 
   // Upsert canonical events by stable ID
