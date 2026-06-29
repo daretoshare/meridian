@@ -25,18 +25,20 @@ const AGE_GROUP_COLORS: Record<string, string> = {
   all:      'bg-orange-100 text-orange-800 border-orange-200',
 }
 
-const TOWERS = Array.from({ length: 16 }, (_, i) => `Tower ${i + 1}`)
+const B5_TOWERS = Array.from({ length: 10 }, (_, i) => `Building 5 – Tower ${i + 1}`)
+const B6_TOWERS = Array.from({ length: 6 },  (_, i) => `Building 6 – Tower ${i + 1}`)
 
 interface Props {
   events: Event[]
   site: SiteContent
+  culturalOpen: boolean
 }
 
 function daysUntil(d: Date): number {
   return Math.ceil((d.getTime() - Date.now()) / 86_400_000)
 }
 
-export default function RegistrationForm({ events, site }: Props) {
+export default function RegistrationForm({ events, site, culturalOpen }: Props) {
   const [isPending, startTransition] = useTransition()
   const [result, setResult]         = useState<{
     success: boolean; message: string; detail?: string; registrations?: RegistrationSummary[]
@@ -46,17 +48,24 @@ export default function RegistrationForm({ events, site }: Props) {
   const [submittedVals, setSubmittedVals]   = useState<Partial<RegistrationFormData>>({})
   const [feeConsented, setFeeConsented]     = useState(false)
   const [showFeeModal, setShowFeeModal]     = useState(false)
+  const [aptSuffix, setAptSuffix]           = useState('')
 
-  const { register, getValues, formState: { errors }, reset } = useForm<RegistrationFormData>({
+  const { register, getValues, watch, setValue, formState: { errors }, reset } = useForm<RegistrationFormData>({
     defaultValues: { event_ids: [], team_name: '' },
   })
 
   // ── Window state ─────────────────────────────────────────────────────────
   const today               = useMemo(() => new Date(), [])
   const isCompetitiveClosed  = today >= COMPETITIVE_DEADLINE
-  const isCulturalNotYetOpen = today < CULTURAL_OPEN_DATE
+  const isCulturalNotYetOpen = !culturalOpen
   const daysToDeadline      = daysUntil(COMPETITIVE_DEADLINE)
   const daysToOpen          = daysUntil(CULTURAL_OPEN_DATE)
+
+  // ── Apartment prefix derived from selected tower ─────────────────────────
+  const selectedTower = watch('tower')
+  const aptBuilding: '5' | '6' | null = selectedTower?.startsWith('Building 5') ? '5'
+    : selectedTower?.startsWith('Building 6') ? '6'
+    : null
 
   // ── Split and sort events ────────────────────────────────────────────────
   // Sort within each bucket: by event_date then alphabetically by name
@@ -205,6 +214,7 @@ export default function RegistrationForm({ events, site }: Props) {
         setSubmittedVals({ ...snapshot, event_ids: selectedEvents })
         reset()
         setSelectedEvents([])
+        setAptSuffix('')
       }
     })
   }
@@ -313,11 +323,30 @@ export default function RegistrationForm({ events, site }: Props) {
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               <Home size={14} className="inline mr-1 text-slate-500" />
-              Tower <span className="text-red-500">*</span>
+              Building &amp; Tower <span className="text-red-500">*</span>
             </label>
-            <select {...register('tower')} className="input-field">
-              <option value="">Select tower…</option>
-              {TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
+            <select
+              {...register('tower')}
+              className="input-field"
+              onChange={(e) => {
+                register('tower').onChange(e)
+                // Reset apartment when building changes
+                const newBuilding = e.target.value.startsWith('Building 5') ? '5'
+                  : e.target.value.startsWith('Building 6') ? '6' : null
+                const currentBuilding = aptBuilding
+                if (newBuilding !== currentBuilding) {
+                  setAptSuffix('')
+                  setValue('apartment_number', '', { shouldValidate: false })
+                }
+              }}
+            >
+              <option value="">Select building &amp; tower…</option>
+              <optgroup label="Building 5 (Tower 1 – 10)">
+                {B5_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
+              </optgroup>
+              <optgroup label="Building 6 (Tower 1 – 6)">
+                {B6_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
+              </optgroup>
             </select>
             {(fieldErrors.tower || errors.tower) && <FieldError message={fieldErrors.tower ?? errors.tower!.message!} />}
           </div>
@@ -326,8 +355,35 @@ export default function RegistrationForm({ events, site }: Props) {
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Apartment Number <span className="text-red-500">*</span>
             </label>
-            <input {...register('apartment_number')} placeholder="50123" maxLength={6} className="input-field" />
-            <p className="text-xs text-slate-400 mt-1">5 or 6 digits, starting with 5 or 6</p>
+            <div className="flex items-center gap-0">
+              {aptBuilding && (
+                <span className="inline-flex items-center px-3 h-10 bg-slate-100 border border-r-0 border-slate-300 rounded-l-xl text-sm font-semibold text-slate-600 shrink-0 select-none">
+                  {aptBuilding}
+                </span>
+              )}
+              <input
+                value={aptSuffix}
+                onChange={(e) => {
+                  const digits = e.target.value.replace(/\D/g, '').slice(0, aptBuilding ? 5 : 6)
+                  setAptSuffix(digits)
+                  setValue(
+                    'apartment_number',
+                    aptBuilding ? aptBuilding + digits : digits,
+                    { shouldValidate: true }
+                  )
+                }}
+                placeholder={aptBuilding ? `0123` : 'Select tower first'}
+                disabled={!aptBuilding}
+                maxLength={aptBuilding ? 5 : 6}
+                inputMode="numeric"
+                className={`input-field flex-1 ${aptBuilding ? 'rounded-l-none' : ''} disabled:bg-slate-50 disabled:text-slate-400`}
+              />
+            </div>
+            <p className="text-xs text-slate-400 mt-1">
+              {aptBuilding
+                ? `Building ${aptBuilding} apartment — enter the remaining digits`
+                : 'Select your tower first to set the apartment prefix'}
+            </p>
             {(fieldErrors.apartment_number || errors.apartment_number) && <FieldError message={fieldErrors.apartment_number ?? errors.apartment_number!.message!} />}
           </div>
 
@@ -482,11 +538,20 @@ export default function RegistrationForm({ events, site }: Props) {
             }
           </div>
 
-          <div className="p-4">
+          <div className="p-4 space-y-3">
             {isCulturalNotYetOpen && (
-              <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
                 <Clock size={16} className="shrink-0 mt-0.5" />
-                <p className="text-sm">Cultural event registration opens on <strong>July 13, 2026</strong> and runs for two weeks.</p>
+                <p className="text-sm">Cultural event registration is not yet open. Check back soon!</p>
+              </div>
+            )}
+            {!isCulturalNotYetOpen && (
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
+                <CheckCircle size={16} className="shrink-0 mt-0.5 text-emerald-600" />
+                <p className="text-sm">
+                  <strong>No participation fee</strong> for cultural events.
+                  Participants are responsible for bringing their own consumables (props, costumes, instruments, etc.).
+                </p>
               </div>
             )}
             {culturalEvents.length === 0

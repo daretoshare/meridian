@@ -64,6 +64,12 @@ export function getContentEvents(activeOnly = true): ContentEvent[] {
   return activeOnly ? all.filter((e) => e.is_active) : all
 }
 
+/** Returns the value of `cultural_registration_open` from events.md frontmatter. */
+export function getCulturalRegistrationOpen(): boolean {
+  const { data } = readMd('events.md')
+  return data.cultural_registration_open === true
+}
+
 // ─── Locations ────────────────────────────────────────────────────────────────
 
 export interface ContentLocation {

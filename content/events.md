@@ -11,7 +11,12 @@
 #
 # REGISTRATION WINDOWS
 #   competitive: open now, closes July 11 2026
-#   cultural:    opens July 13 2026
+#   cultural:    toggle below — set to false to lock, true to open
+#
+# ┌──────────────────────────────────────────────────────────────┐
+# │  CULTURAL REGISTRATION TOGGLE — change this to enable/disable │
+# └──────────────────────────────────────────────────────────────┘
+cultural_registration_open: true
 #
 # CONFIRMED SCHEDULE (2026)
 #   19 Jul  – Running & Field Events
@@ -19,73 +24,100 @@
 #   2  Aug  – Treasure Hunt & Tug of War
 #   8–9 Aug – Badminton (all categories, evening to morning)
 #   9  Aug  – Table Tennis (all categories, morning)
-#   13 Aug  – Cultural Day (singing, dance, fancy dress)
-#   15 Aug  – Independence Day Grand Finale (cultural)
+#   9  Aug  – Creative Freedom (cultural, afternoon)
+#   15 Aug  – Independence Day (cultural events, afternoon to evening)
 # ─────────────────────────────────────────────────────────────────────────────
 
 events:
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # CULTURAL EVENTS — registration opens July 13, 2026
+  # CULTURAL EVENTS — toggle: cultural_registration_open (see frontmatter)
+  # No participation fee. Participants must bring their own consumables.
   # ═══════════════════════════════════════════════════════════════════════════
 
+  # ── Solo ──────────────────────────────────────────────────────────────────
+
   - id: "e1000001-0000-0000-0000-000000000004"
-    name: Kids Solo Singing
+    name: Singing (Age Till 15)
     registration_type: cultural
     age_group: children
-    event_date: "2026-08-13"
-    slot_time: "11:00 AM – 12:30 PM"
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
     max_participants: 30
     location: Amphitheatre
-    description: Individual singing, any song. 3–4 min slot.
+    description: Solo singing, any song. 3–4 min slot. Individual.
     is_team: false
     is_active: true
 
   - id: "e1000001-0000-0000-0000-000000000005"
-    name: Kids Dance (Solo)
+    name: Dance (Age Till 15)
     registration_type: cultural
     age_group: children
-    event_date: "2026-08-13"
-    slot_time: "02:00 PM – 03:30 PM"
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
     max_participants: 30
     location: Amphitheatre
     description: Solo dance, any style. 3–5 min. Individual.
     is_team: false
     is_active: true
 
-  - id: "e1000001-0000-0000-0000-000000000006"
-    name: Kids Dance (Group)
-    registration_type: cultural
-    age_group: children
-    event_date: "2026-08-13"
-    slot_time: "03:30 PM – 04:30 PM"
-    max_participants: 15
-    location: Amphitheatre
-    description: Group choreography, 3–8 members. Register as a group.
-    is_team: true
-    is_active: true
-
-  - id: "e1000001-0000-0000-0000-000000000007"
-    name: Fancy Dress
-    registration_type: cultural
-    age_group: children
-    event_date: "2026-08-13"
-    slot_time: "04:30 PM – 06:00 PM"
-    max_participants: 35
-    location: Main Lawn
-    description: Best patriotic or character costume. Walk the ramp. Individual.
-    is_team: false
-    is_active: true
-
   - id: "e1000001-0000-0000-0000-000000000023"
-    name: Adult Solo Singing
+    name: Singing (Age 15+)
     registration_type: cultural
     age_group: adults
     event_date: "2026-08-15"
-    slot_time: "04:00 PM – 05:30 PM"
-    max_participants: 20
+    slot_time: "Afternoon to Evening"
+    max_participants: 30
     location: Amphitheatre
-    description: Solo vocal, any language. 3–5 min slot. Individual.
+    description: Solo singing, any language. 3–5 min slot. Individual.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000055"
+    name: Dance (Age 15+)
+    registration_type: cultural
+    age_group: adults
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 30
+    location: Amphitheatre
+    description: Solo dance, any style. 3–5 min. Individual.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000007"
+    name: Fancy Dress (Age Till 15)
+    registration_type: cultural
+    age_group: children
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 35
+    location: Amphitheatre
+    description: Patriotic or character costume. Walk the ramp. Individual.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000056"
+    name: Fashion Show – Regional Attire (Age 15+)
+    registration_type: cultural
+    age_group: adults
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 25
+    location: Amphitheatre
+    description: Showcase India's diverse regional traditional attire. Individual.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000057"
+    name: Stand Up Comedy
+    registration_type: cultural
+    age_group: all
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 15
+    location: Amphitheatre
+    description: Original stand-up comedy set. 5 min slot. Individual.
     is_team: false
     is_active: true
 
@@ -94,35 +126,121 @@ events:
     registration_type: cultural
     age_group: all
     event_date: "2026-08-15"
-    slot_time: "04:00 PM – 05:30 PM"
+    slot_time: "Afternoon to Evening"
     max_participants: 25
-    location: Clubhouse Hall 3
-    description: Solo or ensemble instrumental. 5 min slot. Individual or group.
-    is_team: false
-    is_active: true
-
-  - id: "e1000001-0000-0000-0000-000000000025"
-    name: Group Singing
-    registration_type: cultural
-    age_group: all
-    event_date: "2026-08-15"
-    slot_time: "06:30 PM – 08:00 PM"
-    max_participants: 50
     location: Amphitheatre
-    description: Group vocal, 5–15 members. Patriotic/folk songs encouraged.
-    is_team: true
+    description: Solo instrumental performance. 5 min slot. Bring your own instrument.
+    is_team: false
     is_active: true
 
   - id: "e1000001-0000-0000-0000-000000000008"
-    name: Musical Chair
+    name: Musical Chair (Age Till 15)
+    registration_type: cultural
+    age_group: children
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 25
+    location: Main Lawn
+    description: Fun elimination rounds for kids. Individual.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000058"
+    name: Musical Chair (Age 15+)
+    registration_type: cultural
+    age_group: adults
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 25
+    location: Main Lawn
+    description: Fun elimination rounds for adults. Individual.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000059"
+    name: Creative Freedom for All
     registration_type: cultural
     age_group: all
-    event_date: "2026-08-13"
-    slot_time: "06:00 PM – 07:00 PM"
-    max_participants: 40
+    event_date: "2026-08-09"
+    slot_time: "Afternoon"
+    max_participants: 50
     location: Main Lawn
-    description: Open to all age groups. Fun elimination rounds.
+    description: Express yourself freely — any art, performance, or creativity. Individual.
     is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000060"
+    name: Sing Your Patriotic Song
+    registration_type: cultural
+    age_group: all
+    event_date: "2026-08-15"
+    slot_time: "After Flag Hoisting"
+    max_participants: 30
+    location: Main Lawn
+    description: Patriotic songs to celebrate Independence Day. After the flag hoisting ceremony.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000061"
+    name: Speech
+    registration_type: cultural
+    age_group: all
+    event_date: "2026-08-15"
+    slot_time: "After Flag Hoisting"
+    max_participants: 10
+    location: Main Lawn
+    description: Short speech on a patriotic theme. 3–5 min. After the flag hoisting ceremony.
+    is_team: false
+    is_active: true
+
+  # ── Group ─────────────────────────────────────────────────────────────────
+
+  - id: "e1000001-0000-0000-0000-000000000006"
+    name: Group Singing (Age Till 15)
+    registration_type: cultural
+    age_group: children
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 40
+    location: Amphitheatre
+    description: Group vocal, 3–15 members. Any songs. Register as a group.
+    is_team: true
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000025"
+    name: Group Dance (Age Till 15)
+    registration_type: cultural
+    age_group: children
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 40
+    location: Amphitheatre
+    description: Group choreography, 3–15 members. Register as a group.
+    is_team: true
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000062"
+    name: Group Singing (Age 15+)
+    registration_type: cultural
+    age_group: adults
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 40
+    location: Amphitheatre
+    description: Group vocal, 3–15 members. Patriotic/folk encouraged. Register as a group.
+    is_team: true
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000063"
+    name: Group Dance (Age 15+)
+    registration_type: cultural
+    age_group: adults
+    event_date: "2026-08-15"
+    slot_time: "Afternoon to Evening"
+    max_participants: 40
+    location: Amphitheatre
+    description: Group choreography, 3–15 members. Register as a group.
+    is_team: true
     is_active: true
 
   # ═══════════════════════════════════════════════════════════════════════════

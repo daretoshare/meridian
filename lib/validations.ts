@@ -10,7 +10,7 @@ const apartmentFormat = z
   .string()
   .regex(
     /^[56]\d{4,5}$/,
-    'Apartment number must be 5 or 6 digits starting with 5 or 6 (e.g. 50123 or 501234)'
+    'Apartment number must be 5–6 digits starting with 5 (Building 5) or 6 (Building 6)'
   )
 
 export const registrationSchema = z.object({
@@ -23,7 +23,10 @@ export const registrationSchema = z.object({
   tower: z
     .string()
     .min(1, 'Tower is required')
-    .regex(/^Tower (1[0-6]|[1-9])$/, 'Select a valid tower (Tower 1 – Tower 16)'),
+    .regex(
+      /^(Building 5 – Tower (10|[1-9])|Building 6 – Tower [1-6])$/,
+      'Select a valid tower'
+    ),
 
   apartment_number: apartmentFormat,
 
@@ -42,6 +45,15 @@ export const registrationSchema = z.object({
     .string()
     .max(80, 'Team name must be 80 characters or fewer')
     .optional(),
+}).superRefine((data, ctx) => {
+  const building = data.tower?.startsWith('Building 5') ? '5' : data.tower?.startsWith('Building 6') ? '6' : null
+  if (building && data.apartment_number && !data.apartment_number.startsWith(building)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: `Apartment number must start with ${building} for ${data.tower?.split(' – ')[0]}`,
+      path: ['apartment_number'],
+    })
+  }
 })
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>
