@@ -8,16 +8,14 @@ import type { Event } from '@/types/database'
 import type { SiteContent } from '@/lib/content'
 import {
   CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail,
-  ExternalLink, FileText, Lock, Clock, Users,
+  ExternalLink, FileText, Lock, Clock, Users, Check,
 } from 'lucide-react'
 import Link from 'next/link'
 import type { RegistrationSummary } from '@/actions/register'
 
-// ── Registration window constants ────────────────────────────────────────────
-// Competitive events close end-of-day July 11 2026
-const COMPETITIVE_DEADLINE = new Date('2026-07-12T00:00:00')
-// Cultural events open July 13 2026
-const CULTURAL_OPEN_DATE   = new Date('2026-07-13T00:00:00')
+// ── Registration window constants ─────────────────────────────────────────────
+const COMPETITIVE_DEADLINE  = new Date('2026-07-12T00:00:00') // closes end-of-day July 11
+const CULTURAL_OPEN_DATE    = new Date('2026-07-13T00:00:00') // opens July 13
 
 const AGE_GROUP_COLORS: Record<string, string> = {
   children: 'bg-yellow-100 text-yellow-800 border-yellow-200',
@@ -32,25 +30,6 @@ const TOWERS = Array.from({ length: 16 }, (_, i) => `Tower ${i + 1}`)
 interface Props {
   events: Event[]
   site: SiteContent
-}
-
-// Helper: group events by date → event name
-function groupByDate(evts: Event[]) {
-  const byDate: Record<string, Record<string, Event[]>> = {}
-  for (const e of evts) {
-    const day = (e as any).event_date ?? 'unscheduled'
-    if (!byDate[day])       byDate[day] = {}
-    if (!byDate[day][e.name]) byDate[day][e.name] = []
-    byDate[day][e.name].push(e)
-  }
-  return Object.entries(byDate).sort(([a], [b]) => a.localeCompare(b))
-}
-
-function formatDate(iso: string): string {
-  if (iso === 'unscheduled') return 'Date TBD'
-  return new Date(iso + 'T00:00:00').toLocaleDateString('en-IN', {
-    weekday: 'long', day: 'numeric', month: 'long',
-  })
 }
 
 function daysUntil(d: Date): number {
@@ -70,40 +49,42 @@ export default function RegistrationForm({ events, site }: Props) {
     defaultValues: { event_ids: [], team_name: '' },
   })
 
-  // ── Window state (computed once per render) ──────────────────────────────
+  // ── Window state ─────────────────────────────────────────────────────────
   const today               = useMemo(() => new Date(), [])
-  const isCompetitiveClosed = today >= COMPETITIVE_DEADLINE
+  const isCompetitiveClosed  = today >= COMPETITIVE_DEADLINE
   const isCulturalNotYetOpen = today < CULTURAL_OPEN_DATE
   const daysToDeadline      = daysUntil(COMPETITIVE_DEADLINE)
   const daysToOpen          = daysUntil(CULTURAL_OPEN_DATE)
 
-  // ── Event grouping ────────────────────────────────────────────────────────
-  const competitiveByDate = useMemo(() =>
-    groupByDate(events.filter(e => (e as any).registration_type !== 'cultural')),
+  // ── Split and sort events ────────────────────────────────────────────────
+  // Sort within each bucket: by event_date then alphabetically by name
+  const sortByDateName = (a: Event, b: Event) => {
+    const da = (a as any).event_date ?? '9999'
+    const db = (b as any).event_date ?? '9999'
+    if (da !== db) return da.localeCompare(db)
+    return a.name.localeCompare(b.name)
+  }
+
+  const competitiveEvents = useMemo(() =>
+    events.filter(e => (e as any).registration_type !== 'cultural').sort(sortByDateName),
     [events]
   )
-  const culturalByDate = useMemo(() =>
-    groupByDate(events.filter(e => (e as any).registration_type === 'cultural')),
+  const culturalEvents = useMemo(() =>
+    events.filter(e => (e as any).registration_type === 'cultural').sort(sortByDateName),
     [events]
   )
 
   // ── Team event detection ─────────────────────────────────────────────────
-  const eventMap = useMemo(
-    () => Object.fromEntries(events.map(e => [e.id, e])),
-    [events]
-  )
+  const eventMap = useMemo(() => Object.fromEntries(events.map(e => [e.id, e])), [events])
   const hasTeamEvent = useMemo(() =>
     selectedEvents.some(id => (eventMap[id] as any)?.is_team === true),
     [selectedEvents, eventMap]
   )
 
-  // ── Toggle selection ─────────────────────────────────────────────────────
+  // ── Toggle ───────────────────────────────────────────────────────────────
   const toggleEvent = (id: string, disabled: boolean) => {
     if (disabled) return
-    setSelectedEvents(prev => {
-      if (prev.includes(id)) return prev.filter(e => e !== id)
-      return [...prev, id]
-    })
+    setSelectedEvents(prev => prev.includes(id) ? prev.filter(e => e !== id) : [...prev, id])
   }
 
   // ── PDF receipt ──────────────────────────────────────────────────────────
@@ -125,29 +106,29 @@ export default function RegistrationForm({ events, site }: Props) {
   <meta charset="utf-8"/>
   <title>Meridian Park — Registration Receipt</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; font-size: 12px; color: #1e293b; padding: 32px; }
-    .header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
-    .logo { width: 44px; height: 44px; }
-    h1 { font-size: 18px; font-weight: 700; }
-    .sub { font-size: 11px; color: #64748b; }
-    .badge { display: inline-block; background: #dcfce7; color: #16a34a; font-size: 11px;
-             font-weight: 600; padding: 3px 10px; border-radius: 20px; margin: 12px 0 16px; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px;
-                 background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; }
-    .info-item label { display: block; font-size: 10px; color: #94a3b8; text-transform: uppercase;
-                       letter-spacing: .05em; margin-bottom: 2px; }
-    .info-item span { font-weight: 600; }
-    table { width: 100%; border-collapse: collapse; }
-    th { background: #f1f5f9; text-align: left; padding: 7px 10px; font-size: 10px;
-         text-transform: uppercase; letter-spacing: .05em; border-bottom: 2px solid #e2e8f0; }
-    td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
-    tr:nth-child(even) td { background: #fafafa; }
-    .mono { font-family: monospace; font-weight: 700; font-size: 13px; color: #0f172a; }
-    small { display: block; color: #64748b; font-size: 10px; text-transform: capitalize; }
-    .footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #e2e8f0;
-              font-size: 10px; color: #94a3b8; display: flex; justify-content: space-between; }
-    @media print { body { padding: 16px; } }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:Arial,sans-serif; font-size:12px; color:#1e293b; padding:32px; }
+    .header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    .logo { width:44px; height:44px; }
+    h1 { font-size:18px; font-weight:700; }
+    .sub { font-size:11px; color:#64748b; }
+    .badge { display:inline-block; background:#dcfce7; color:#16a34a; font-size:11px;
+             font-weight:600; padding:3px 10px; border-radius:20px; margin:12px 0 16px; }
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px;
+                 background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; }
+    .info-item label { display:block; font-size:10px; color:#94a3b8; text-transform:uppercase;
+                       letter-spacing:.05em; margin-bottom:2px; }
+    .info-item span { font-weight:600; }
+    table { width:100%; border-collapse:collapse; }
+    th { background:#f1f5f9; text-align:left; padding:7px 10px; font-size:10px;
+         text-transform:uppercase; letter-spacing:.05em; border-bottom:2px solid #e2e8f0; }
+    td { padding:8px 10px; border-bottom:1px solid #f1f5f9; vertical-align:top; }
+    tr:nth-child(even) td { background:#fafafa; }
+    .mono { font-family:monospace; font-weight:700; font-size:13px; color:#0f172a; }
+    small { display:block; color:#64748b; font-size:10px; text-transform:capitalize; }
+    .footer { margin-top:24px; padding-top:12px; border-top:1px solid #e2e8f0;
+              font-size:10px; color:#94a3b8; display:flex; justify-content:space-between; }
+    @media print { body { padding:16px; } }
   </style>
 </head>
 <body>
@@ -167,9 +148,7 @@ export default function RegistrationForm({ events, site }: Props) {
     ${vals.team_name ? `<div class="info-item" style="grid-column:1/-1"><label>Team Name</label><span>${vals.team_name}</span></div>` : ''}
   </div>
   <table>
-    <thead>
-      <tr><th>Reg ID</th><th>Event</th><th>Date</th><th>Time</th><th>Venue</th></tr>
-    </thead>
+    <thead><tr><th>Reg ID</th><th>Event</th><th>Date</th><th>Time</th><th>Venue</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
   <div class="footer">
@@ -184,7 +163,7 @@ export default function RegistrationForm({ events, site }: Props) {
     if (win) { win.document.write(html); win.document.close() }
   }
 
-  // ── Submit handler ────────────────────────────────────────────────────────
+  // ── Submit ────────────────────────────────────────────────────────────────
   const handleSubmitClick = () => {
     const raw    = { ...getValues(), event_ids: selectedEvents }
     const parsed = registrationSchema.safeParse(raw)
@@ -210,87 +189,87 @@ export default function RegistrationForm({ events, site }: Props) {
     })
   }
 
-  // ── Event card renderer ───────────────────────────────────────────────────
-  const renderEventGroup = (
-    activityName: string,
-    activityEvents: Event[],
+  // ── Flat event list ───────────────────────────────────────────────────────
+  const renderFlatList = (
+    evts: Event[],
     disabled: boolean,
-    disabledReason?: string,
-  ) => {
-    const isTeam = (activityEvents[0] as any)?.is_team === true
-    return (
-      <div key={activityName} className="mb-5">
-        <div className="flex items-center gap-2 mb-2">
-          <h3 className="text-sm font-semibold text-slate-700">{activityName}</h3>
-          {isTeam && (
-            <span className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
-              <Users size={10} /> Team
-            </span>
-          )}
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {activityEvents.map(event => {
-            const isSelected = selectedEvents.includes(event.id)
-            return (
-              <button
-                key={event.id}
-                type="button"
-                onClick={() => toggleEvent(event.id, disabled)}
-                disabled={disabled}
-                className={`
-                  relative text-left p-4 rounded-xl border-2 transition-all duration-150
-                  ${disabled
-                    ? 'border-slate-100 bg-slate-50 cursor-not-allowed opacity-60'
-                    : isSelected
-                    ? 'border-orange-400 bg-orange-50 shadow-sm'
-                    : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
-                  }
-                `}
-              >
-                {isSelected && !disabled && (
-                  <CheckCircle size={18} className="absolute top-3 right-3 text-orange-500" />
-                )}
-                {disabled && disabledReason === 'closed' && (
-                  <Lock size={14} className="absolute top-3 right-3 text-slate-400" />
-                )}
-                {disabled && disabledReason === 'soon' && (
-                  <Clock size={14} className="absolute top-3 right-3 text-blue-400" />
-                )}
-                <div className="flex items-center gap-2 flex-wrap mb-2">
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${AGE_GROUP_COLORS[event.age_group] ?? AGE_GROUP_COLORS.all}`}>
-                    {event.age_group}
-                  </span>
-                </div>
-                <p className="text-sm font-medium text-slate-700">{event.slot_time}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{event.location}</p>
-                <p className="text-xs text-slate-500 mt-1">Max {event.max_participants} participants</p>
-              </button>
-            )
-          })}
-        </div>
-      </div>
-    )
-  }
-
-  const renderDateSection = (
-    dateEntries: [string, Record<string, Event[]>][],
-    disabled: boolean,
-    disabledReason?: string,
+    reason?: 'closed' | 'soon',
   ) => (
-    dateEntries.map(([date, activitiesOnDay]) => (
-      <div key={date} className="mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="flex items-center gap-2 bg-slate-800 text-white text-sm font-semibold px-3 py-1.5 rounded-lg">
-            <Calendar size={14} />
-            {formatDate(date)}
-          </div>
-          <div className="flex-1 h-px bg-slate-200" />
-        </div>
-        {Object.entries(activitiesOnDay).map(([activityName, activityEvents]) =>
-          renderEventGroup(activityName, activityEvents, disabled, disabledReason)
-        )}
-      </div>
-    ))
+    <div className="space-y-2">
+      {evts.map(event => {
+        const isSelected = selectedEvents.includes(event.id)
+        const isTeam     = (event as any).is_team === true
+        const rawDate    = (event as any).event_date as string | null
+        const dateLabel  = rawDate
+          ? new Date(rawDate + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+          : null
+
+        return (
+          <button
+            key={event.id}
+            type="button"
+            onClick={() => toggleEvent(event.id, disabled)}
+            disabled={disabled}
+            className={`
+              w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all
+              ${disabled
+                ? 'border-slate-100 bg-slate-50 cursor-not-allowed opacity-55'
+                : isSelected
+                ? 'border-orange-400 bg-orange-50 shadow-sm'
+                : 'border-slate-200 bg-white hover:border-orange-300 hover:bg-orange-50/40'}
+            `}
+          >
+            {/* Circle indicator */}
+            <div className={`
+              shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center
+              ${isSelected && !disabled
+                ? 'border-orange-500 bg-orange-500'
+                : disabled && reason === 'closed'
+                ? 'border-slate-200 bg-slate-100'
+                : disabled && reason === 'soon'
+                ? 'border-blue-200 bg-blue-50'
+                : 'border-slate-300 bg-white'}
+            `}>
+              {isSelected && !disabled   && <Check size={11} className="text-white" />}
+              {disabled && reason === 'closed' && <Lock size={9} className="text-slate-300" />}
+              {disabled && reason === 'soon'   && <Clock size={9} className="text-blue-300" />}
+            </div>
+
+            {/* Event info */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className={`text-sm font-semibold ${disabled ? 'text-slate-400' : isSelected ? 'text-orange-900' : 'text-slate-800'}`}>
+                  {event.name}
+                </span>
+                {isTeam && (
+                  <span className="text-xs text-blue-600 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                    <Users size={9} /> Team
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2 mt-1 flex-wrap text-xs text-slate-400">
+                {dateLabel
+                  ? <span className="text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full font-medium">
+                      Tentative: {dateLabel}
+                    </span>
+                  : <span className="text-slate-400 italic">Date TBD</span>}
+                <span>{event.slot_time}</span>
+                <span>·</span>
+                <span>{event.location}</span>
+                <span>·</span>
+                <span>{event.max_participants} spots</span>
+              </div>
+            </div>
+
+            {/* Age group badge */}
+            <span className={`shrink-0 text-xs font-medium px-2 py-0.5 rounded-full border hidden sm:inline-flex
+              ${AGE_GROUP_COLORS[event.age_group] ?? AGE_GROUP_COLORS.all}`}>
+              {event.age_group}
+            </span>
+          </button>
+        )
+      })}
+    </div>
   )
 
   return (
@@ -358,87 +337,88 @@ export default function RegistrationForm({ events, site }: Props) {
       </section>
 
       {/* ── Event Selection ──────────────────────────────────────────────── */}
-      <section className="space-y-8">
+      <section className="space-y-6">
         <div>
           <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
             <Calendar size={20} className="text-orange-500" />
             {site.form_section_events}
           </h2>
-          <p className="text-sm text-slate-500 mt-1">{site.form_events_hint}</p>
+          <p className="text-sm text-slate-500 mt-1 mb-1">{site.form_events_hint}</p>
+          <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full">
+            <Clock size={11} /> Dates shown are tentative and subject to confirmation by the committee.
+          </p>
         </div>
 
-        {/* ── COMPETITIVE ────────────────────────────────────────────────── */}
+        {/* ── COMPETITIVE ─────────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-slate-200 overflow-hidden">
-          {/* Section header */}
           <div className={`px-5 py-3 flex flex-wrap items-center gap-3 border-b ${isCompetitiveClosed ? 'bg-slate-100 border-slate-200' : 'bg-amber-50 border-amber-100'}`}>
             <div className="flex-1">
               <p className="font-bold text-slate-800">🏆 Competitive Events</p>
               <p className="text-xs text-slate-500 mt-0.5">Sports Solo · Sports Group · Art Solo</p>
             </div>
-            {isCompetitiveClosed ? (
-              <span className="flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-100 border border-red-200 px-3 py-1 rounded-full">
-                <Lock size={11} /> Registration Closed
-              </span>
-            ) : (
-              <span className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full">
-                <Clock size={11} />
-                {daysToDeadline > 0
-                  ? `Closes in ${daysToDeadline} day${daysToDeadline !== 1 ? 's' : ''} · July 11, 2026`
-                  : 'Closes today · July 11, 2026'}
-              </span>
-            )}
+            {isCompetitiveClosed
+              ? <span className="flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-100 border border-red-200 px-3 py-1 rounded-full">
+                  <Lock size={11} /> Registration Closed
+                </span>
+              : <span className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full">
+                  <Clock size={11} />
+                  {daysToDeadline > 0
+                    ? `Closes in ${daysToDeadline} day${daysToDeadline !== 1 ? 's' : ''} · July 11, 2026`
+                    : 'Closes today · July 11, 2026'}
+                </span>
+            }
           </div>
 
-          <div className="p-5">
+          <div className="p-4">
             {isCompetitiveClosed && (
               <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-red-50 border border-red-200 text-red-800">
                 <Lock size={16} className="shrink-0 mt-0.5" />
-                <p className="text-sm">Competitive event registration closed on <strong>July 11, 2026</strong>. Contact the committee if you believe this is an error.</p>
+                <p className="text-sm">Registration for competitive events closed on <strong>July 11, 2026</strong>.</p>
               </div>
             )}
-            {competitiveByDate.length === 0
-              ? <p className="text-sm text-slate-400 py-6 text-center">No competitive events scheduled yet.</p>
-              : renderDateSection(competitiveByDate, isCompetitiveClosed, 'closed')}
+            {competitiveEvents.length === 0
+              ? <p className="text-sm text-slate-400 py-8 text-center">No competitive events available.</p>
+              : renderFlatList(competitiveEvents, isCompetitiveClosed, 'closed')
+            }
           </div>
         </div>
 
-        {/* ── CULTURAL ───────────────────────────────────────────────────── */}
+        {/* ── CULTURAL ────────────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-slate-200 overflow-hidden">
-          {/* Section header */}
           <div className={`px-5 py-3 flex flex-wrap items-center gap-3 border-b ${isCulturalNotYetOpen ? 'bg-blue-50 border-blue-100' : 'bg-green-50 border-green-100'}`}>
             <div className="flex-1">
               <p className="font-bold text-slate-800">🎭 Cultural Events</p>
-              <p className="text-xs text-slate-500 mt-0.5">Dance · Singing · Drama · Fun Games</p>
+              <p className="text-xs text-slate-500 mt-0.5">Dance · Singing · Games</p>
             </div>
-            {isCulturalNotYetOpen ? (
-              <span className="flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-100 border border-blue-200 px-3 py-1 rounded-full">
-                <Clock size={11} />
-                {daysToOpen > 0
-                  ? `Opens in ${daysToOpen} day${daysToOpen !== 1 ? 's' : ''} · July 13, 2026`
-                  : 'Opens today · July 13, 2026'}
-              </span>
-            ) : (
-              <span className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100 border border-green-200 px-3 py-1 rounded-full">
-                <CheckCircle size={11} /> Registration Open
-              </span>
-            )}
+            {isCulturalNotYetOpen
+              ? <span className="flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-100 border border-blue-200 px-3 py-1 rounded-full">
+                  <Clock size={11} />
+                  {daysToOpen > 0
+                    ? `Opens in ${daysToOpen} day${daysToOpen !== 1 ? 's' : ''} · July 13, 2026`
+                    : 'Opens today · July 13, 2026'}
+                </span>
+              : <span className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100 border border-green-200 px-3 py-1 rounded-full">
+                  <CheckCircle size={11} /> Registration Open
+                </span>
+            }
           </div>
 
-          <div className="p-5">
+          <div className="p-4">
             {isCulturalNotYetOpen && (
               <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
                 <Clock size={16} className="shrink-0 mt-0.5" />
-                <p className="text-sm">Cultural event registration opens on <strong>July 13, 2026</strong> and runs for two weeks. Please check back then!</p>
+                <p className="text-sm">Cultural event registration opens on <strong>July 13, 2026</strong> and runs for two weeks.</p>
               </div>
             )}
-            {culturalByDate.length === 0
-              ? <p className="text-sm text-slate-400 py-6 text-center">No cultural events scheduled yet.</p>
-              : renderDateSection(culturalByDate, isCulturalNotYetOpen, 'soon')}
+            {culturalEvents.length === 0
+              ? <p className="text-sm text-slate-400 py-8 text-center">No cultural events available.</p>
+              : renderFlatList(culturalEvents, isCulturalNotYetOpen, 'soon')
+            }
           </div>
         </div>
       </section>
 
-      {/* ── Team Name (conditional) ──────────────────────────────────────── */}
+      {/* ── Team Name ────────────────────────────────────────────────────── */}
       {hasTeamEvent && (
         <section className="rounded-2xl border border-blue-200 bg-blue-50 p-5 space-y-3">
           <div className="flex items-center gap-2">
@@ -450,7 +430,7 @@ export default function RegistrationForm({ events, site }: Props) {
           </p>
           <div>
             <label className="block text-sm font-medium text-blue-800 mb-1">
-              Team Name <span className="text-xs font-normal text-blue-600">(optional)</span>
+              Team Name <span className="text-xs font-normal text-blue-500">(optional)</span>
             </label>
             <input
               {...register('team_name')}
@@ -458,22 +438,20 @@ export default function RegistrationForm({ events, site }: Props) {
               maxLength={80}
               className="input-field bg-white"
             />
-            <p className="text-xs text-blue-600 mt-1.5">
-              Please ensure your team is formed before registering.
-            </p>
+            <p className="text-xs text-blue-600 mt-1.5">Please ensure your team is formed before registering.</p>
             {(fieldErrors.team_name || errors.team_name) && <FieldError message={fieldErrors.team_name ?? errors.team_name!.message!} />}
           </div>
         </section>
       )}
 
-      {/* ── Validation hint ─────────────────────────────────────────────── */}
+      {/* ── Hint ─────────────────────────────────────────────────────────── */}
       {events.length > 0 && selectedEvents.length === 0 && (
         <p className="text-sm text-slate-400 flex items-center gap-1.5">
           <AlertCircle size={14} /> Select at least one event to register.
         </p>
       )}
 
-      {/* ── Server result ───────────────────────────────────────────────── */}
+      {/* ── Error ────────────────────────────────────────────────────────── */}
       {result && !result.success && (
         <div className="flex items-start gap-3 p-4 rounded-xl border bg-red-50 border-red-200 text-red-800">
           <AlertCircle size={20} className="shrink-0 mt-0.5" />
@@ -484,15 +462,14 @@ export default function RegistrationForm({ events, site }: Props) {
         </div>
       )}
 
+      {/* ── Success receipt ───────────────────────────────────────────────── */}
       {result?.success && result.registrations && result.registrations.length > 0 && (
         <div className="rounded-xl border border-green-200 bg-green-50 overflow-hidden">
           <div className="flex items-center gap-3 px-5 py-4 bg-green-100 border-b border-green-200">
             <CheckCircle size={22} className="text-green-600 shrink-0" />
             <div className="flex-1">
               <p className="font-semibold text-green-800">{result.message}</p>
-              <p className="text-xs text-green-600 mt-0.5">
-                Save your registration IDs — you&apos;ll need them to check your status.
-              </p>
+              <p className="text-xs text-green-600 mt-0.5">Save your registration IDs — you&apos;ll need them to check your status.</p>
             </div>
           </div>
 
@@ -500,7 +477,7 @@ export default function RegistrationForm({ events, site }: Props) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-green-50 border-b border-green-200 text-xs text-green-700 uppercase tracking-wide">
-                  <th className="px-4 py-2 text-left font-semibold">Registration ID</th>
+                  <th className="px-4 py-2 text-left font-semibold">Reg ID</th>
                   <th className="px-4 py-2 text-left font-semibold">Event</th>
                   <th className="px-4 py-2 text-left font-semibold">Date</th>
                   <th className="px-4 py-2 text-left font-semibold">Time</th>
@@ -518,7 +495,9 @@ export default function RegistrationForm({ events, site }: Props) {
                       <p className="text-xs text-slate-400 capitalize">{r.age_group}</p>
                     </td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">
-                      {r.event_date ? new Date(r.event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
+                      {r.event_date
+                        ? <>{new Date(r.event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} <span className="text-amber-600">(Tentative)</span></>
+                        : '—'}
                     </td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">{r.slot_time}</td>
                     <td className="px-4 py-3 text-slate-500 text-xs">{r.location}</td>
@@ -543,7 +522,7 @@ export default function RegistrationForm({ events, site }: Props) {
         </div>
       )}
 
-      {/* ── Submit ──────────────────────────────────────────────────────── */}
+      {/* ── Submit ────────────────────────────────────────────────────────── */}
       <button
         type="button"
         onClick={handleSubmitClick}
@@ -557,11 +536,10 @@ export default function RegistrationForm({ events, site }: Props) {
           flex items-center justify-center gap-2
         "
       >
-        {isPending ? (
-          <><Loader2 size={18} className="animate-spin" /> Registering…</>
-        ) : (
-          `Register for ${selectedEvents.length || 0} Event${selectedEvents.length !== 1 ? 's' : ''}`
-        )}
+        {isPending
+          ? <><Loader2 size={18} className="animate-spin" /> Registering…</>
+          : `Register for ${selectedEvents.length || 0} Event${selectedEvents.length !== 1 ? 's' : ''}`
+        }
       </button>
 
     </form>
