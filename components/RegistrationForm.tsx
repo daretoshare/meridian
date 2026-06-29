@@ -199,10 +199,6 @@ export default function RegistrationForm({ events, site }: Props) {
       {evts.map(event => {
         const isSelected = selectedEvents.includes(event.id)
         const isTeam     = (event as any).is_team === true
-        const rawDate    = (event as any).event_date as string | null
-        const dateLabel  = rawDate
-          ? new Date(rawDate + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
-          : null
 
         return (
           <button
@@ -248,11 +244,6 @@ export default function RegistrationForm({ events, site }: Props) {
                 )}
               </div>
               <div className="flex items-center gap-2 mt-1 flex-wrap text-xs text-slate-400">
-                {dateLabel
-                  ? <span className="text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full font-medium">
-                      Tentative: {dateLabel}
-                    </span>
-                  : <span className="text-slate-400 italic">Date TBD</span>}
                 <span>{event.slot_time}</span>
                 <span>·</span>
                 <span>{event.location}</span>
@@ -343,10 +334,15 @@ export default function RegistrationForm({ events, site }: Props) {
             <Calendar size={20} className="text-orange-500" />
             {site.form_section_events}
           </h2>
-          <p className="text-sm text-slate-500 mt-1 mb-1">{site.form_events_hint}</p>
-          <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full">
-            <Clock size={11} /> Dates shown are tentative and subject to confirmation by the committee.
-          </p>
+          <p className="text-sm text-slate-500 mt-1 mb-2">{site.form_events_hint}</p>
+          <div className="flex items-start gap-2.5 p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+            <Calendar size={15} className="shrink-0 mt-0.5 text-amber-500" />
+            <p>
+              All events will be held on <strong>weekends (Saturdays &amp; Sundays)</strong> between{' '}
+              <strong>18 July and 9 August 2026</strong>. The exact schedule for each event will be announced
+              closer to the date.
+            </p>
+          </div>
         </div>
 
         {/* ── COMPETITIVE ─────────────────────────────────────────────────── */}
@@ -479,7 +475,7 @@ export default function RegistrationForm({ events, site }: Props) {
                 <tr className="bg-green-50 border-b border-green-200 text-xs text-green-700 uppercase tracking-wide">
                   <th className="px-4 py-2 text-left font-semibold">Reg ID</th>
                   <th className="px-4 py-2 text-left font-semibold">Event</th>
-                  <th className="px-4 py-2 text-left font-semibold">Date</th>
+                  {submittedVals.team_name && <th className="px-4 py-2 text-left font-semibold">Team</th>}
                   <th className="px-4 py-2 text-left font-semibold">Time</th>
                   <th className="px-4 py-2 text-left font-semibold">Venue</th>
                 </tr>
@@ -494,11 +490,9 @@ export default function RegistrationForm({ events, site }: Props) {
                       <p className="font-medium text-slate-700">{r.event_name}</p>
                       <p className="text-xs text-slate-400 capitalize">{r.age_group}</p>
                     </td>
-                    <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">
-                      {r.event_date
-                        ? <>{new Date(r.event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} <span className="text-amber-600">(Tentative)</span></>
-                        : '—'}
-                    </td>
+                    {submittedVals.team_name && (
+                      <td className="px-4 py-3 text-xs text-slate-600">{submittedVals.team_name}</td>
+                    )}
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">{r.slot_time}</td>
                     <td className="px-4 py-3 text-slate-500 text-xs">{r.location}</td>
                   </tr>

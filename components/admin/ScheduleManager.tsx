@@ -385,11 +385,11 @@ export default function ScheduleManager({ events, locations }: Props) {
                               </span>
                             </td>
 
-                            {/* Date — show tentative badge */}
+                            {/* Date */}
                             <td className="px-4 py-3 whitespace-nowrap">
                               {dateLabel
-                                ? <span className="text-xs text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                                    <Clock size={9} /> Tentative: {dateLabel}
+                                ? <span className="text-xs text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                                    <Calendar size={9} /> {dateLabel}
                                   </span>
                                 : <span className="text-xs text-slate-400 italic">TBD</span>}
                             </td>
