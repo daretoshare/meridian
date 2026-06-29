@@ -94,7 +94,7 @@ export default function RegistrationForm({ events, site }: Props) {
     const rows = regs.map(r => `
       <tr>
         <td class="mono">${r.id.slice(0, 8).toUpperCase()}</td>
-        <td>${r.event_name}<br/><small>${r.age_group}</small></td>
+        <td><span class="${r.is_team ? 'team-tag' : 'solo-tag'}">${r.is_team ? 'Team' : 'Solo'}</span> ${r.event_name}<br/><small>${r.age_group}</small></td>
         <td>${r.event_date ? new Date(r.event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</td>
         <td>${r.slot_time}</td>
         <td>${r.location}</td>
@@ -125,6 +125,8 @@ export default function RegistrationForm({ events, site }: Props) {
     td { padding:8px 10px; border-bottom:1px solid #f1f5f9; vertical-align:top; }
     tr:nth-child(even) td { background:#fafafa; }
     .mono { font-family:monospace; font-weight:700; font-size:13px; color:#0f172a; }
+    .solo-tag { font-size:9px; font-weight:700; background:#f1f5f9; color:#64748b; padding:1px 5px; border-radius:4px; }
+    .team-tag { font-size:9px; font-weight:700; background:#dbeafe; color:#1d4ed8; padding:1px 5px; border-radius:4px; }
     small { display:block; color:#64748b; font-size:10px; text-transform:capitalize; }
     .disclaimer { margin-top:20px; background:#fffbeb; border:1px solid #fcd34d; border-radius:8px;
                   padding:10px 12px; font-size:10px; color:#92400e; line-height:1.6; }
@@ -496,7 +498,12 @@ export default function RegistrationForm({ events, site }: Props) {
                       {r.id.slice(0, 8).toUpperCase()}
                     </td>
                     <td className="px-4 py-3">
-                      <p className="font-medium text-slate-700">{r.event_name}</p>
+                      <p className="font-medium text-slate-700 flex items-center gap-1.5">
+                        <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${r.is_team ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'}`}>
+                          {r.is_team ? 'Team' : 'Solo'}
+                        </span>
+                        {r.event_name}
+                      </p>
                       <p className="text-xs text-slate-400 capitalize">{r.age_group}</p>
                     </td>
                     {submittedVals.team_name && (

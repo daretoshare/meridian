@@ -13,6 +13,7 @@ export interface RegistrationSummary {
   event_date: string | null
   slot_time: string
   location: string
+  is_team: boolean
 }
 
 export type ActionResult =
@@ -146,6 +147,7 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
         event_date: evt?.event_date ?? null,
         slot_time:  evt?.slot_time ?? '',
         location:   evt?.location ?? '',
+        is_team:    (evt as any)?.is_team === true,
       }
     })
 
