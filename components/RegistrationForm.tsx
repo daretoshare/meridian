@@ -126,7 +126,10 @@ export default function RegistrationForm({ events, site }: Props) {
     tr:nth-child(even) td { background:#fafafa; }
     .mono { font-family:monospace; font-weight:700; font-size:13px; color:#0f172a; }
     small { display:block; color:#64748b; font-size:10px; text-transform:capitalize; }
-    .footer { margin-top:24px; padding-top:12px; border-top:1px solid #e2e8f0;
+    .disclaimer { margin-top:20px; background:#fffbeb; border:1px solid #fcd34d; border-radius:8px;
+                  padding:10px 12px; font-size:10px; color:#92400e; line-height:1.6; }
+    .disclaimer strong { font-weight:700; }
+    .footer { margin-top:16px; padding-top:12px; border-top:1px solid #e2e8f0;
               font-size:10px; color:#94a3b8; display:flex; justify-content:space-between; }
     @media print { body { padding:16px; } }
   </style>
@@ -151,8 +154,14 @@ export default function RegistrationForm({ events, site }: Props) {
     <thead><tr><th>Reg ID</th><th>Event</th><th>Date</th><th>Time</th><th>Venue</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
+  <div class="disclaimer">
+    ⚠️ <strong>This registration is tentative.</strong> Event details, timings, and venues are subject to
+    change at the discretion of the organizing committee. Your registration may be moved to the waitlist or
+    cancelled based on capacity or other factors. For the latest status, visit the
+    <strong> Check Registration Status</strong> page on the society portal using your email, phone number, or Registration ID.
+  </div>
   <div class="footer">
-    <span>Keep this receipt. Use your Reg ID to check status at the society portal.</span>
+    <span>Keep this receipt. Use your Reg ID, email, or phone to check status at the society portal.</span>
     <span>Meridian Park · Independence Day 2026</span>
   </div>
   <script>window.onload = () => { window.print() }</script>
@@ -499,6 +508,20 @@ export default function RegistrationForm({ events, site }: Props) {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Disclaimer */}
+          <div className="px-5 py-3 bg-amber-50 border-t border-amber-100 flex items-start gap-2 text-xs text-amber-800">
+            <AlertCircle size={13} className="shrink-0 mt-0.5 text-amber-500" />
+            <p>
+              <strong>This registration is tentative.</strong> Event details, timings, and venues are subject
+              to change at the discretion of the organizing committee. Your registration may be moved to the
+              waitlist or cancelled based on capacity or other factors. For the latest status, use the{' '}
+              <Link href="/status" className="underline underline-offset-2 font-semibold hover:text-amber-900">
+                Check Registration Status
+              </Link>{' '}
+              page.
+            </p>
           </div>
 
           <div className="px-5 py-3 bg-green-50 border-t border-green-100 flex flex-col sm:flex-row items-start sm:items-center gap-3 justify-between">
