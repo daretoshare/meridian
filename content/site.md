@@ -1,7 +1,7 @@
 ---
 # ─── Society Identity ──────────────────────────────────────────
 society_name: Meridian Park
-society_subtitle: Housing Society
+society_subtitle: Housing Society | Cultural Committee
 admin_label: Admin
 
 # ─── Nav / Hero ────────────────────────────────────────────────
