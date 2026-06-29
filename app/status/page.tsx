@@ -86,7 +86,8 @@ export default function StatusPage() {
         await fetchByProfileId(supabase, profile.id, setRows, setError)
 
       } else {
-        // Reg ID: search registrations whose UUID starts with the entered hex prefix
+        // Reg ID: UUID column — use a range query covering all UUIDs with this 8-char prefix
+        // e.g. "A1B2C3D4" → gte a1b2c3d4-0000-… lte a1b2c3d4-ffff-…
         const prefix = input.toLowerCase()
         const { data, error: regErr } = await supabase
           .from('registrations')
@@ -94,7 +95,8 @@ export default function StatusPage() {
             id, status, reason,
             events ( name, age_group, event_date, slot_time, location )
           `)
-          .like('id', `${prefix}%`)
+          .gte('id', `${prefix}-0000-0000-0000-000000000000`)
+          .lte('id', `${prefix}-ffff-ffff-ffff-ffffffffffff`)
           .order('status', { ascending: true })
 
         if (regErr) { setError('Could not load registrations. Please try again.'); return }
