@@ -264,14 +264,14 @@ events:
   # ── Competitive · Kept from previous schedule ──────────────────────────────
 
   - id: "e1000001-0000-0000-0000-000000000016"
-    name: Carroms
+    name: Carrom
     registration_type: competitive
     age_group: all
     event_date: "2026-08-14"
     slot_time: "02:00 PM – 04:00 PM"
     max_participants: 24
     location: Clubhouse Hall 1
-    description: Pairs/doubles carroms tournament. Team of 2 per entry.
+    description: Pairs/doubles carrom tournament. Team of 2 per entry.
     is_team: true
     is_active: true
 
