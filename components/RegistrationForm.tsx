@@ -8,7 +8,7 @@ import type { Event } from '@/types/database'
 import type { SiteContent } from '@/lib/content'
 import {
   CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail,
-  ExternalLink, FileText, Lock, Clock, Users, Check,
+  ExternalLink, FileText, Lock, Clock, Users, Check, IndianRupee, X,
 } from 'lucide-react'
 import Link from 'next/link'
 import type { RegistrationSummary } from '@/actions/register'
@@ -44,6 +44,8 @@ export default function RegistrationForm({ events, site }: Props) {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([])
   const [fieldErrors, setFieldErrors]       = useState<Record<string, string>>({})
   const [submittedVals, setSubmittedVals]   = useState<Partial<RegistrationFormData>>({})
+  const [feeConsented, setFeeConsented]     = useState(false)
+  const [showFeeModal, setShowFeeModal]     = useState(false)
 
   const { register, getValues, formState: { errors }, reset } = useForm<RegistrationFormData>({
     defaultValues: { event_ids: [], team_name: '' },
@@ -84,7 +86,14 @@ export default function RegistrationForm({ events, site }: Props) {
   // ── Toggle ───────────────────────────────────────────────────────────────
   const toggleEvent = (id: string, disabled: boolean) => {
     if (disabled) return
+    if (!feeConsented) { setShowFeeModal(true); return }
     setSelectedEvents(prev => prev.includes(id) ? prev.filter(e => e !== id) : [...prev, id])
+  }
+
+  // ── Format event date ─────────────────────────────────────────────────────
+  const formatEventDate = (raw: string | null) => {
+    if (!raw) return null
+    return new Date(raw + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
   }
 
   // ── PDF receipt ──────────────────────────────────────────────────────────
@@ -208,8 +217,9 @@ export default function RegistrationForm({ events, site }: Props) {
   ) => (
     <div className="space-y-2">
       {evts.map(event => {
-        const isSelected = selectedEvents.includes(event.id)
-        const isTeam     = (event as any).is_team === true
+        const isSelected  = selectedEvents.includes(event.id)
+        const isTeam      = (event as any).is_team === true
+        const dateLabel   = formatEventDate((event as any).event_date)
 
         return (
           <button
@@ -254,12 +264,19 @@ export default function RegistrationForm({ events, site }: Props) {
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-2 mt-1 flex-wrap text-xs text-slate-400">
-                <span>{event.slot_time}</span>
-                <span>·</span>
-                <span>{event.location}</span>
-                <span>·</span>
-                <span>{event.max_participants} spots</span>
+              <div className="flex items-center gap-2 mt-1.5 flex-wrap text-xs">
+                {dateLabel && (
+                  <span className="flex items-center gap-1 text-slate-700 font-medium bg-slate-100 px-2 py-0.5 rounded-full">
+                    <Calendar size={9} /> {dateLabel}
+                  </span>
+                )}
+                <span className="flex items-center gap-1 text-slate-500">
+                  <Clock size={9} /> {event.slot_time}
+                </span>
+                <span className="text-slate-300">·</span>
+                <span className="text-slate-500">{event.location}</span>
+                <span className="text-slate-300">·</span>
+                <span className="text-slate-500">{event.max_participants} spots</span>
               </div>
             </div>
 
@@ -338,6 +355,44 @@ export default function RegistrationForm({ events, site }: Props) {
         </div>
       </section>
 
+      {/* ── Fee Consent Modal ────────────────────────────────────────────── */}
+      {showFeeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden">
+            <div className="bg-orange-50 border-b border-orange-200 px-6 py-4 flex items-center gap-3">
+              <IndianRupee size={20} className="text-orange-600 shrink-0" />
+              <h2 className="font-bold text-orange-900 text-lg">Participation Fee</h2>
+              <button onClick={() => setShowFeeModal(false)} className="ml-auto text-orange-400 hover:text-orange-700">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="px-6 py-5 space-y-4 text-sm text-slate-700">
+              <p className="text-base font-semibold text-slate-800">₹ 100 per participant</p>
+              <p>
+                A participation fee of <strong>₹ 100 per person</strong> applies irrespective of the number
+                of activities an individual registers for.
+              </p>
+              <p>
+                This fee will be collected by a <strong>cultural committee member</strong>. Payment details and
+                a collection link will be shared with you separately after registration.
+              </p>
+              <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-amber-800 text-xs">
+                <strong>Note:</strong> Your registration will remain tentative until payment is confirmed.
+                The organizing committee reserves the right to cancel unpaid registrations.
+              </div>
+            </div>
+            <div className="px-6 pb-5 flex gap-3">
+              <button
+                onClick={() => { setFeeConsented(true); setShowFeeModal(false) }}
+                className="flex-1 py-2.5 text-sm font-semibold rounded-xl bg-orange-600 hover:bg-orange-700 text-white transition-colors"
+              >
+                I Agree — Proceed to Select Events
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Event Selection ──────────────────────────────────────────────── */}
       <section className="space-y-6">
         <div>
@@ -346,15 +401,32 @@ export default function RegistrationForm({ events, site }: Props) {
             {site.form_section_events}
           </h2>
           <p className="text-sm text-slate-500 mt-1 mb-2">{site.form_events_hint}</p>
-          <div className="flex items-start gap-2.5 p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
-            <Calendar size={15} className="shrink-0 mt-0.5 text-amber-500" />
-            <p>
-              All events will be held on <strong>weekends (Saturdays &amp; Sundays)</strong> between{' '}
-              <strong>18 July and 9 August 2026</strong>. The exact schedule for each event will be announced
-              closer to the date.
-            </p>
-          </div>
         </div>
+
+        {/* Fee consent gate */}
+        {!feeConsented && (
+          <button
+            type="button"
+            onClick={() => setShowFeeModal(true)}
+            className="w-full flex items-center gap-4 p-4 bg-orange-50 border-2 border-orange-200 border-dashed rounded-2xl hover:border-orange-400 hover:bg-orange-100 transition-colors group"
+          >
+            <div className="w-10 h-10 bg-orange-100 group-hover:bg-orange-200 rounded-xl flex items-center justify-center shrink-0 transition-colors">
+              <IndianRupee size={20} className="text-orange-600" />
+            </div>
+            <div className="text-left">
+              <p className="font-semibold text-orange-900 text-sm">Review &amp; Accept Participation Fee</p>
+              <p className="text-xs text-orange-700 mt-0.5">₹ 100 per participant · Click to read terms and unlock event selection</p>
+            </div>
+            <Lock size={16} className="ml-auto text-orange-400 shrink-0" />
+          </button>
+        )}
+
+        {feeConsented && (
+          <div className="flex items-center gap-2.5 px-4 py-2.5 bg-green-50 border border-green-200 rounded-xl text-sm text-green-800">
+            <CheckCircle size={15} className="text-green-600 shrink-0" />
+            <span>Participation fee accepted — ₹ 100 per participant, collected separately by the committee.</span>
+          </div>
+        )}
 
         {/* ── COMPETITIVE ─────────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-slate-200 overflow-hidden">
