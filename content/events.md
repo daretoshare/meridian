@@ -16,7 +16,7 @@
 # ┌──────────────────────────────────────────────────────────────┐
 # │  CULTURAL REGISTRATION TOGGLE — change this to enable/disable │
 # └──────────────────────────────────────────────────────────────┘
-cultural_registration_open: true
+cultural_registration_open: false
 #
 # CONFIRMED SCHEDULE (2026)
 #   19 Jul  – Running & Field Events

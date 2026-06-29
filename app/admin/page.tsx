@@ -23,7 +23,7 @@ export default async function AdminPage() {
     .select(`
       id, profile_id, event_id, status, reason, team_name, created_at,
       profiles ( full_name, block, apartment_number, phone_number, email ),
-      events ( name, age_group, slot_time, location, event_date, is_team )
+      events ( name, age_group, slot_time, location, event_date, is_team, registration_type )
     `)
     .order('created_at', { ascending: false })
 

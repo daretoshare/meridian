@@ -75,7 +75,7 @@ export default function RegistrationsTable({ registrations, events }: Props) {
   }
 
   const exportCSV = () => {
-    const header = ['Reg ID', 'Name', 'Participant / Team', 'Tower', 'Apartment', 'Phone', 'Email', 'Event', 'Age Group', 'Date', 'Slot', 'Location', 'Status', 'Reason']
+    const header = ['Reg ID', 'Name', 'Participant / Team', 'Tower', 'Apartment', 'Phone', 'Email', 'Event', 'Type', 'Solo/Team', 'Age Group', 'Date', 'Slot', 'Location', 'Status', 'Reason']
     const rows = filtered.map((r) => [
       shortId(r.id),
       r.profiles.full_name,
@@ -84,7 +84,9 @@ export default function RegistrationsTable({ registrations, events }: Props) {
       r.profiles.apartment_number,
       r.profiles.phone_number,
       r.profiles.email,
-      ((r.events as any).is_team ? 'Team' : 'Solo') + ' — ' + r.events.name,
+      r.events.name,
+      ((r.events as any).registration_type ?? 'competitive'),
+      ((r.events as any).is_team ? 'Team' : 'Solo'),
       r.events.age_group,
       (r.events as any).event_date ?? '',
       r.events.slot_time,
@@ -113,7 +115,7 @@ export default function RegistrationsTable({ registrations, events }: Props) {
         <td>${participantLabel(r)}${(r.events as any).is_team ? ' <span class="team-badge">Team</span>' : ''}</td>
         <td>${r.profiles.block} / ${r.profiles.apartment_number}</td>
         <td>${r.profiles.phone_number}<br/><small>${r.profiles.email}</small></td>
-        <td><span class="${(r.events as any).is_team ? 'team-badge' : 'solo-badge'}">${(r.events as any).is_team ? 'Team' : 'Solo'}</span> ${r.events.name}<br/><small class="cap">${r.events.age_group}</small></td>
+        <td><span class="${(r.events as any).registration_type === 'cultural' ? 'cultural-badge' : 'competitive-badge'}">${(r.events as any).registration_type === 'cultural' ? 'Cultural' : 'Competitive'}</span> <span class="${(r.events as any).is_team ? 'team-badge' : 'solo-badge'}">${(r.events as any).is_team ? 'Team' : 'Solo'}</span> ${r.events.name}<br/><small class="cap">${r.events.age_group}</small></td>
         <td>${(r.events as any).event_date ? new Date((r.events as any).event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '—'}</td>
         <td>${r.events.slot_time}</td>
         <td>${r.events.location}</td>
@@ -137,8 +139,10 @@ export default function RegistrationsTable({ registrations, events }: Props) {
     td { padding: 6px 8px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
     tr:nth-child(even) td { background: #fafafa; }
     .cap { text-transform: capitalize; color: #64748b; }
-    .solo-badge { font-size: 9px; font-weight: 600; background: #f1f5f9; color: #64748b; padding: 1px 5px; border-radius: 20px; }
-    .team-badge { font-size: 9px; font-weight: 600; background: #dbeafe; color: #1d4ed8; padding: 1px 5px; border-radius: 20px; }
+    .solo-badge        { font-size: 9px; font-weight: 600; background: #f1f5f9; color: #64748b; padding: 1px 5px; border-radius: 20px; }
+    .team-badge        { font-size: 9px; font-weight: 600; background: #dbeafe; color: #1d4ed8; padding: 1px 5px; border-radius: 20px; }
+    .competitive-badge { font-size: 9px; font-weight: 600; background: #fef9c3; color: #854d0e; padding: 1px 5px; border-radius: 20px; }
+    .cultural-badge    { font-size: 9px; font-weight: 600; background: #fce7f3; color: #9d174d; padding: 1px 5px; border-radius: 20px; }
     .status { font-weight: 600; text-transform: capitalize; }
     .status.confirmed  { color: #16a34a; }
     .status.waitlisted { color: #b45309; }
@@ -287,7 +291,10 @@ export default function RegistrationsTable({ registrations, events }: Props) {
                     <p className="text-xs text-slate-400 truncate max-w-[160px]">{reg.profiles.email}</p>
                   </td>
                   <td className="px-4 py-3">
-                    <p className="font-medium text-slate-700 flex items-center gap-1.5">
+                    <p className="font-medium text-slate-700 flex items-center gap-1.5 flex-wrap">
+                      <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${(reg.events as any).registration_type === 'cultural' ? 'bg-pink-100 text-pink-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                        {(reg.events as any).registration_type === 'cultural' ? 'Cultural' : 'Competitive'}
+                      </span>
                       <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${isTeam ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'}`}>
                         {isTeam ? 'Team' : 'Solo'}
                       </span>
