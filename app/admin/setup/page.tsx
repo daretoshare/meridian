@@ -64,19 +64,28 @@ export default async function SetupPage() {
     })
   }
 
-  // ── Check: events with stable IDs present
+  // ── Check: events synced from events.md
   {
-    const { data, error } = await (admin as any)
+    // Count active events in DB and compare to what's in the markdown
+    const { getContentEvents } = await import('@/lib/content')
+    const contentEvents = getContentEvents(true) // active only
+    const contentCount  = contentEvents.length
+
+    const { count, error } = await (admin as any)
       .from('events')
-      .select('id')
-      .eq('id', 'e1000001-0000-0000-0000-000000000001')
-      .single()
+      .select('id', { count: 'exact', head: true })
+      .eq('is_active', true)
+
+    const dbCount = count ?? 0
+    const synced  = !error && dbCount >= contentCount
     checks.push({
-      label: 'Stable event IDs present (from content/events.md)',
-      ok: !error && !!data,
+      label: 'Events synced to database',
+      ok: synced,
       detail: error
-        ? '❌ Not found — run the migration SQL or npm run sync-events'
-        : '✓ Markdown event IDs are in the database',
+        ? `❌ Query failed: ${error.message}`
+        : synced
+        ? `✓ ${dbCount} active event(s) in DB (${contentCount} in events.md)`
+        : `❌ DB has ${dbCount} active events but events.md has ${contentCount} — run npm run sync-events`,
     })
   }
 
