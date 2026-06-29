@@ -68,11 +68,18 @@ export default function RegistrationsTable({ registrations, events }: Props) {
     })
   }
 
+  const participantLabel = (r: RegistrationWithDetails) => {
+    const isTeam   = (r.events as any).is_team === true
+    const teamName = (r as any).team_name as string | null | undefined
+    return isTeam && teamName ? teamName : r.profiles.full_name
+  }
+
   const exportCSV = () => {
-    const header = ['Reg ID', 'Name', 'Tower', 'Apartment', 'Phone', 'Email', 'Event', 'Age Group', 'Date', 'Slot', 'Location', 'Status', 'Reason']
+    const header = ['Reg ID', 'Name', 'Participant / Team', 'Tower', 'Apartment', 'Phone', 'Email', 'Event', 'Age Group', 'Date', 'Slot', 'Location', 'Status', 'Reason']
     const rows = filtered.map((r) => [
       shortId(r.id),
       r.profiles.full_name,
+      participantLabel(r),
       r.profiles.block,
       r.profiles.apartment_number,
       r.profiles.phone_number,
@@ -103,6 +110,7 @@ export default function RegistrationsTable({ registrations, events }: Props) {
       <tr>
         <td>${shortId(r.id)}</td>
         <td>${r.profiles.full_name}</td>
+        <td>${participantLabel(r)}${(r.events as any).is_team ? ' <span class="team-badge">Team</span>' : ''}</td>
         <td>${r.profiles.block} / ${r.profiles.apartment_number}</td>
         <td>${r.profiles.phone_number}<br/><small>${r.profiles.email}</small></td>
         <td>${r.events.name}<br/><small class="cap">${r.events.age_group}</small></td>
@@ -129,6 +137,7 @@ export default function RegistrationsTable({ registrations, events }: Props) {
     td { padding: 6px 8px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
     tr:nth-child(even) td { background: #fafafa; }
     .cap { text-transform: capitalize; color: #64748b; }
+    .team-badge { font-size: 9px; font-weight: 600; background: #dbeafe; color: #1d4ed8; padding: 1px 5px; border-radius: 20px; }
     .status { font-weight: 600; text-transform: capitalize; }
     .status.confirmed  { color: #16a34a; }
     .status.waitlisted { color: #b45309; }
@@ -144,7 +153,7 @@ export default function RegistrationsTable({ registrations, events }: Props) {
   <table>
     <thead>
       <tr>
-        <th>Reg ID</th><th>Name</th><th>Tower / Apt</th><th>Contact</th>
+        <th>Reg ID</th><th>Name</th><th>Participant / Team</th><th>Tower / Apt</th><th>Contact</th>
         <th>Event</th><th>Date</th><th>Time</th><th>Venue</th><th>Status</th><th>Reason</th>
       </tr>
     </thead>
@@ -239,16 +248,19 @@ export default function RegistrationsTable({ registrations, events }: Props) {
         <table className="w-full text-sm text-left">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              {['Reg ID', 'Name', 'Tower / Apt.', 'Contact', 'Event', 'Date', 'Slot', 'Location', 'Status', 'Reason', 'Change Status'].map((h) => (
+              {['Reg ID', 'Name', 'Participant / Team', 'Tower / Apt.', 'Contact', 'Event', 'Date', 'Slot', 'Location', 'Status', 'Reason', 'Change Status'].map((h) => (
                 <th key={h} className="px-4 py-3 font-semibold text-slate-600 whitespace-nowrap text-xs uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {filtered.length === 0 ? (
-              <tr><td colSpan={11} className="px-4 py-12 text-center text-slate-400">No registrations match your filters.</td></tr>
+              <tr><td colSpan={12} className="px-4 py-12 text-center text-slate-400">No registrations match your filters.</td></tr>
             ) : (
-              filtered.map((reg) => (
+              filtered.map((reg) => {
+                const isTeam   = (reg.events as any).is_team === true
+                const teamName = (reg as any).team_name as string | null | undefined
+                return (
                 <tr key={reg.id} className="hover:bg-slate-50 transition-colors align-top">
                   <td className="px-4 py-3">
                     <span className="font-mono text-xs font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">
@@ -258,6 +270,15 @@ export default function RegistrationsTable({ registrations, events }: Props) {
                   <td className="px-4 py-3">
                     <p className="font-medium text-slate-800">{reg.profiles.full_name}</p>
                     <p className="text-xs text-slate-400">{reg.profiles.block}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    {isTeam && teamName
+                      ? <span className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
+                          <svg width="8" height="8" viewBox="0 0 16 16" fill="currentColor"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/><path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/></svg>
+                          {teamName}
+                        </span>
+                      : <span className="text-xs text-slate-600">{reg.profiles.full_name}</span>
+                    }
                   </td>
                   <td className="px-4 py-3 text-slate-600">{reg.profiles.apartment_number}</td>
                   <td className="px-4 py-3">
@@ -298,7 +319,7 @@ export default function RegistrationsTable({ registrations, events }: Props) {
                     </select>
                   </td>
                 </tr>
-              ))
+              )})
             )}
           </tbody>
         </table>
