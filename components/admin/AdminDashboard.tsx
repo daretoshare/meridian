@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { adminLogout } from '@/actions/admin'
 import RegistrationsTable from './RegistrationsTable'
+import TeamRegistrationsTable from './TeamRegistrationsTable'
 import ScheduleManager from './ScheduleManager'
 import ParticipantsReport from './ParticipantsReport'
 import type { RegistrationWithDetails, EventWithCount, Event } from '@/types/database'
@@ -17,6 +18,7 @@ import {
   CheckCircle,
   TrendingUp,
   Shield,
+  UserRound,
 } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 
@@ -28,10 +30,13 @@ interface Props {
   events: EventWithCount[]
 }
 
-type Tab = 'registrations' | 'schedule' | 'participants'
+type Tab = 'solo' | 'team' | 'schedule' | 'participants'
 
 export default function AdminDashboard({ user, site, locations, registrations, events }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>('registrations')
+  const [activeTab, setActiveTab] = useState<Tab>('solo')
+
+  const soloRegs = registrations.filter(r => !(r.events as any).is_team)
+  const teamRegs = registrations.filter(r =>  (r.events as any).is_team)
 
   const confirmedCount = registrations.filter((r) => r.status === 'confirmed').length
   const totalEvents = events.length
@@ -113,12 +118,18 @@ export default function AdminDashboard({ user, site, locations, registrations, e
         </div>
 
         {/* Tab Bar */}
-        <div className="bg-slate-100 rounded-xl p-1.5 inline-flex gap-1">
+        <div className="bg-slate-100 rounded-xl p-1.5 inline-flex gap-1 flex-wrap">
           <TabButton
-            active={activeTab === 'registrations'}
-            onClick={() => setActiveTab('registrations')}
-            icon={<LayoutDashboard size={15} />}
-            label={site.admin_tab_registrations}
+            active={activeTab === 'solo'}
+            onClick={() => setActiveTab('solo')}
+            icon={<UserRound size={15} />}
+            label={`Solo (${soloRegs.length})`}
+          />
+          <TabButton
+            active={activeTab === 'team'}
+            onClick={() => setActiveTab('team')}
+            icon={<Users size={15} />}
+            label={`Team (${teamRegs.length})`}
           />
           <TabButton
             active={activeTab === 'schedule'}
@@ -136,11 +147,13 @@ export default function AdminDashboard({ user, site, locations, registrations, e
 
         {/* Tab Content */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-          {activeTab === 'registrations' ? (
+          {activeTab === 'solo' ? (
             <RegistrationsTable
-              registrations={registrations}
+              registrations={soloRegs}
               events={events as unknown as Event[]}
             />
+          ) : activeTab === 'team' ? (
+            <TeamRegistrationsTable registrations={teamRegs} />
           ) : activeTab === 'schedule' ? (
             <ScheduleManager events={events} locations={locations} />
           ) : (
