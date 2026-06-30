@@ -164,15 +164,12 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
   const downloadReceiptPDF = (regs: RegistrationSummary[]) => {
     const vals = submittedVals
     const now  = new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
-    const rows = regs.map(r => {
-      const teamName = r.is_team ? eventTeamDetails[r.event_id ?? '']?.team_name : undefined
-      return `
+    const rows = regs.map(r => `
       <tr>
         <td class="mono">${r.id.slice(0, 8).toUpperCase()}</td>
         <td><span class="${r.is_team ? 'team-tag' : 'solo-tag'}">${r.is_team ? 'Team' : 'Solo'}</span> ${r.event_name}<br/><small>${r.age_group}</small></td>
-        <td>${teamName ? `<span class="team-name">${teamName}</span>` : '—'}</td>
-      </tr>`
-    }).join('')
+        <td>${r.team_name ? `<span class="team-name">${r.team_name}</span>` : '—'}</td>
+      </tr>`).join('')
 
     const html = `<!DOCTYPE html>
 <html>
@@ -774,8 +771,8 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
                       <p className="text-xs text-slate-400 capitalize">{r.age_group}</p>
                     </td>
                     <td className="px-4 py-3 text-xs text-slate-600">
-                      {r.is_team && eventTeamDetails[r.event_id]?.team_name
-                        ? <span className="font-medium text-blue-700">{eventTeamDetails[r.event_id].team_name}</span>
+                      {r.team_name
+                        ? <span className="font-medium text-blue-700">{r.team_name}</span>
                         : <span className="text-slate-300">—</span>}
                     </td>
                   </tr>
