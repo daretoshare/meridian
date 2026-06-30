@@ -26,59 +26,76 @@ function buildPayRef(index: number) {
 export default function ParticipantsReport({ registrations }: Props) {
   const [search, setSearch] = useState('')
 
-  // Build unique participant list
-  // Dedup key: phone number (normalised to 10 digits)
+  // Build unique participant list.
+  // Registrants are deduped by profile_id (one person can register for multiple events).
+  // Team members are deduped by phone, then cross-referenced against registrant phones —
+  // if a team member's phone matches a registrant, their events are merged into that registrant.
   const participants = useMemo(() => {
-    const map = new Map<string, UniqueParticipant & { eventSet: Set<string> }>()
+    type Entry = UniqueParticipant & { eventSet: Set<string> }
 
-    const upsert = (
-      phone: string,
-      name: string,
-      tower: string,
-      apartment: string,
-      email: string,
-      eventName: string,
-      source: UniqueParticipant['source'],
-    ) => {
-      const key = phone.replace(/\D/g, '').slice(-10)
-      if (!key || key.length < 10) return
-      if (map.has(key)) {
-        map.get(key)!.eventSet.add(eventName)
+    // --- registrants: keyed by profile_id ---
+    const byProfile = new Map<string, Entry>()
+
+    for (const reg of registrations) {
+      if (reg.status === 'cancelled') continue
+      const pid = reg.profile_id
+      if (byProfile.has(pid)) {
+        byProfile.get(pid)!.eventSet.add(reg.events.name)
       } else {
-        map.set(key, {
-          payRef:    '',           // assigned after sort
-          name, tower, apartment, phone: key, email,
-          source,
-          eventSet:  new Set([eventName]),
-          events:    [],
+        byProfile.set(pid, {
+          payRef: '', events: [],
+          name:      reg.profiles.full_name,
+          tower:     reg.profiles.block,
+          apartment: reg.profiles.apartment_number,
+          phone:     reg.profiles.phone_number.replace(/\D/g, '').slice(-10),
+          email:     reg.profiles.email,
+          source:    'registrant',
+          eventSet:  new Set([reg.events.name]),
         })
       }
     }
 
+    // Build phone → profile_id index for merging team members who are already registrants
+    const phoneToProfile = new Map<string, string>()
+    for (const [pid, entry] of byProfile) {
+      if (entry.phone.length === 10) phoneToProfile.set(entry.phone, pid)
+    }
+
+    // --- team members: keyed by phone ---
+    const byPhone = new Map<string, Entry>()
+
     for (const reg of registrations) {
       if (reg.status === 'cancelled') continue
-
-      // Primary registrant
-      upsert(
-        reg.profiles.phone_number,
-        reg.profiles.full_name,
-        reg.profiles.block,
-        reg.profiles.apartment_number,
-        reg.profiles.email,
-        reg.events.name,
-        'registrant',
-      )
-
-      // Team members stored in JSONB
       const members: Array<{ name: string; tower: string; apartment_number: string; phone_number: string }> =
         (reg as any).team_members ?? []
+
       for (const m of members) {
-        upsert(m.phone_number, m.name, m.tower, m.apartment_number, '', reg.events.name, 'team_member')
+        const phone = m.phone_number.replace(/\D/g, '').slice(-10)
+        if (!phone || phone.length < 10) continue
+
+        if (phoneToProfile.has(phone)) {
+          // This team member is already a registrant — just add the event
+          byProfile.get(phoneToProfile.get(phone)!)!.eventSet.add(reg.events.name)
+        } else if (byPhone.has(phone)) {
+          byPhone.get(phone)!.eventSet.add(reg.events.name)
+        } else {
+          byPhone.set(phone, {
+            payRef: '', events: [],
+            name:      m.name,
+            tower:     m.tower,
+            apartment: m.apartment_number,
+            phone,
+            email:     '',
+            source:    'team_member',
+            eventSet:  new Set([reg.events.name]),
+          })
+        }
       }
     }
 
-    // Sort by tower then apartment, assign sequential pay refs
-    const sorted = [...map.values()].sort((a, b) => {
+    // Combine, sort by tower then apartment, assign pay refs
+    const all = [...byProfile.values(), ...byPhone.values()]
+    const sorted = all.sort((a, b) => {
       const t = a.tower.localeCompare(b.tower)
       return t !== 0 ? t : a.apartment.localeCompare(b.apartment)
     })
