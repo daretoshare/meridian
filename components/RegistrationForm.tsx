@@ -123,42 +123,35 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
     })
   }
 
-  // ── Team detail helpers ───────────────────────────────────────────────────
+  // ── Team detail helpers (always use prev inside setters to avoid stale closure) ──
   const getTeamDetail = (eventId: string) =>
     eventTeamDetails[eventId] ?? { team_name: '', members: [] }
 
+  const empty = { team_name: '', members: [] as TeamMember[] }
+
   const setTeamName = (eventId: string, name: string) =>
-    setEventTeamDetails(prev => ({
-      ...prev,
-      [eventId]: { ...getTeamDetail(eventId), team_name: name },
-    }))
+    setEventTeamDetails(prev => {
+      const cur = prev[eventId] ?? empty
+      return { ...prev, [eventId]: { ...cur, team_name: name } }
+    })
 
   const addTeamMember = (eventId: string) =>
-    setEventTeamDetails(prev => ({
-      ...prev,
-      [eventId]: {
-        ...getTeamDetail(eventId),
-        members: [...getTeamDetail(eventId).members, { name: '', tower: '', apartment_number: '', phone_number: '' }],
-      },
-    }))
+    setEventTeamDetails(prev => {
+      const cur = prev[eventId] ?? empty
+      return { ...prev, [eventId]: { ...cur, members: [...cur.members, { name: '', tower: '', apartment_number: '', phone_number: '' }] } }
+    })
 
   const removeTeamMember = (eventId: string, idx: number) =>
-    setEventTeamDetails(prev => ({
-      ...prev,
-      [eventId]: {
-        ...getTeamDetail(eventId),
-        members: getTeamDetail(eventId).members.filter((_, i) => i !== idx),
-      },
-    }))
+    setEventTeamDetails(prev => {
+      const cur = prev[eventId] ?? empty
+      return { ...prev, [eventId]: { ...cur, members: cur.members.filter((_, i) => i !== idx) } }
+    })
 
   const updateTeamMember = (eventId: string, idx: number, patch: Partial<TeamMember>) =>
-    setEventTeamDetails(prev => ({
-      ...prev,
-      [eventId]: {
-        ...getTeamDetail(eventId),
-        members: getTeamDetail(eventId).members.map((m, i) => i === idx ? { ...m, ...patch } : m),
-      },
-    }))
+    setEventTeamDetails(prev => {
+      const cur = prev[eventId] ?? empty
+      return { ...prev, [eventId]: { ...cur, members: cur.members.map((m, i) => i === idx ? { ...m, ...patch } : m) } }
+    })
 
   // ── PDF receipt ──────────────────────────────────────────────────────────
   const downloadReceiptPDF = (regs: RegistrationSummary[]) => {
