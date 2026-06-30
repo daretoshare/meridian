@@ -2,13 +2,13 @@
 
 import { useState, useTransition, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { registrationSchema, type RegistrationFormData, type TeamMember } from '@/lib/validations'
+import { registrationSchema, teamMemberSchema, type RegistrationFormData, type TeamMember } from '@/lib/validations'
 import { registerForEvents } from '@/actions/register'
 import type { Event } from '@/types/database'
 import type { SiteContent } from '@/lib/content'
 import {
   CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail,
-  ExternalLink, FileText, Lock, Clock, Users, Check, IndianRupee, X,
+  ExternalLink, FileText, Lock, Clock, Users, Check, IndianRupee, X, ChevronDown,
 } from 'lucide-react'
 import Link from 'next/link'
 import type { RegistrationSummary } from '@/actions/register'
@@ -44,13 +44,14 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
   const [result, setResult]         = useState<{
     success: boolean; message: string; detail?: string; registrations?: RegistrationSummary[]
   } | null>(null)
-  const [selectedEvents, setSelectedEvents] = useState<string[]>([])
-  const [fieldErrors, setFieldErrors]       = useState<Record<string, string>>({})
-  const [submittedVals, setSubmittedVals]   = useState<Partial<RegistrationFormData>>({})
-  const [feeConsented, setFeeConsented]     = useState(false)
-  const [showFeeModal, setShowFeeModal]     = useState(false)
-  const [teamMembers, setTeamMembers]       = useState<TeamMember[]>([])
-  const [tmErrors, setTmErrors]             = useState<Record<number, Partial<Record<keyof TeamMember, string>>>>({})
+  const [selectedEvents, setSelectedEvents]       = useState<string[]>([])
+  const [fieldErrors, setFieldErrors]             = useState<Record<string, string>>({})
+  const [submittedVals, setSubmittedVals]         = useState<Partial<RegistrationFormData>>({})
+  const [feeConsented, setFeeConsented]           = useState(false)
+  const [showFeeModal, setShowFeeModal]           = useState(false)
+  const [eventTeamMembers, setEventTeamMembers]   = useState<Record<string, TeamMember[]>>({})
+  const [openAccordions, setOpenAccordions]       = useState<Set<string>>(new Set())
+  const [tmErrors, setTmErrors]                   = useState<Record<string, Record<number, Partial<Record<keyof TeamMember, string>>>>>({})
 
   const { register, getValues, formState: { errors }, reset } = useForm<RegistrationFormData>({
     defaultValues: { event_ids: [], team_name: '' },
@@ -96,19 +97,54 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
     [events]
   )
 
-  // ── Team event detection ─────────────────────────────────────────────────
+  // ── Event map ────────────────────────────────────────────────────────────
   const eventMap = useMemo(() => Object.fromEntries(events.map(e => [e.id, e])), [events])
-  const hasTeamEvent = useMemo(() =>
-    selectedEvents.some(id => (eventMap[id] as any)?.is_team === true),
-    [selectedEvents, eventMap]
-  )
 
   // ── Toggle ───────────────────────────────────────────────────────────────
   const toggleEvent = (id: string, disabled: boolean) => {
     if (disabled) return
     if (!feeConsented) { setShowFeeModal(true); return }
-    setSelectedEvents(prev => prev.includes(id) ? prev.filter(e => e !== id) : [...prev, id])
+    const isCurrentlySelected = selectedEvents.includes(id)
+    setSelectedEvents(prev => isCurrentlySelected ? prev.filter(e => e !== id) : [...prev, id])
+    if (isCurrentlySelected) {
+      // Deselecting: close accordion and clear team members for this event
+      setOpenAccordions(prev => { const s = new Set(prev); s.delete(id); return s })
+      setEventTeamMembers(prev => { const m = { ...prev }; delete m[id]; return m })
+    } else {
+      // Selecting a team event: auto-open accordion
+      if ((eventMap[id] as any)?.is_team) {
+        setOpenAccordions(prev => new Set([...prev, id]))
+      }
+    }
   }
+
+  // ── Accordion toggle ──────────────────────────────────────────────────────
+  const toggleAccordion = (id: string) => {
+    setOpenAccordions(prev => {
+      const s = new Set(prev)
+      s.has(id) ? s.delete(id) : s.add(id)
+      return s
+    })
+  }
+
+  // ── Team member helpers ────────────────────────────────────────────────────
+  const addTeamMember = (eventId: string) =>
+    setEventTeamMembers(prev => ({
+      ...prev,
+      [eventId]: [...(prev[eventId] ?? []), { name: '', tower: '', apartment_number: '', phone_number: '' }],
+    }))
+
+  const removeTeamMember = (eventId: string, idx: number) =>
+    setEventTeamMembers(prev => ({
+      ...prev,
+      [eventId]: (prev[eventId] ?? []).filter((_, i) => i !== idx),
+    }))
+
+  const updateTeamMember = (eventId: string, idx: number, patch: Partial<TeamMember>) =>
+    setEventTeamMembers(prev => ({
+      ...prev,
+      [eventId]: (prev[eventId] ?? []).map((m, i) => i === idx ? { ...m, ...patch } : m),
+    }))
 
   // ── PDF receipt ──────────────────────────────────────────────────────────
   const downloadReceiptPDF = (regs: RegistrationSummary[]) => {
@@ -196,12 +232,40 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
 
   // ── Submit ────────────────────────────────────────────────────────────────
   const handleSubmitClick = () => {
-    const raw    = { ...getValues(), event_ids: selectedEvents, team_members: teamMembers.length ? teamMembers : undefined }
+    // Step 1: validate per-event team members manually so we can show field-level errors
+    const newTmErrors: typeof tmErrors = {}
+    let hasTmError = false
+    for (const [eventId, members] of Object.entries(eventTeamMembers)) {
+      newTmErrors[eventId] = {}
+      for (let idx = 0; idx < members.length; idx++) {
+        const r = teamMemberSchema.safeParse(members[idx])
+        if (!r.success) {
+          newTmErrors[eventId][idx] = Object.fromEntries(
+            Object.entries(r.error.flatten().fieldErrors).map(([k, v]) => [k, (v as string[])[0]])
+          ) as Partial<Record<keyof TeamMember, string>>
+          hasTmError = true
+        }
+      }
+    }
+    setTmErrors(newTmErrors)
+    if (hasTmError) return
+
+    // Step 2: Zod validate everything else
+    const hasEventTeamMembers = Object.values(eventTeamMembers).some(m => m.length > 0)
+    const raw = {
+      ...getValues(),
+      event_ids: selectedEvents,
+      event_team_members: hasEventTeamMembers ? eventTeamMembers : undefined,
+    }
     const parsed = registrationSchema.safeParse(raw)
     if (!parsed.success) {
       const errs: Record<string, string> = {}
       for (const [key, msgs] of Object.entries(parsed.error.flatten().fieldErrors)) {
         errs[key] = (msgs as string[])[0] ?? 'Invalid'
+      }
+      // event_ids error is shown inline
+      if (parsed.error.flatten().fieldErrors.event_ids) {
+        errs.event_ids = (parsed.error.flatten().fieldErrors.event_ids as string[])[0]
       }
       setFieldErrors(errs)
       return
@@ -216,12 +280,13 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
         setSubmittedVals({ ...snapshot, event_ids: selectedEvents })
         reset()
         setSelectedEvents([])
-        setTeamMembers([])
+        setEventTeamMembers({})
+        setOpenAccordions(new Set())
       }
     })
   }
 
-  // ── Flat event list ───────────────────────────────────────────────────────
+  // ── Flat event list with per-event team member accordions ────────────────
   const renderFlatList = (
     evts: Event[],
     disabled: boolean,
@@ -231,58 +296,159 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
       {evts.map(event => {
         const isSelected  = selectedEvents.includes(event.id)
         const isTeam      = (event as any).is_team === true
+        const members     = eventTeamMembers[event.id] ?? []
+        const accordionOpen = openAccordions.has(event.id)
 
         return (
-          <button
-            key={event.id}
-            type="button"
-            onClick={() => toggleEvent(event.id, disabled)}
-            disabled={disabled}
-            className={`
-              w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all
-              ${disabled
-                ? 'border-slate-100 bg-slate-50 cursor-not-allowed opacity-55'
-                : isSelected
-                ? 'border-orange-400 bg-orange-50 shadow-sm'
-                : 'border-slate-200 bg-white hover:border-orange-300 hover:bg-orange-50/40'}
-            `}
-          >
-            {/* Circle indicator */}
-            <div className={`
-              shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center
-              ${isSelected && !disabled
-                ? 'border-orange-500 bg-orange-500'
-                : disabled && reason === 'closed'
-                ? 'border-slate-200 bg-slate-100'
-                : disabled && reason === 'soon'
-                ? 'border-blue-200 bg-blue-50'
-                : 'border-slate-300 bg-white'}
-            `}>
-              {isSelected && !disabled   && <Check size={11} className="text-white" />}
-              {disabled && reason === 'closed' && <Lock size={9} className="text-slate-300" />}
-              {disabled && reason === 'soon'   && <Clock size={9} className="text-blue-300" />}
-            </div>
+          <div key={event.id} className="space-y-1">
+            {/* Event card */}
+            <button
+              type="button"
+              onClick={() => toggleEvent(event.id, disabled)}
+              disabled={disabled}
+              className={`
+                w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all
+                ${disabled
+                  ? 'border-slate-100 bg-slate-50 cursor-not-allowed opacity-55'
+                  : isSelected
+                  ? 'border-orange-400 bg-orange-50 shadow-sm'
+                  : 'border-slate-200 bg-white hover:border-orange-300 hover:bg-orange-50/40'}
+              `}
+            >
+              {/* Circle indicator */}
+              <div className={`
+                shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center
+                ${isSelected && !disabled
+                  ? 'border-orange-500 bg-orange-500'
+                  : disabled && reason === 'closed'
+                  ? 'border-slate-200 bg-slate-100'
+                  : disabled && reason === 'soon'
+                  ? 'border-blue-200 bg-blue-50'
+                  : 'border-slate-300 bg-white'}
+              `}>
+                {isSelected && !disabled        && <Check size={11} className="text-white" />}
+                {disabled && reason === 'closed' && <Lock  size={9}  className="text-slate-300" />}
+                {disabled && reason === 'soon'   && <Clock size={9}  className="text-blue-300" />}
+              </div>
 
-            {/* Event info */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className={`text-sm font-semibold ${disabled ? 'text-slate-400' : isSelected ? 'text-orange-900' : 'text-slate-800'}`}>
-                  {event.name}
-                </span>
-                {isTeam && (
-                  <span className="text-xs text-blue-600 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded-full flex items-center gap-1">
-                    <Users size={9} /> Team
+              {/* Event info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={`text-sm font-semibold ${disabled ? 'text-slate-400' : isSelected ? 'text-orange-900' : 'text-slate-800'}`}>
+                    {event.name}
                   </span>
+                  {isTeam && (
+                    <span className="text-xs text-blue-600 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                      <Users size={9} /> Team
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Age group badge */}
+              <span className={`shrink-0 text-xs font-medium px-2 py-0.5 rounded-full border hidden sm:inline-flex
+                ${AGE_GROUP_COLORS[event.age_group] ?? AGE_GROUP_COLORS.all}`}>
+                {event.age_group}
+              </span>
+            </button>
+
+            {/* Per-event team member accordion (only when selected + is_team + not disabled) */}
+            {isSelected && isTeam && !disabled && (
+              <div className="ml-6 rounded-xl border border-blue-200 bg-blue-50 overflow-hidden">
+                {/* Accordion header */}
+                <button
+                  type="button"
+                  onClick={() => toggleAccordion(event.id)}
+                  className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-semibold text-blue-800 hover:bg-blue-100 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <Users size={14} className="text-blue-600" />
+                    <span>Team Members{members.length > 0 ? ` (${members.length} added)` : ''}</span>
+                  </div>
+                  <ChevronDown size={15} className={`transition-transform text-blue-500 ${accordionOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {accordionOpen && (
+                  <div className="px-4 pb-4 pt-1 border-t border-blue-100 space-y-3">
+                    <p className="text-xs text-blue-600 mt-2">Add details for each team member <em>other than yourself</em>. This helps volunteers track participation fees.</p>
+
+                    {members.map((member, idx) => (
+                      <div key={idx} className="bg-white rounded-xl border border-blue-200 p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold text-blue-700">Member {idx + 1}</span>
+                          <button type="button" onClick={() => removeTeamMember(event.id, idx)} className="text-xs text-red-400 hover:text-red-600">Remove</button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div className="sm:col-span-2">
+                            <label className="block text-xs font-medium text-slate-600 mb-1">Full Name *</label>
+                            <input
+                              value={member.name}
+                              onChange={e => updateTeamMember(event.id, idx, { name: e.target.value })}
+                              placeholder="Priya Sharma"
+                              className="input-field text-sm"
+                            />
+                            {tmErrors[event.id]?.[idx]?.name && <p className="text-xs text-red-500 mt-1">{tmErrors[event.id][idx].name}</p>}
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-slate-600 mb-1">Building &amp; Tower *</label>
+                            <select
+                              value={member.tower}
+                              onChange={e => updateTeamMember(event.id, idx, { tower: e.target.value })}
+                              className="input-field text-sm"
+                            >
+                              <option value="">Select tower…</option>
+                              <optgroup label="Building 5 (Tower 1 – 10)">
+                                {B5_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
+                              </optgroup>
+                              <optgroup label="Building 6 (Tower 1 – 6)">
+                                {B6_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
+                              </optgroup>
+                            </select>
+                            {tmErrors[event.id]?.[idx]?.tower && <p className="text-xs text-red-500 mt-1">{tmErrors[event.id][idx].tower}</p>}
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-slate-600 mb-1">Apartment Number *</label>
+                            <input
+                              value={member.apartment_number}
+                              onChange={e => updateTeamMember(event.id, idx, { apartment_number: e.target.value.replace(/\D/g, '').slice(0, 6) })}
+                              placeholder="50123"
+                              inputMode="numeric"
+                              maxLength={6}
+                              className="input-field text-sm"
+                            />
+                            {tmErrors[event.id]?.[idx]?.apartment_number && <p className="text-xs text-red-500 mt-1">{tmErrors[event.id][idx].apartment_number}</p>}
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-xs font-medium text-slate-600 mb-1">Phone Number *</label>
+                            <div className="flex">
+                              <span className="inline-flex items-center px-3 border border-r-0 border-slate-300 rounded-l-lg bg-slate-50 text-slate-500 text-sm">+91</span>
+                              <input
+                                value={member.phone_number}
+                                onChange={e => updateTeamMember(event.id, idx, { phone_number: e.target.value.replace(/\D/g, '').slice(0, 10) })}
+                                placeholder="9876543210"
+                                inputMode="numeric"
+                                maxLength={10}
+                                className="input-field rounded-l-none text-sm flex-1"
+                              />
+                            </div>
+                            {tmErrors[event.id]?.[idx]?.phone_number && <p className="text-xs text-red-500 mt-1">{tmErrors[event.id][idx].phone_number}</p>}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={() => addTeamMember(event.id)}
+                      className="text-xs font-semibold text-blue-700 bg-blue-100 hover:bg-blue-200 border border-blue-300 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      + Add Member
+                    </button>
+                  </div>
                 )}
               </div>
-            </div>
-
-            {/* Age group badge */}
-            <span className={`shrink-0 text-xs font-medium px-2 py-0.5 rounded-full border hidden sm:inline-flex
-              ${AGE_GROUP_COLORS[event.age_group] ?? AGE_GROUP_COLORS.all}`}>
-              {event.age_group}
-            </span>
-          </button>
+            )}
+          </div>
         )
       })}
     </div>
@@ -516,113 +682,19 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
         </div>
       </section>
 
-      {/* ── Team / Group Event Details ───────────────────────────────────── */}
-      {hasTeamEvent && (
-        <section className="rounded-2xl border border-blue-200 bg-blue-50 p-5 space-y-4">
-          <div className="flex items-center gap-2">
-            <Users size={18} className="text-blue-600" />
-            <h3 className="font-semibold text-blue-900">Team / Group Details</h3>
-          </div>
-
-          {/* Team Name */}
-          <div>
-            <label className="block text-sm font-medium text-blue-800 mb-1">
-              Team / Group Name <span className="text-xs font-normal text-blue-500">(optional)</span>
-            </label>
-            <input
-              {...register('team_name')}
-              placeholder="e.g. Tower 5 Blazers"
-              maxLength={80}
-              className="input-field bg-white"
-            />
-            {(fieldErrors.team_name || errors.team_name) && <FieldError message={fieldErrors.team_name ?? errors.team_name!.message!} />}
-          </div>
-
-          {/* Team members */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-blue-800">Team Members</p>
-              <button
-                type="button"
-                onClick={() => setTeamMembers(m => [...m, { name: '', tower: '', apartment_number: '', phone_number: '' }])}
-                className="text-xs font-semibold text-blue-700 bg-blue-100 hover:bg-blue-200 border border-blue-300 px-3 py-1.5 rounded-lg transition-colors"
-              >
-                + Add Member
-              </button>
-            </div>
-            <p className="text-xs text-blue-600">Add details for each team member (other than yourself). This helps volunteers track payment collection.</p>
-
-            {teamMembers.map((member, idx) => (
-              <div key={idx} className="bg-white rounded-xl border border-blue-200 p-4 space-y-3">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-semibold text-blue-700">Member {idx + 1}</span>
-                  <button
-                    type="button"
-                    onClick={() => setTeamMembers(m => m.filter((_, i) => i !== idx))}
-                    className="text-xs text-red-400 hover:text-red-600"
-                  >
-                    Remove
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-slate-600 mb-1">Full Name *</label>
-                    <input
-                      value={member.name}
-                      onChange={e => setTeamMembers(m => m.map((x, i) => i === idx ? { ...x, name: e.target.value } : x))}
-                      placeholder="Priya Sharma"
-                      className="input-field text-sm"
-                    />
-                    {tmErrors[idx]?.name && <p className="text-xs text-red-500 mt-1">{tmErrors[idx].name}</p>}
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-slate-600 mb-1">Building & Tower *</label>
-                    <select
-                      value={member.tower}
-                      onChange={e => setTeamMembers(m => m.map((x, i) => i === idx ? { ...x, tower: e.target.value } : x))}
-                      className="input-field text-sm"
-                    >
-                      <option value="">Select tower…</option>
-                      <optgroup label="Building 5 (Tower 1 – 10)">
-                        {B5_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
-                      </optgroup>
-                      <optgroup label="Building 6 (Tower 1 – 6)">
-                        {B6_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
-                      </optgroup>
-                    </select>
-                    {tmErrors[idx]?.tower && <p className="text-xs text-red-500 mt-1">{tmErrors[idx].tower}</p>}
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-slate-600 mb-1">Apartment Number *</label>
-                    <input
-                      value={member.apartment_number}
-                      onChange={e => setTeamMembers(m => m.map((x, i) => i === idx ? { ...x, apartment_number: e.target.value.replace(/\D/g, '').slice(0, 6) } : x))}
-                      placeholder="50123"
-                      inputMode="numeric"
-                      maxLength={6}
-                      className="input-field text-sm"
-                    />
-                    {tmErrors[idx]?.apartment_number && <p className="text-xs text-red-500 mt-1">{tmErrors[idx].apartment_number}</p>}
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-slate-600 mb-1">Phone Number *</label>
-                    <div className="flex">
-                      <span className="inline-flex items-center px-3 border border-r-0 border-slate-300 rounded-l-lg bg-slate-50 text-slate-500 text-sm">+91</span>
-                      <input
-                        value={member.phone_number}
-                        onChange={e => setTeamMembers(m => m.map((x, i) => i === idx ? { ...x, phone_number: e.target.value.replace(/\D/g, '').slice(0, 10) } : x))}
-                        placeholder="9876543210"
-                        inputMode="numeric"
-                        maxLength={10}
-                        className="input-field rounded-l-none text-sm flex-1"
-                      />
-                    </div>
-                    {tmErrors[idx]?.phone_number && <p className="text-xs text-red-500 mt-1">{tmErrors[idx].phone_number}</p>}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* ── Team Name (shown when any team event is selected) ─────────────── */}
+      {selectedEvents.some(id => (eventMap[id] as any)?.is_team) && (
+        <section className="rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4">
+          <label className="block text-sm font-semibold text-blue-800 mb-1">
+            Team / Group Name <span className="text-xs font-normal text-blue-500">(optional)</span>
+          </label>
+          <input
+            {...register('team_name')}
+            placeholder="e.g. Tower 5 Blazers"
+            maxLength={80}
+            className="input-field bg-white"
+          />
+          {(fieldErrors.team_name || errors.team_name) && <FieldError message={fieldErrors.team_name ?? errors.team_name!.message!} />}
         </section>
       )}
 
@@ -631,6 +703,9 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
         <p className="text-sm text-slate-400 flex items-center gap-1.5">
           <AlertCircle size={14} /> Select at least one event to register.
         </p>
+      )}
+      {fieldErrors.event_ids && (
+        <FieldError message={fieldErrors.event_ids} />
       )}
 
       {/* ── Error ────────────────────────────────────────────────────────── */}

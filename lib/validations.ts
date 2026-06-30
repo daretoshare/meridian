@@ -49,7 +49,7 @@ export const registrationSchema = z.object({
     .max(80, 'Team name must be 80 characters or fewer')
     .optional(),
 
-  team_members: z.array(teamMemberSchema).optional(),
+  event_team_members: z.record(z.string(), z.array(teamMemberSchema)).optional(),
 })
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>
