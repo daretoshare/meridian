@@ -8,6 +8,7 @@ const isDev = true // always show DB errors until form is confirmed working
 
 export interface RegistrationSummary {
   id: string
+  event_id: string
   event_name: string
   age_group: string
   event_date: string | null
@@ -31,7 +32,7 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
     }
   }
 
-  const { full_name, tower, apartment_number, phone_number, email, event_ids, team_name, event_team_members } = parsed.data
+  const { full_name, tower, apartment_number, phone_number, email, event_ids, event_team_details } = parsed.data
 
   // 2. Server-side: enforce max one event per activity category
   const { getContentEvents } = await import('@/lib/content')
@@ -88,9 +89,11 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
           profile_id: profile.id,
           event_id,
           status: 'confirmed',
-          team_name:    teamEventIds.has(event_id) && team_name ? team_name : null,
-          team_members: teamEventIds.has(event_id) && event_team_members?.[event_id]?.length
-            ? event_team_members[event_id]
+          team_name:    teamEventIds.has(event_id) && event_team_details?.[event_id]?.team_name
+            ? event_team_details[event_id].team_name
+            : null,
+          team_members: teamEventIds.has(event_id) && event_team_details?.[event_id]?.members?.length
+            ? event_team_details[event_id].members
             : null,
         })
         .select('id, event_id')
@@ -145,6 +148,7 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
       const evt     = allEvents.find((e) => e.id === eventId)
       return {
         id:         regId,
+        event_id:   eventId,
         event_name: evt?.name ?? '',
         age_group:  evt?.age_group ?? '',
         event_date: evt?.event_date ?? null,

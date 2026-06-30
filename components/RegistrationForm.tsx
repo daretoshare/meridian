@@ -44,17 +44,17 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
   const [result, setResult]         = useState<{
     success: boolean; message: string; detail?: string; registrations?: RegistrationSummary[]
   } | null>(null)
-  const [selectedEvents, setSelectedEvents]       = useState<string[]>([])
-  const [fieldErrors, setFieldErrors]             = useState<Record<string, string>>({})
-  const [submittedVals, setSubmittedVals]         = useState<Partial<RegistrationFormData>>({})
-  const [feeConsented, setFeeConsented]           = useState(false)
-  const [showFeeModal, setShowFeeModal]           = useState(false)
-  const [eventTeamMembers, setEventTeamMembers]   = useState<Record<string, TeamMember[]>>({})
-  const [openAccordions, setOpenAccordions]       = useState<Set<string>>(new Set())
-  const [tmErrors, setTmErrors]                   = useState<Record<string, Record<number, Partial<Record<keyof TeamMember, string>>>>>({})
+  const [selectedEvents, setSelectedEvents]     = useState<string[]>([])
+  const [fieldErrors, setFieldErrors]           = useState<Record<string, string>>({})
+  const [submittedVals, setSubmittedVals]       = useState<Partial<RegistrationFormData>>({})
+  const [feeConsented, setFeeConsented]         = useState(false)
+  const [showFeeModal, setShowFeeModal]         = useState(false)
+  const [eventTeamDetails, setEventTeamDetails] = useState<Record<string, { team_name: string; members: TeamMember[] }>>({})
+  const [openAccordions, setOpenAccordions]     = useState<Set<string>>(new Set())
+  const [tmErrors, setTmErrors]                 = useState<Record<string, Record<number, Partial<Record<keyof TeamMember, string>>>>>({})
 
   const { register, getValues, formState: { errors }, reset } = useForm<RegistrationFormData>({
-    defaultValues: { event_ids: [], team_name: '' },
+    defaultValues: { event_ids: [] },
   })
 
   // ── Window state (driven by events.md toggles) ────────────────────────────
@@ -107,14 +107,10 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
     const isCurrentlySelected = selectedEvents.includes(id)
     setSelectedEvents(prev => isCurrentlySelected ? prev.filter(e => e !== id) : [...prev, id])
     if (isCurrentlySelected) {
-      // Deselecting: close accordion and clear team members for this event
       setOpenAccordions(prev => { const s = new Set(prev); s.delete(id); return s })
-      setEventTeamMembers(prev => { const m = { ...prev }; delete m[id]; return m })
-    } else {
-      // Selecting a team event: auto-open accordion
-      if ((eventMap[id] as any)?.is_team) {
-        setOpenAccordions(prev => new Set([...prev, id]))
-      }
+      setEventTeamDetails(prev => { const m = { ...prev }; delete m[id]; return m })
+    } else if ((eventMap[id] as any)?.is_team) {
+      setOpenAccordions(prev => new Set([...prev, id]))
     }
   }
 
@@ -127,34 +123,56 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
     })
   }
 
-  // ── Team member helpers ────────────────────────────────────────────────────
-  const addTeamMember = (eventId: string) =>
-    setEventTeamMembers(prev => ({
+  // ── Team detail helpers ───────────────────────────────────────────────────
+  const getTeamDetail = (eventId: string) =>
+    eventTeamDetails[eventId] ?? { team_name: '', members: [] }
+
+  const setTeamName = (eventId: string, name: string) =>
+    setEventTeamDetails(prev => ({
       ...prev,
-      [eventId]: [...(prev[eventId] ?? []), { name: '', tower: '', apartment_number: '', phone_number: '' }],
+      [eventId]: { ...getTeamDetail(eventId), team_name: name },
+    }))
+
+  const addTeamMember = (eventId: string) =>
+    setEventTeamDetails(prev => ({
+      ...prev,
+      [eventId]: {
+        ...getTeamDetail(eventId),
+        members: [...getTeamDetail(eventId).members, { name: '', tower: '', apartment_number: '', phone_number: '' }],
+      },
     }))
 
   const removeTeamMember = (eventId: string, idx: number) =>
-    setEventTeamMembers(prev => ({
+    setEventTeamDetails(prev => ({
       ...prev,
-      [eventId]: (prev[eventId] ?? []).filter((_, i) => i !== idx),
+      [eventId]: {
+        ...getTeamDetail(eventId),
+        members: getTeamDetail(eventId).members.filter((_, i) => i !== idx),
+      },
     }))
 
   const updateTeamMember = (eventId: string, idx: number, patch: Partial<TeamMember>) =>
-    setEventTeamMembers(prev => ({
+    setEventTeamDetails(prev => ({
       ...prev,
-      [eventId]: (prev[eventId] ?? []).map((m, i) => i === idx ? { ...m, ...patch } : m),
+      [eventId]: {
+        ...getTeamDetail(eventId),
+        members: getTeamDetail(eventId).members.map((m, i) => i === idx ? { ...m, ...patch } : m),
+      },
     }))
 
   // ── PDF receipt ──────────────────────────────────────────────────────────
   const downloadReceiptPDF = (regs: RegistrationSummary[]) => {
     const vals = submittedVals
     const now  = new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
-    const rows = regs.map(r => `
+    const rows = regs.map(r => {
+      const teamName = r.is_team ? eventTeamDetails[r.event_id ?? '']?.team_name : undefined
+      return `
       <tr>
         <td class="mono">${r.id.slice(0, 8).toUpperCase()}</td>
         <td><span class="${r.is_team ? 'team-tag' : 'solo-tag'}">${r.is_team ? 'Team' : 'Solo'}</span> ${r.event_name}<br/><small>${r.age_group}</small></td>
-      </tr>`).join('')
+        <td>${teamName ? `<span class="team-name">${teamName}</span>` : '—'}</td>
+      </tr>`
+    }).join('')
 
     const html = `<!DOCTYPE html>
 <html>
@@ -182,7 +200,8 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
     tr:nth-child(even) td { background:#fafafa; }
     .mono { font-family:monospace; font-weight:700; font-size:13px; color:#0f172a; }
     .solo-tag { font-size:9px; font-weight:700; background:#f1f5f9; color:#64748b; padding:1px 5px; border-radius:4px; }
-    .team-tag { font-size:9px; font-weight:700; background:#dbeafe; color:#1d4ed8; padding:1px 5px; border-radius:4px; }
+    .team-tag  { font-size:9px; font-weight:700; background:#dbeafe; color:#1d4ed8; padding:1px 5px; border-radius:4px; }
+    .team-name { font-size:10px; font-weight:600; color:#1d4ed8; }
     small { display:block; color:#64748b; font-size:10px; text-transform:capitalize; }
     .disclaimer { margin-top:20px; background:#fffbeb; border:1px solid #fcd34d; border-radius:8px;
                   padding:10px 12px; font-size:10px; color:#92400e; line-height:1.6; }
@@ -206,10 +225,9 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
     <div class="info-item"><label>Email</label><span>${vals.email ?? ''}</span></div>
     <div class="info-item"><label>Tower / Apartment</label><span>${vals.tower ?? ''} / ${vals.apartment_number ?? ''}</span></div>
     <div class="info-item"><label>Phone</label><span>+91 ${vals.phone_number ?? ''}</span></div>
-    ${vals.team_name ? `<div class="info-item" style="grid-column:1/-1"><label>Team Name</label><span>${vals.team_name}</span></div>` : ''}
   </div>
   <table>
-    <thead><tr><th>Reg ID</th><th>Event</th></tr></thead>
+    <thead><tr><th>Reg ID</th><th>Event</th><th>Team Name</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
   <div class="disclaimer">
@@ -235,10 +253,10 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
     // Step 1: validate per-event team members manually so we can show field-level errors
     const newTmErrors: typeof tmErrors = {}
     let hasTmError = false
-    for (const [eventId, members] of Object.entries(eventTeamMembers)) {
+    for (const [eventId, detail] of Object.entries(eventTeamDetails)) {
       newTmErrors[eventId] = {}
-      for (let idx = 0; idx < members.length; idx++) {
-        const r = teamMemberSchema.safeParse(members[idx])
+      for (let idx = 0; idx < detail.members.length; idx++) {
+        const r = teamMemberSchema.safeParse(detail.members[idx])
         if (!r.success) {
           newTmErrors[eventId][idx] = Object.fromEntries(
             Object.entries(r.error.flatten().fieldErrors).map(([k, v]) => [k, (v as string[])[0]])
@@ -251,11 +269,11 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
     if (hasTmError) return
 
     // Step 2: Zod validate everything else
-    const hasEventTeamMembers = Object.values(eventTeamMembers).some(m => m.length > 0)
+    const hasTeamDetails = Object.values(eventTeamDetails).some(d => d.team_name || d.members.length > 0)
     const raw = {
       ...getValues(),
       event_ids: selectedEvents,
-      event_team_members: hasEventTeamMembers ? eventTeamMembers : undefined,
+      event_team_details: hasTeamDetails ? eventTeamDetails : undefined,
     }
     const parsed = registrationSchema.safeParse(raw)
     if (!parsed.success) {
@@ -280,7 +298,7 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
         setSubmittedVals({ ...snapshot, event_ids: selectedEvents })
         reset()
         setSelectedEvents([])
-        setEventTeamMembers({})
+        setEventTeamDetails({})
         setOpenAccordions(new Set())
       }
     })
@@ -294,9 +312,9 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
   ) => (
     <div className="space-y-2">
       {evts.map(event => {
-        const isSelected  = selectedEvents.includes(event.id)
-        const isTeam      = (event as any).is_team === true
-        const members     = eventTeamMembers[event.id] ?? []
+        const isSelected    = selectedEvents.includes(event.id)
+        const isTeam        = (event as any).is_team === true
+        const detail        = getTeamDetail(event.id)
         const accordionOpen = openAccordions.has(event.id)
 
         return (
@@ -363,16 +381,33 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
                 >
                   <div className="flex items-center gap-2">
                     <Users size={14} className="text-blue-600" />
-                    <span>Team Members{members.length > 0 ? ` (${members.length} added)` : ''}</span>
+                    <span>
+                      {detail.team_name ? `"${detail.team_name}"` : 'Team Details'}
+                      {detail.members.length > 0 ? ` · ${detail.members.length} member${detail.members.length !== 1 ? 's' : ''}` : ''}
+                    </span>
                   </div>
                   <ChevronDown size={15} className={`transition-transform text-blue-500 ${accordionOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {accordionOpen && (
                   <div className="px-4 pb-4 pt-1 border-t border-blue-100 space-y-3">
-                    <p className="text-xs text-blue-600 mt-2">Add details for each team member <em>other than yourself</em>. This helps volunteers track participation fees.</p>
+                    {/* Team Name for this event */}
+                    <div className="mt-2">
+                      <label className="block text-xs font-semibold text-blue-800 mb-1">
+                        Team / Group Name <span className="font-normal text-blue-500">(optional)</span>
+                      </label>
+                      <input
+                        value={detail.team_name}
+                        onChange={e => setTeamName(event.id, e.target.value)}
+                        placeholder="e.g. Tower 5 Blazers"
+                        maxLength={80}
+                        className="input-field bg-white text-sm"
+                      />
+                    </div>
 
-                    {members.map((member, idx) => (
+                    <p className="text-xs text-blue-600">Add details for each team member <em>other than yourself</em>. This helps volunteers track participation fees.</p>
+
+                    {detail.members.map((member, idx) => (
                       <div key={idx} className="bg-white rounded-xl border border-blue-200 p-4 space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-semibold text-blue-700">Member {idx + 1}</span>
@@ -682,22 +717,6 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
         </div>
       </section>
 
-      {/* ── Team Name (shown when any team event is selected) ─────────────── */}
-      {selectedEvents.some(id => (eventMap[id] as any)?.is_team) && (
-        <section className="rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4">
-          <label className="block text-sm font-semibold text-blue-800 mb-1">
-            Team / Group Name <span className="text-xs font-normal text-blue-500">(optional)</span>
-          </label>
-          <input
-            {...register('team_name')}
-            placeholder="e.g. Tower 5 Blazers"
-            maxLength={80}
-            className="input-field bg-white"
-          />
-          {(fieldErrors.team_name || errors.team_name) && <FieldError message={fieldErrors.team_name ?? errors.team_name!.message!} />}
-        </section>
-      )}
-
       {/* ── Hint ─────────────────────────────────────────────────────────── */}
       {events.length > 0 && selectedEvents.length === 0 && (
         <p className="text-sm text-slate-400 flex items-center gap-1.5">
@@ -736,7 +755,7 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
                 <tr className="bg-green-50 border-b border-green-200 text-xs text-green-700 uppercase tracking-wide">
                   <th className="px-4 py-2 text-left font-semibold">Reg ID</th>
                   <th className="px-4 py-2 text-left font-semibold">Event</th>
-                  {submittedVals.team_name && <th className="px-4 py-2 text-left font-semibold">Team</th>}
+                  <th className="px-4 py-2 text-left font-semibold">Team</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-green-100">
@@ -754,9 +773,11 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
                       </p>
                       <p className="text-xs text-slate-400 capitalize">{r.age_group}</p>
                     </td>
-                    {submittedVals.team_name && (
-                      <td className="px-4 py-3 text-xs text-slate-600">{submittedVals.team_name}</td>
-                    )}
+                    <td className="px-4 py-3 text-xs text-slate-600">
+                      {r.is_team && eventTeamDetails[r.event_id]?.team_name
+                        ? <span className="font-medium text-blue-700">{eventTeamDetails[r.event_id].team_name}</span>
+                        : <span className="text-slate-300">—</span>}
+                    </td>
                   </tr>
                 ))}
               </tbody>

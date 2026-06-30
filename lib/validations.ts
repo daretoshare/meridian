@@ -44,12 +44,13 @@ export const registrationSchema = z.object({
     .array(z.string().min(1))
     .min(1, 'Please select at least one event'),
 
-  team_name: z
-    .string()
-    .max(80, 'Team name must be 80 characters or fewer')
-    .optional(),
-
-  event_team_members: z.record(z.string(), z.array(teamMemberSchema)).optional(),
+  event_team_details: z.record(
+    z.string(),
+    z.object({
+      team_name: z.string().max(80, 'Team name must be 80 characters or fewer').optional(),
+      members:   z.array(teamMemberSchema).optional(),
+    })
+  ).optional(),
 })
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>
