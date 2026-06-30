@@ -70,6 +70,12 @@ export function getCulturalRegistrationOpen(): boolean {
   return data.cultural_registration_open === true
 }
 
+/** Returns the value of `competitive_registration_open` from events.md frontmatter. */
+export function getCompetitiveRegistrationOpen(): boolean {
+  const { data } = readMd('events.md')
+  return data.competitive_registration_open === true
+}
+
 // ─── Locations ────────────────────────────────────────────────────────────────
 
 export interface ContentLocation {

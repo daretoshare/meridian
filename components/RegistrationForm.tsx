@@ -32,13 +32,14 @@ interface Props {
   events: Event[]
   site: SiteContent
   culturalOpen: boolean
+  competitiveOpen: boolean
 }
 
 function daysUntil(d: Date): number {
   return Math.ceil((d.getTime() - Date.now()) / 86_400_000)
 }
 
-export default function RegistrationForm({ events, site, culturalOpen }: Props) {
+export default function RegistrationForm({ events, site, culturalOpen, competitiveOpen }: Props) {
   const [isPending, startTransition] = useTransition()
   const [result, setResult]         = useState<{
     success: boolean; message: string; detail?: string; registrations?: RegistrationSummary[]
@@ -54,12 +55,9 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
     defaultValues: { event_ids: [], team_name: '' },
   })
 
-  // ── Window state ─────────────────────────────────────────────────────────
-  const today               = useMemo(() => new Date(), [])
-  const isCompetitiveClosed  = today >= COMPETITIVE_DEADLINE
+  // ── Window state (driven by events.md toggles) ────────────────────────────
+  const isCompetitiveClosed  = !competitiveOpen
   const isCulturalNotYetOpen = !culturalOpen
-  const daysToDeadline      = daysUntil(COMPETITIVE_DEADLINE)
-  const daysToOpen          = daysUntil(CULTURAL_OPEN_DATE)
 
   // ── Apartment prefix derived from selected tower ─────────────────────────
   const selectedTower = watch('tower')
@@ -67,21 +65,13 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
     : selectedTower?.startsWith('Building 6') ? '6'
     : null
 
-  // ── Split and sort events ────────────────────────────────────────────────
-  // Sort within each bucket: by event_date then alphabetically by name
-  const sortByDateName = (a: Event, b: Event) => {
-    const da = (a as any).event_date ?? '9999'
-    const db = (b as any).event_date ?? '9999'
-    if (da !== db) return da.localeCompare(db)
-    return a.name.localeCompare(b.name)
-  }
-
+  // ── Split events — preserve MD order (already ordered correctly in events.md) ──
   const competitiveEvents = useMemo(() =>
-    events.filter(e => (e as any).registration_type !== 'cultural').sort(sortByDateName),
+    events.filter(e => (e as any).registration_type !== 'cultural'),
     [events]
   )
   const culturalEvents = useMemo(() =>
-    events.filter(e => (e as any).registration_type === 'cultural').sort(sortByDateName),
+    events.filter(e => (e as any).registration_type === 'cultural'),
     [events]
   )
 
@@ -99,12 +89,6 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
     setSelectedEvents(prev => prev.includes(id) ? prev.filter(e => e !== id) : [...prev, id])
   }
 
-  // ── Format event date ─────────────────────────────────────────────────────
-  const formatEventDate = (raw: string | null) => {
-    if (!raw) return null
-    return new Date(raw + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
-  }
-
   // ── PDF receipt ──────────────────────────────────────────────────────────
   const downloadReceiptPDF = (regs: RegistrationSummary[]) => {
     const vals = submittedVals
@@ -113,9 +97,6 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
       <tr>
         <td class="mono">${r.id.slice(0, 8).toUpperCase()}</td>
         <td><span class="${r.is_team ? 'team-tag' : 'solo-tag'}">${r.is_team ? 'Team' : 'Solo'}</span> ${r.event_name}<br/><small>${r.age_group}</small></td>
-        <td>${r.event_date ? new Date(r.event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</td>
-        <td>${r.slot_time}</td>
-        <td>${r.location}</td>
       </tr>`).join('')
 
     const html = `<!DOCTYPE html>
@@ -171,7 +152,7 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
     ${vals.team_name ? `<div class="info-item" style="grid-column:1/-1"><label>Team Name</label><span>${vals.team_name}</span></div>` : ''}
   </div>
   <table>
-    <thead><tr><th>Reg ID</th><th>Event</th><th>Date</th><th>Time</th><th>Venue</th></tr></thead>
+    <thead><tr><th>Reg ID</th><th>Event</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
   <div class="disclaimer">
@@ -229,7 +210,6 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
       {evts.map(event => {
         const isSelected  = selectedEvents.includes(event.id)
         const isTeam      = (event as any).is_team === true
-        const dateLabel   = formatEventDate((event as any).event_date)
 
         return (
           <button
@@ -273,20 +253,6 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
                     <Users size={9} /> Team
                   </span>
                 )}
-              </div>
-              <div className="flex items-center gap-2 mt-1.5 flex-wrap text-xs">
-                {dateLabel && (
-                  <span className="flex items-center gap-1 text-slate-700 font-medium bg-slate-100 px-2 py-0.5 rounded-full">
-                    <Calendar size={9} /> {dateLabel}
-                  </span>
-                )}
-                <span className="flex items-center gap-1 text-slate-500">
-                  <Clock size={9} /> {event.slot_time}
-                </span>
-                <span className="text-slate-300">·</span>
-                <span className="text-slate-500">{event.location}</span>
-                <span className="text-slate-300">·</span>
-                <span className="text-slate-500">{event.max_participants} spots</span>
               </div>
             </div>
 
@@ -423,14 +389,14 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
               </button>
             </div>
             <div className="px-6 py-5 space-y-4 text-sm text-slate-700">
-              <p className="text-base font-semibold text-slate-800">₹ 100 per participant</p>
+              <p className="text-base font-semibold text-slate-800">₹ 150 per participant</p>
               <p>
-                A participation fee of <strong>₹ 100 per person</strong> applies irrespective of the number
+                A participation fee of <strong>₹ 150 per person</strong> applies, irrespective of the number
                 of activities an individual registers for.
               </p>
               <p>
-                This fee will be collected by a <strong>cultural committee member</strong>. Payment details and
-                a collection link will be shared with you separately after registration.
+                A <strong>volunteer from the cultural committee</strong> will contact you with payment details
+                once the registration window closes. You do not need to pay now.
               </p>
               <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-amber-800 text-xs">
                 <strong>Note:</strong> Your registration will remain tentative until payment is confirmed.
@@ -471,7 +437,7 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
             </div>
             <div className="text-left">
               <p className="font-semibold text-orange-900 text-sm">Review &amp; Accept Participation Fee</p>
-              <p className="text-xs text-orange-700 mt-0.5">₹ 100 per participant · Click to read terms and unlock event selection</p>
+              <p className="text-xs text-orange-700 mt-0.5">₹ 150 per participant · Click to read terms and unlock event selection</p>
             </div>
             <Lock size={16} className="ml-auto text-orange-400 shrink-0" />
           </button>
@@ -480,7 +446,7 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
         {feeConsented && (
           <div className="flex items-center gap-2.5 px-4 py-2.5 bg-green-50 border border-green-200 rounded-xl text-sm text-green-800">
             <CheckCircle size={15} className="text-green-600 shrink-0" />
-            <span>Participation fee accepted — ₹ 100 per participant, collected separately by the committee.</span>
+            <span>Participation fee accepted — ₹ 150 per participant. A volunteer will contact you with payment details after the registration window closes.</span>
           </div>
         )}
 
@@ -489,17 +455,14 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
           <div className={`px-5 py-3 flex flex-wrap items-center gap-3 border-b ${isCompetitiveClosed ? 'bg-slate-100 border-slate-200' : 'bg-amber-50 border-amber-100'}`}>
             <div className="flex-1">
               <p className="font-bold text-slate-800">🏆 Competitive Events</p>
-              <p className="text-xs text-slate-500 mt-0.5">Sports Solo · Sports Group · Art Solo</p>
+              <p className="text-xs text-slate-500 mt-0.5">Running · Chess · Badminton · Table Tennis · Treasure Hunt</p>
             </div>
             {isCompetitiveClosed
               ? <span className="flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-100 border border-red-200 px-3 py-1 rounded-full">
                   <Lock size={11} /> Registration Closed
                 </span>
               : <span className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full">
-                  <Clock size={11} />
-                  {daysToDeadline > 0
-                    ? `Closes in ${daysToDeadline} day${daysToDeadline !== 1 ? 's' : ''} · July 11, 2026`
-                    : 'Closes today · July 11, 2026'}
+                  <CheckCircle size={11} /> Registration Open
                 </span>
             }
           </div>
@@ -508,7 +471,13 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
             {isCompetitiveClosed && (
               <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-red-50 border border-red-200 text-red-800">
                 <Lock size={16} className="shrink-0 mt-0.5" />
-                <p className="text-sm">Registration for competitive events closed on <strong>July 11, 2026</strong>.</p>
+                <p className="text-sm">Registration for competitive events is currently closed.</p>
+              </div>
+            )}
+            {!isCompetitiveClosed && (
+              <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">
+                <AlertCircle size={16} className="shrink-0 mt-0.5" />
+                <p className="text-sm">Events will be conducted on weekends — <strong>25–26 July</strong> and <strong>8–9 August 2026</strong>. Exact schedule will be shared closer to the date.</p>
               </div>
             )}
             {competitiveEvents.length === 0
@@ -523,14 +492,11 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
           <div className={`px-5 py-3 flex flex-wrap items-center gap-3 border-b ${isCulturalNotYetOpen ? 'bg-blue-50 border-blue-100' : 'bg-green-50 border-green-100'}`}>
             <div className="flex-1">
               <p className="font-bold text-slate-800">🎭 Cultural Events</p>
-              <p className="text-xs text-slate-500 mt-0.5">Dance · Singing · Games</p>
+              <p className="text-xs text-slate-500 mt-0.5">Dance · Singing · Games · Creative Arts</p>
             </div>
             {isCulturalNotYetOpen
               ? <span className="flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-100 border border-blue-200 px-3 py-1 rounded-full">
-                  <Clock size={11} />
-                  {daysToOpen > 0
-                    ? `Opens in ${daysToOpen} day${daysToOpen !== 1 ? 's' : ''} · July 13, 2026`
-                    : 'Opens today · July 13, 2026'}
+                  <Lock size={11} /> Registration Closed
                 </span>
               : <span className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100 border border-green-200 px-3 py-1 rounded-full">
                   <CheckCircle size={11} /> Registration Open
@@ -541,18 +507,20 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
           <div className="p-4 space-y-3">
             {isCulturalNotYetOpen && (
               <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
-                <Clock size={16} className="shrink-0 mt-0.5" />
+                <Lock size={16} className="shrink-0 mt-0.5" />
                 <p className="text-sm">Cultural event registration is not yet open. Check back soon!</p>
               </div>
             )}
             {!isCulturalNotYetOpen && (
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
-                <CheckCircle size={16} className="shrink-0 mt-0.5 text-emerald-600" />
-                <p className="text-sm">
-                  <strong>No participation fee</strong> for cultural events.
-                  Participants are responsible for bringing their own consumables (props, costumes, instruments, etc.).
-                </p>
-              </div>
+              <>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
+                  <CheckCircle size={16} className="shrink-0 mt-0.5 text-emerald-600" />
+                  <div className="text-sm space-y-1">
+                    <p><strong>No participation fee</strong> for cultural events. Participants are responsible for bringing their own consumables, props, costumes, and instruments.</p>
+                    <p className="text-emerald-700"><strong>Schedule note:</strong> <em>Express Your Creative Freedom</em> will be conducted a week prior — on <strong>8–9 August</strong>. All other cultural events will be held on <strong>15 August 2026</strong> (Independence Day).</p>
+                  </div>
+                </div>
+              </>
             )}
             {culturalEvents.length === 0
               ? <p className="text-sm text-slate-400 py-8 text-center">No cultural events available.</p>
@@ -624,8 +592,6 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
                   <th className="px-4 py-2 text-left font-semibold">Reg ID</th>
                   <th className="px-4 py-2 text-left font-semibold">Event</th>
                   {submittedVals.team_name && <th className="px-4 py-2 text-left font-semibold">Team</th>}
-                  <th className="px-4 py-2 text-left font-semibold">Time</th>
-                  <th className="px-4 py-2 text-left font-semibold">Venue</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-green-100">
@@ -646,8 +612,6 @@ export default function RegistrationForm({ events, site, culturalOpen }: Props) 
                     {submittedVals.team_name && (
                       <td className="px-4 py-3 text-xs text-slate-600">{submittedVals.team_name}</td>
                     )}
-                    <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">{r.slot_time}</td>
-                    <td className="px-4 py-3 text-slate-500 text-xs">{r.location}</td>
                   </tr>
                 ))}
               </tbody>

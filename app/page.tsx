@@ -1,5 +1,5 @@
 import { getActiveEvents } from '@/actions/register'
-import { getSiteContent, getCulturalRegistrationOpen } from '@/lib/content'
+import { getSiteContent, getCulturalRegistrationOpen, getCompetitiveRegistrationOpen } from '@/lib/content'
 import RegistrationForm from '@/components/RegistrationForm'
 import { Flag, Shield, ClipboardList } from 'lucide-react'
 import Link from 'next/link'
@@ -12,7 +12,8 @@ export default async function HomePage() {
     getActiveEvents(),
     Promise.resolve(getSiteContent()),
   ])
-  const culturalOpen = getCulturalRegistrationOpen()
+  const culturalOpen     = getCulturalRegistrationOpen()
+  const competitiveOpen  = getCompetitiveRegistrationOpen()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
@@ -91,7 +92,7 @@ export default async function HomePage() {
       {/* Form Card */}
       <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-16">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-100 p-6 sm:p-8">
-          <RegistrationForm events={events} site={site} culturalOpen={culturalOpen} />
+          <RegistrationForm events={events} site={site} culturalOpen={culturalOpen} competitiveOpen={competitiveOpen} />
         </div>
         <p className="text-center text-xs text-slate-400 mt-6">{site.form_footer_note}</p>
       </main>
