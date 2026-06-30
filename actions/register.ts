@@ -31,7 +31,7 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
     }
   }
 
-  const { full_name, tower, apartment_number, phone_number, email, event_ids, team_name } = parsed.data
+  const { full_name, tower, apartment_number, phone_number, email, event_ids, team_name, team_members } = parsed.data
 
   // 2. Server-side: enforce max one event per activity category
   const { getContentEvents } = await import('@/lib/content')
@@ -88,7 +88,8 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
           profile_id: profile.id,
           event_id,
           status: 'confirmed',
-          team_name: teamEventIds.has(event_id) && team_name ? team_name : null,
+          team_name:    teamEventIds.has(event_id) && team_name ? team_name : null,
+          team_members: teamEventIds.has(event_id) && team_members?.length ? team_members : null,
         })
         .select('id, event_id')
         .single()

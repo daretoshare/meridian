@@ -5,17 +5,16 @@ import Link from 'next/link'
 import { adminLogout } from '@/actions/admin'
 import RegistrationsTable from './RegistrationsTable'
 import ScheduleManager from './ScheduleManager'
-import EventScheduleView from './EventScheduleView'
+import ParticipantsReport from './ParticipantsReport'
 import type { RegistrationWithDetails, EventWithCount, Event } from '@/types/database'
 import type { SiteContent, ContentLocation } from '@/lib/content'
 import {
   LayoutDashboard,
   Calendar,
-  BarChart2,
+  IndianRupee,
   LogOut,
   Users,
   CheckCircle,
-  Clock,
   TrendingUp,
   Shield,
 } from 'lucide-react'
@@ -29,7 +28,7 @@ interface Props {
   events: EventWithCount[]
 }
 
-type Tab = 'registrations' | 'schedule' | 'overview'
+type Tab = 'registrations' | 'schedule' | 'participants'
 
 export default function AdminDashboard({ user, site, locations, registrations, events }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('registrations')
@@ -128,10 +127,10 @@ export default function AdminDashboard({ user, site, locations, registrations, e
             label={site.admin_tab_schedule}
           />
           <TabButton
-            active={activeTab === 'overview'}
-            onClick={() => setActiveTab('overview')}
-            icon={<BarChart2 size={15} />}
-            label="Event Overview"
+            active={activeTab === 'participants'}
+            onClick={() => setActiveTab('participants')}
+            icon={<IndianRupee size={15} />}
+            label="Fee Collection"
           />
         </div>
 
@@ -145,7 +144,7 @@ export default function AdminDashboard({ user, site, locations, registrations, e
           ) : activeTab === 'schedule' ? (
             <ScheduleManager events={events} locations={locations} />
           ) : (
-            <EventScheduleView events={events} registrations={registrations} />
+            <ParticipantsReport registrations={registrations} />
           )}
         </div>
       </main>

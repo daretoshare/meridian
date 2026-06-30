@@ -89,13 +89,28 @@ export default async function SetupPage() {
     })
   }
 
+  // ── Check: team_members column exists
+  {
+    const { error } = await (admin as any)
+      .from('registrations')
+      .select('team_members')
+      .limit(1)
+    checks.push({
+      label: 'registrations.team_members column',
+      ok: !error,
+      detail: error
+        ? `❌ Column missing — run migration 008: ALTER TABLE registrations ADD COLUMN IF NOT EXISTS team_members JSONB;`
+        : '✓ Column exists',
+    })
+  }
+
   const allOk = checks.every((c) => c.ok)
 
-  // Read migration SQL for display
-  const migrationSql = fs.readFileSync(
-    path.join(process.cwd(), 'supabase/migrations/002_fix_grants_and_seed.sql'),
-    'utf-8'
-  )
+  // Read migration SQL for display (base + team_members migration)
+  const migrationSql = [
+    fs.readFileSync(path.join(process.cwd(), 'supabase/migrations/002_fix_grants_and_seed.sql'), 'utf-8'),
+    fs.readFileSync(path.join(process.cwd(), 'supabase/migrations/008_add_team_members_to_registrations.sql'), 'utf-8'),
+  ].join('\n\n-- migration 008 --\n')
 
   return (
     <SetupClient

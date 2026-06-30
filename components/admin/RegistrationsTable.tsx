@@ -75,7 +75,7 @@ export default function RegistrationsTable({ registrations, events }: Props) {
   }
 
   const exportCSV = () => {
-    const header = ['Reg ID', 'Name', 'Participant / Team', 'Tower', 'Apartment', 'Phone', 'Email', 'Event', 'Type', 'Solo/Team', 'Age Group', 'Date', 'Slot', 'Location', 'Status', 'Reason']
+    const header = ['Reg ID', 'Name', 'Participant / Team', 'Tower', 'Apartment', 'Phone', 'Email', 'Event', 'Type', 'Solo/Team', 'Age Group', 'Status', 'Reason']
     const rows = filtered.map((r) => [
       shortId(r.id),
       r.profiles.full_name,
@@ -88,9 +88,6 @@ export default function RegistrationsTable({ registrations, events }: Props) {
       ((r.events as any).registration_type ?? 'competitive'),
       ((r.events as any).is_team ? 'Team' : 'Solo'),
       r.events.age_group,
-      (r.events as any).event_date ?? '',
-      r.events.slot_time,
-      r.events.location,
       r.status,
       (r as any).reason ?? '',
     ])
@@ -116,9 +113,6 @@ export default function RegistrationsTable({ registrations, events }: Props) {
         <td>${r.profiles.block} / ${r.profiles.apartment_number}</td>
         <td>${r.profiles.phone_number}<br/><small>${r.profiles.email}</small></td>
         <td><span class="${(r.events as any).registration_type === 'cultural' ? 'cultural-badge' : 'competitive-badge'}">${(r.events as any).registration_type === 'cultural' ? 'Cultural' : 'Competitive'}</span> <span class="${(r.events as any).is_team ? 'team-badge' : 'solo-badge'}">${(r.events as any).is_team ? 'Team' : 'Solo'}</span> ${r.events.name}<br/><small class="cap">${r.events.age_group}</small></td>
-        <td>${(r.events as any).event_date ? new Date((r.events as any).event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '—'}</td>
-        <td>${r.events.slot_time}</td>
-        <td>${r.events.location}</td>
         <td class="status ${r.status}">${r.status}</td>
         <td>${(r as any).reason ?? '—'}</td>
       </tr>`).join('')
@@ -159,7 +153,7 @@ export default function RegistrationsTable({ registrations, events }: Props) {
     <thead>
       <tr>
         <th>Reg ID</th><th>Name</th><th>Participant / Team</th><th>Tower / Apt</th><th>Contact</th>
-        <th>Event</th><th>Date</th><th>Time</th><th>Venue</th><th>Status</th><th>Reason</th>
+        <th>Event</th><th>Status</th><th>Reason</th>
       </tr>
     </thead>
     <tbody>${rows}</tbody>
@@ -253,14 +247,14 @@ export default function RegistrationsTable({ registrations, events }: Props) {
         <table className="w-full text-sm text-left">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              {['Reg ID', 'Name', 'Participant / Team', 'Tower / Apt.', 'Contact', 'Event', 'Date', 'Slot', 'Location', 'Status', 'Reason', 'Change Status'].map((h) => (
+              {['Reg ID', 'Name', 'Participant / Team', 'Tower / Apt.', 'Contact', 'Event', 'Status', 'Reason', 'Change Status'].map((h) => (
                 <th key={h} className="px-4 py-3 font-semibold text-slate-600 whitespace-nowrap text-xs uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {filtered.length === 0 ? (
-              <tr><td colSpan={12} className="px-4 py-12 text-center text-slate-400">No registrations match your filters.</td></tr>
+              <tr><td colSpan={9} className="px-4 py-12 text-center text-slate-400">No registrations match your filters.</td></tr>
             ) : (
               filtered.map((reg) => {
                 const isTeam   = (reg.events as any).is_team === true
@@ -302,13 +296,6 @@ export default function RegistrationsTable({ registrations, events }: Props) {
                     </p>
                     <p className="text-xs text-slate-400 capitalize">{reg.events.age_group}</p>
                   </td>
-                  <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">
-                    {(reg.events as any).event_date
-                      ? new Date((reg.events as any).event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
-                      : '—'}
-                  </td>
-                  <td className="px-4 py-3 text-slate-600 whitespace-nowrap text-xs">{reg.events.slot_time}</td>
-                  <td className="px-4 py-3 text-slate-500 text-xs">{reg.events.location}</td>
                   <td className="px-4 py-3">
                     <span className={`inline-flex px-2 py-1 rounded-full border text-xs font-medium capitalize ${STATUS_STYLES[reg.status]}`}>
                       {reg.status}

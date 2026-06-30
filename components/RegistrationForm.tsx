@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { registrationSchema, type RegistrationFormData } from '@/lib/validations'
+import { registrationSchema, type RegistrationFormData, type TeamMember } from '@/lib/validations'
 import { registerForEvents } from '@/actions/register'
 import type { Event } from '@/types/database'
 import type { SiteContent } from '@/lib/content'
@@ -49,9 +49,10 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
   const [submittedVals, setSubmittedVals]   = useState<Partial<RegistrationFormData>>({})
   const [feeConsented, setFeeConsented]     = useState(false)
   const [showFeeModal, setShowFeeModal]     = useState(false)
-  const [aptSuffix, setAptSuffix]           = useState('')
+  const [teamMembers, setTeamMembers]       = useState<TeamMember[]>([])
+  const [tmErrors, setTmErrors]             = useState<Record<number, Partial<Record<keyof TeamMember, string>>>>({})
 
-  const { register, getValues, watch, setValue, formState: { errors }, reset } = useForm<RegistrationFormData>({
+  const { register, getValues, formState: { errors }, reset } = useForm<RegistrationFormData>({
     defaultValues: { event_ids: [], team_name: '' },
   })
 
@@ -59,19 +60,39 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
   const isCompetitiveClosed  = !competitiveOpen
   const isCulturalNotYetOpen = !culturalOpen
 
-  // ── Apartment prefix derived from selected tower ─────────────────────────
-  const selectedTower = watch('tower')
-  const aptBuilding: '5' | '6' | null = selectedTower?.startsWith('Building 5') ? '5'
-    : selectedTower?.startsWith('Building 6') ? '6'
-    : null
+  // ── Sport group for sorting competitive events ────────────────────────────
+  const sportGroup = (name: string) => {
+    if (/^50m|^100m/i.test(name))          return '1-Running'
+    if (/lemon spoon/i.test(name))         return '2-LemonSpoon'
+    if (/^chess/i.test(name))              return '3-Chess'
+    if (/badminton singles/i.test(name))   return '4-BadmintonSingles'
+    if (/badminton doubles/i.test(name))   return '5-BadmintonDoubles'
+    if (/badminton mixed/i.test(name))     return '6-BadmintonMixed'
+    if (/table tennis singles/i.test(name)) return '7-TTSingles'
+    if (/table tennis doubles/i.test(name)) return '8-TTDoubles'
+    if (/table tennis mixed/i.test(name))  return '9-TTMixed'
+    if (/treasure hunt/i.test(name))       return 'Z-Treasure'
+    return 'M-' + name
+  }
 
-  // ── Split events — preserve MD order (already ordered correctly in events.md) ──
+  const AGE_GROUP_ORDER: Record<string, number> = { children: 0, teens: 1, adults: 2, seniors: 3, all: 4 }
+
+  const sortCompetitive = (a: Event, b: Event) => {
+    const ga = sportGroup(a.name), gb = sportGroup(b.name)
+    if (ga !== gb) return ga.localeCompare(gb)
+    return (AGE_GROUP_ORDER[a.age_group] ?? 9) - (AGE_GROUP_ORDER[b.age_group] ?? 9)
+  }
+
+  const sortCultural = (a: Event, b: Event) =>
+    (AGE_GROUP_ORDER[a.age_group] ?? 9) - (AGE_GROUP_ORDER[b.age_group] ?? 9)
+
+  // ── Split events ──────────────────────────────────────────────────────────
   const competitiveEvents = useMemo(() =>
-    events.filter(e => (e as any).registration_type !== 'cultural'),
+    events.filter(e => (e as any).registration_type !== 'cultural').sort(sortCompetitive),
     [events]
   )
   const culturalEvents = useMemo(() =>
-    events.filter(e => (e as any).registration_type === 'cultural'),
+    events.filter(e => (e as any).registration_type === 'cultural').sort(sortCultural),
     [events]
   )
 
@@ -175,7 +196,7 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
 
   // ── Submit ────────────────────────────────────────────────────────────────
   const handleSubmitClick = () => {
-    const raw    = { ...getValues(), event_ids: selectedEvents }
+    const raw    = { ...getValues(), event_ids: selectedEvents, team_members: teamMembers.length ? teamMembers : undefined }
     const parsed = registrationSchema.safeParse(raw)
     if (!parsed.success) {
       const errs: Record<string, string> = {}
@@ -195,7 +216,7 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
         setSubmittedVals({ ...snapshot, event_ids: selectedEvents })
         reset()
         setSelectedEvents([])
-        setAptSuffix('')
+        setTeamMembers([])
       }
     })
   }
@@ -291,21 +312,7 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
               <Home size={14} className="inline mr-1 text-slate-500" />
               Building &amp; Tower <span className="text-red-500">*</span>
             </label>
-            <select
-              {...register('tower')}
-              className="input-field"
-              onChange={(e) => {
-                register('tower').onChange(e)
-                // Reset apartment when building changes
-                const newBuilding = e.target.value.startsWith('Building 5') ? '5'
-                  : e.target.value.startsWith('Building 6') ? '6' : null
-                const currentBuilding = aptBuilding
-                if (newBuilding !== currentBuilding) {
-                  setAptSuffix('')
-                  setValue('apartment_number', '', { shouldValidate: false })
-                }
-              }}
-            >
+            <select {...register('tower')} className="input-field">
               <option value="">Select building &amp; tower…</option>
               <optgroup label="Building 5 (Tower 1 – 10)">
                 {B5_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
@@ -321,35 +328,14 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Apartment Number <span className="text-red-500">*</span>
             </label>
-            <div className="flex items-center gap-0">
-              {aptBuilding && (
-                <span className="inline-flex items-center px-3 h-10 bg-slate-100 border border-r-0 border-slate-300 rounded-l-xl text-sm font-semibold text-slate-600 shrink-0 select-none">
-                  {aptBuilding}
-                </span>
-              )}
-              <input
-                value={aptSuffix}
-                onChange={(e) => {
-                  const digits = e.target.value.replace(/\D/g, '').slice(0, aptBuilding ? 5 : 6)
-                  setAptSuffix(digits)
-                  setValue(
-                    'apartment_number',
-                    aptBuilding ? aptBuilding + digits : digits,
-                    { shouldValidate: true }
-                  )
-                }}
-                placeholder={aptBuilding ? `0123` : 'Select tower first'}
-                disabled={!aptBuilding}
-                maxLength={aptBuilding ? 5 : 6}
-                inputMode="numeric"
-                className={`input-field flex-1 ${aptBuilding ? 'rounded-l-none' : ''} disabled:bg-slate-50 disabled:text-slate-400`}
-              />
-            </div>
-            <p className="text-xs text-slate-400 mt-1">
-              {aptBuilding
-                ? `Building ${aptBuilding} apartment — enter the remaining digits`
-                : 'Select your tower first to set the apartment prefix'}
-            </p>
+            <input
+              {...register('apartment_number')}
+              placeholder="e.g. 50123 or 601234"
+              maxLength={6}
+              inputMode="numeric"
+              className="input-field"
+            />
+            <p className="text-xs text-slate-400 mt-1">Enter your full apartment number (5 or 6 digits)</p>
             {(fieldErrors.apartment_number || errors.apartment_number) && <FieldError message={fieldErrors.apartment_number ?? errors.apartment_number!.message!} />}
           </div>
 
@@ -530,19 +516,18 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
         </div>
       </section>
 
-      {/* ── Team Name ────────────────────────────────────────────────────── */}
+      {/* ── Team / Group Event Details ───────────────────────────────────── */}
       {hasTeamEvent && (
-        <section className="rounded-2xl border border-blue-200 bg-blue-50 p-5 space-y-3">
+        <section className="rounded-2xl border border-blue-200 bg-blue-50 p-5 space-y-4">
           <div className="flex items-center gap-2">
             <Users size={18} className="text-blue-600" />
-            <h3 className="font-semibold text-blue-900">Team Registration</h3>
+            <h3 className="font-semibold text-blue-900">Team / Group Details</h3>
           </div>
-          <p className="text-sm text-blue-700">
-            You&apos;ve selected one or more team / group events. Please enter your team name below.
-          </p>
+
+          {/* Team Name */}
           <div>
             <label className="block text-sm font-medium text-blue-800 mb-1">
-              Team Name <span className="text-xs font-normal text-blue-500">(optional)</span>
+              Team / Group Name <span className="text-xs font-normal text-blue-500">(optional)</span>
             </label>
             <input
               {...register('team_name')}
@@ -550,8 +535,93 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
               maxLength={80}
               className="input-field bg-white"
             />
-            <p className="text-xs text-blue-600 mt-1.5">Please ensure your team is formed before registering.</p>
             {(fieldErrors.team_name || errors.team_name) && <FieldError message={fieldErrors.team_name ?? errors.team_name!.message!} />}
+          </div>
+
+          {/* Team members */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-blue-800">Team Members</p>
+              <button
+                type="button"
+                onClick={() => setTeamMembers(m => [...m, { name: '', tower: '', apartment_number: '', phone_number: '' }])}
+                className="text-xs font-semibold text-blue-700 bg-blue-100 hover:bg-blue-200 border border-blue-300 px-3 py-1.5 rounded-lg transition-colors"
+              >
+                + Add Member
+              </button>
+            </div>
+            <p className="text-xs text-blue-600">Add details for each team member (other than yourself). This helps volunteers track payment collection.</p>
+
+            {teamMembers.map((member, idx) => (
+              <div key={idx} className="bg-white rounded-xl border border-blue-200 p-4 space-y-3">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-semibold text-blue-700">Member {idx + 1}</span>
+                  <button
+                    type="button"
+                    onClick={() => setTeamMembers(m => m.filter((_, i) => i !== idx))}
+                    className="text-xs text-red-400 hover:text-red-600"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Full Name *</label>
+                    <input
+                      value={member.name}
+                      onChange={e => setTeamMembers(m => m.map((x, i) => i === idx ? { ...x, name: e.target.value } : x))}
+                      placeholder="Priya Sharma"
+                      className="input-field text-sm"
+                    />
+                    {tmErrors[idx]?.name && <p className="text-xs text-red-500 mt-1">{tmErrors[idx].name}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Building & Tower *</label>
+                    <select
+                      value={member.tower}
+                      onChange={e => setTeamMembers(m => m.map((x, i) => i === idx ? { ...x, tower: e.target.value } : x))}
+                      className="input-field text-sm"
+                    >
+                      <option value="">Select tower…</option>
+                      <optgroup label="Building 5 (Tower 1 – 10)">
+                        {B5_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
+                      </optgroup>
+                      <optgroup label="Building 6 (Tower 1 – 6)">
+                        {B6_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
+                      </optgroup>
+                    </select>
+                    {tmErrors[idx]?.tower && <p className="text-xs text-red-500 mt-1">{tmErrors[idx].tower}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Apartment Number *</label>
+                    <input
+                      value={member.apartment_number}
+                      onChange={e => setTeamMembers(m => m.map((x, i) => i === idx ? { ...x, apartment_number: e.target.value.replace(/\D/g, '').slice(0, 6) } : x))}
+                      placeholder="50123"
+                      inputMode="numeric"
+                      maxLength={6}
+                      className="input-field text-sm"
+                    />
+                    {tmErrors[idx]?.apartment_number && <p className="text-xs text-red-500 mt-1">{tmErrors[idx].apartment_number}</p>}
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Phone Number *</label>
+                    <div className="flex">
+                      <span className="inline-flex items-center px-3 border border-r-0 border-slate-300 rounded-l-lg bg-slate-50 text-slate-500 text-sm">+91</span>
+                      <input
+                        value={member.phone_number}
+                        onChange={e => setTeamMembers(m => m.map((x, i) => i === idx ? { ...x, phone_number: e.target.value.replace(/\D/g, '').slice(0, 10) } : x))}
+                        placeholder="9876543210"
+                        inputMode="numeric"
+                        maxLength={10}
+                        className="input-field rounded-l-none text-sm flex-1"
+                      />
+                    </div>
+                    {tmErrors[idx]?.phone_number && <p className="text-xs text-red-500 mt-1">{tmErrors[idx].phone_number}</p>}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       )}
