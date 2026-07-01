@@ -11,8 +11,8 @@
 # ┌───────────────────────────────────────────────────────────────────────────┐
 # │  REGISTRATION TOGGLES — flip these to open / close each category          │
 # └───────────────────────────────────────────────────────────────────────────┘
-competitive_registration_status: open
-cultural_registration_status: pending
+competitive_registration_status: open     # pending | open | closed
+cultural_registration_status: pending     # pending | open | closed
 
 #
 # SCHEDULE
@@ -63,6 +63,42 @@ events:
     max_participants: 20
     location: ""
     description: 100-metre flat race. Individual. Age 8–12.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000066"
+    name: Lemon Spoon Race (Age 3 – 5)
+    registration_type: competitive
+    age_group: children
+    event_date: null
+    slot_time: ""
+    max_participants: 20
+    location: ""
+    description: Classic lemon-and-spoon race. Individual. Age 3–5.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000067"
+    name: Lemon Spoon Race (Age 5 – 8)
+    registration_type: competitive
+    age_group: children
+    event_date: null
+    slot_time: ""
+    max_participants: 20
+    location: ""
+    description: Classic lemon-and-spoon race. Individual. Age 5–8.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000068"
+    name: Lemon Spoon Race (Age 8 – 15)
+    registration_type: competitive
+    age_group: children
+    event_date: null
+    slot_time: ""
+    max_participants: 20
+    location: ""
+    description: Classic lemon-and-spoon race. Individual. Age 8–15.
     is_team: false
     is_active: true
 
