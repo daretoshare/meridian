@@ -30,6 +30,18 @@ events:
 
   # ── Running ───────────────────────────────────────────────────────────────
 
+  - id: "e1000001-0000-0000-0000-000000000069"
+    name: Toddlers Race
+    registration_type: competitive
+    age_group: children
+    event_date: null
+    slot_time: ""
+    max_participants: 20
+    location: ""
+    description: Fun dash for toddlers. Individual. Age up to 3.
+    is_team: false
+    is_active: true
+
   - id: "e1000001-0000-0000-0000-000000000026"
     name: 50m Run (Age 3 – 5)
     registration_type: competitive
