@@ -11,7 +11,8 @@
 # ┌───────────────────────────────────────────────────────────────────────────┐
 # │  REGISTRATION TOGGLES — flip these to open / close each category          │
 # └───────────────────────────────────────────────────────────────────────────┘
-competitive_registration_open: true
+competitive_registration_status: open
+cultural_registration_status: pending
 
 #
 # SCHEDULE

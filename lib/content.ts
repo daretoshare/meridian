@@ -64,16 +64,22 @@ export function getContentEvents(activeOnly = true): ContentEvent[] {
   return activeOnly ? all.filter((e) => e.is_active) : all
 }
 
-/** Returns the value of `cultural_registration_open` from events.md frontmatter. */
-export function getCulturalRegistrationOpen(): boolean {
+export type RegistrationStatus = 'pending' | 'open' | 'closed'
+
+/** Returns the registration status for cultural events: pending | open | closed */
+export function getCulturalRegistrationStatus(): RegistrationStatus {
   const { data } = readMd('events.md')
-  return data.cultural_registration_open === true
+  const v = data.cultural_registration_status
+  if (v === 'open' || v === 'closed') return v
+  return 'pending'
 }
 
-/** Returns the value of `competitive_registration_open` from events.md frontmatter. */
-export function getCompetitiveRegistrationOpen(): boolean {
+/** Returns the registration status for competitive events: pending | open | closed */
+export function getCompetitiveRegistrationStatus(): RegistrationStatus {
   const { data } = readMd('events.md')
-  return data.competitive_registration_open === true
+  const v = data.competitive_registration_status
+  if (v === 'open' || v === 'closed') return v
+  return 'pending'
 }
 
 // ─── Locations ────────────────────────────────────────────────────────────────

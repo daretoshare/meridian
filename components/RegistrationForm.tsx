@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { registrationSchema, teamMemberSchema, type RegistrationFormData, type TeamMember } from '@/lib/validations'
 import { registerForEvents } from '@/actions/register'
 import type { Event } from '@/types/database'
-import type { SiteContent } from '@/lib/content'
+import type { SiteContent, RegistrationStatus } from '@/lib/content'
 import {
   CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail,
   ExternalLink, FileText, Lock, Clock, Users, Check, IndianRupee, X, ChevronDown,
@@ -31,15 +31,15 @@ const B6_TOWERS = Array.from({ length: 6 },  (_, i) => `Building 6 – Tower ${i
 interface Props {
   events: Event[]
   site: SiteContent
-  culturalOpen: boolean
-  competitiveOpen: boolean
+  culturalStatus: RegistrationStatus
+  competitiveStatus: RegistrationStatus
 }
 
 function daysUntil(d: Date): number {
   return Math.ceil((d.getTime() - Date.now()) / 86_400_000)
 }
 
-export default function RegistrationForm({ events, site, culturalOpen, competitiveOpen }: Props) {
+export default function RegistrationForm({ events, site, culturalStatus, competitiveStatus }: Props) {
   const [isPending, startTransition] = useTransition()
   const [result, setResult]         = useState<{
     success: boolean; message: string; detail?: string; registrations?: RegistrationSummary[]
@@ -63,8 +63,8 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
   const phoneReg = register('phone_number',     { validate: v => /^[6-9]\d{9}$/.test(v) || 'Enter a valid 10-digit Indian mobile number (starts with 6–9)' })
 
   // ── Window state (driven by events.md toggles) ────────────────────────────
-  const isCompetitiveClosed  = !competitiveOpen
-  const isCulturalNotYetOpen = !culturalOpen
+  const isCompetitiveLocked = competitiveStatus !== 'open'
+  const isCulturalLocked    = culturalStatus !== 'open'
 
   // ── Sport group for sorting competitive events ────────────────────────────
   const sportGroup = (name: string) => {
@@ -663,29 +663,46 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
 
         {/* ── COMPETITIVE ─────────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-slate-200 overflow-hidden">
-          <div className={`px-5 py-3 flex flex-wrap items-center gap-3 border-b ${isCompetitiveClosed ? 'bg-slate-100 border-slate-200' : 'bg-amber-50 border-amber-100'}`}>
+          <div className={`px-5 py-3 flex flex-wrap items-center gap-3 border-b ${
+            competitiveStatus === 'open'    ? 'bg-amber-50 border-amber-100' :
+            competitiveStatus === 'closed'  ? 'bg-slate-100 border-slate-200' :
+                                              'bg-blue-50 border-blue-100'
+          }`}>
             <div className="flex-1">
               <p className="font-bold text-slate-800">🏆 Competitive Events</p>
               <p className="text-xs text-slate-500 mt-0.5">Running · Chess · Badminton · Table Tennis · Treasure Hunt</p>
             </div>
-            {isCompetitiveClosed
-              ? <span className="flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-100 border border-red-200 px-3 py-1 rounded-full">
-                  <Lock size={11} /> Registration Closed
-                </span>
-              : <span className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full">
-                  <CheckCircle size={11} /> Registration Open
-                </span>
-            }
+            {competitiveStatus === 'open' && (
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full">
+                <CheckCircle size={11} /> Registration Open
+              </span>
+            )}
+            {competitiveStatus === 'closed' && (
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-100 border border-red-200 px-3 py-1 rounded-full">
+                <Lock size={11} /> Registration Closed
+              </span>
+            )}
+            {competitiveStatus === 'pending' && (
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-100 border border-blue-200 px-3 py-1 rounded-full">
+                <Clock size={11} /> Coming Soon
+              </span>
+            )}
           </div>
 
           <div className="p-4">
-            {isCompetitiveClosed && (
-              <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-red-50 border border-red-200 text-red-800">
-                <Lock size={16} className="shrink-0 mt-0.5" />
-                <p className="text-sm">Registration for competitive events is currently closed.</p>
+            {competitiveStatus === 'pending' && (
+              <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
+                <Clock size={16} className="shrink-0 mt-0.5" />
+                <p className="text-sm">Registration for competitive events has not started yet. Check back soon!</p>
               </div>
             )}
-            {!isCompetitiveClosed && (
+            {competitiveStatus === 'closed' && (
+              <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-red-50 border border-red-200 text-red-800">
+                <Lock size={16} className="shrink-0 mt-0.5" />
+                <p className="text-sm">Registration for competitive events is now closed.</p>
+              </div>
+            )}
+            {competitiveStatus === 'open' && (
               <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">
                 <AlertCircle size={16} className="shrink-0 mt-0.5" />
                 <p className="text-sm">Events will be conducted on weekends — <strong>25–26 July</strong> and <strong>8–9 August 2026</strong>. Exact schedule will be shared closer to the date.</p>
@@ -693,49 +710,64 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
             )}
             {competitiveEvents.length === 0
               ? <p className="text-sm text-slate-400 py-8 text-center">No competitive events available.</p>
-              : renderFlatList(competitiveEvents, isCompetitiveClosed, 'closed')
+              : renderFlatList(competitiveEvents, isCompetitiveLocked, 'closed')
             }
           </div>
         </div>
 
         {/* ── CULTURAL ────────────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-slate-200 overflow-hidden">
-          <div className={`px-5 py-3 flex flex-wrap items-center gap-3 border-b ${isCulturalNotYetOpen ? 'bg-blue-50 border-blue-100' : 'bg-green-50 border-green-100'}`}>
+          <div className={`px-5 py-3 flex flex-wrap items-center gap-3 border-b ${
+            culturalStatus === 'open'   ? 'bg-green-50 border-green-100' :
+            culturalStatus === 'closed' ? 'bg-slate-100 border-slate-200' :
+                                          'bg-blue-50 border-blue-100'
+          }`}>
             <div className="flex-1">
               <p className="font-bold text-slate-800">🎭 Cultural Events</p>
               <p className="text-xs text-slate-500 mt-0.5">Dance · Singing · Games · Creative Arts</p>
             </div>
-            {isCulturalNotYetOpen
-              ? <span className="flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-100 border border-blue-200 px-3 py-1 rounded-full">
-                  <Lock size={11} /> Registration Closed
-                </span>
-              : <span className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100 border border-green-200 px-3 py-1 rounded-full">
-                  <CheckCircle size={11} /> Registration Open
-                </span>
-            }
+            {culturalStatus === 'open' && (
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100 border border-green-200 px-3 py-1 rounded-full">
+                <CheckCircle size={11} /> Registration Open
+              </span>
+            )}
+            {culturalStatus === 'closed' && (
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-100 border border-red-200 px-3 py-1 rounded-full">
+                <Lock size={11} /> Registration Closed
+              </span>
+            )}
+            {culturalStatus === 'pending' && (
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-100 border border-blue-200 px-3 py-1 rounded-full">
+                <Clock size={11} /> Coming Soon
+              </span>
+            )}
           </div>
 
           <div className="p-4 space-y-3">
-            {isCulturalNotYetOpen && (
+            {culturalStatus === 'pending' && (
               <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
-                <Lock size={16} className="shrink-0 mt-0.5" />
-                <p className="text-sm">Cultural event registration is not yet open. Check back soon!</p>
+                <Clock size={16} className="shrink-0 mt-0.5" />
+                <p className="text-sm">Cultural event registration has not started yet. Check back soon!</p>
               </div>
             )}
-            {!isCulturalNotYetOpen && (
-              <>
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
-                  <CheckCircle size={16} className="shrink-0 mt-0.5 text-emerald-600" />
-                  <div className="text-sm space-y-1">
-                    <p><strong>No participation fee</strong> for cultural events. Participants are responsible for bringing their own consumables, props, costumes, and instruments.</p>
-                    <p className="text-emerald-700"><strong>Schedule note:</strong> <em>Express Your Creative Freedom</em> will be conducted a week prior — on <strong>8–9 August</strong>. All other cultural events will be held on <strong>15 August 2026</strong> (Independence Day).</p>
-                  </div>
+            {culturalStatus === 'closed' && (
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-200 text-red-800">
+                <Lock size={16} className="shrink-0 mt-0.5" />
+                <p className="text-sm">Registration for cultural events is now closed.</p>
+              </div>
+            )}
+            {culturalStatus === 'open' && (
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
+                <CheckCircle size={16} className="shrink-0 mt-0.5 text-emerald-600" />
+                <div className="text-sm space-y-1">
+                  <p><strong>No participation fee</strong> for cultural events. Participants are responsible for bringing their own consumables, props, costumes, and instruments.</p>
+                  <p className="text-emerald-700"><strong>Schedule note:</strong> <em>Express Your Creative Freedom</em> will be conducted a week prior — on <strong>8–9 August</strong>. All other cultural events will be held on <strong>15 August 2026</strong> (Independence Day).</p>
                 </div>
-              </>
+              </div>
             )}
             {culturalEvents.length === 0
               ? <p className="text-sm text-slate-400 py-8 text-center">No cultural events available.</p>
-              : renderFlatList(culturalEvents, isCulturalNotYetOpen, 'soon')
+              : renderFlatList(culturalEvents, isCulturalLocked, 'soon')
             }
           </div>
         </div>
