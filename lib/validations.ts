@@ -8,7 +8,7 @@ const bangaloreMobile = z
 export const teamMemberSchema = z.object({
   name:             z.string().min(2, 'Name required').max(100),
   tower:            z.string().min(1, 'Tower required').regex(/^(Building 5 – Tower (10|[1-9])|Building 6 – Tower [1-6])$/, 'Select a valid tower'),
-  apartment_number: z.string().regex(/^\d{5,6}$/, 'Enter a 5–6 digit apartment number'),
+  apartment_number: z.string().regex(/^[56]\d{4,5}$/, 'Apartment number must start with 5 or 6 and be 5–6 digits (e.g. 50123)'),
   phone_number:     bangaloreMobile,
 })
 
@@ -31,7 +31,7 @@ export const registrationSchema = z.object({
 
   apartment_number: z
     .string()
-    .regex(/^\d{5,6}$/, 'Enter a 5–6 digit apartment number'),
+    .regex(/^[56]\d{4,5}$/, 'Apartment number must start with 5 or 6 (e.g. 50123)'),
 
   phone_number: bangaloreMobile,
 

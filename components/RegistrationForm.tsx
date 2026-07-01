@@ -59,7 +59,7 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
   })
 
   // Pre-registered fields that need onChange stripping (must be stable — not inside JSX)
-  const aptReg   = register('apartment_number', { validate: v => /^\d{5,6}$/.test(v) || 'Enter a 5–6 digit apartment number' })
+  const aptReg   = register('apartment_number', { validate: v => /^[56]\d{4,5}$/.test(v) || 'Apartment number must start with 5 or 6 (e.g. 50123)' })
   const phoneReg = register('phone_number',     { validate: v => /^[6-9]\d{9}$/.test(v) || 'Enter a valid 10-digit Indian mobile number (starts with 6–9)' })
 
   // ── Window state (driven by events.md toggles) ────────────────────────────
@@ -545,7 +545,7 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
               maxLength={6}
               className="input-field"
             />
-            <p className="text-xs text-slate-400 mt-1">Enter your full apartment number (5 or 6 digits)</p>
+            <p className="text-xs text-slate-400 mt-1">Starts with 5 or 6 · 5 or 6 digits total (e.g. 50123, 601234)</p>
             {(fieldErrors.apartment_number || errors.apartment_number) && <FieldError message={fieldErrors.apartment_number ?? errors.apartment_number!.message!} />}
           </div>
 
