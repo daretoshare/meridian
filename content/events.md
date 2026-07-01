@@ -12,7 +12,7 @@
 # │  REGISTRATION TOGGLES — flip these to open / close each category          │
 # └───────────────────────────────────────────────────────────────────────────┘
 competitive_registration_open: true
-cultural_registration_open: false
+
 #
 # SCHEDULE
 #   Competitive events: weekends of 25–26 Jul and 8–9 Aug
