@@ -55,7 +55,12 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
 
   const { register, getValues, formState: { errors }, reset } = useForm<RegistrationFormData>({
     defaultValues: { event_ids: [] },
+    mode: 'onBlur',
   })
+
+  // Pre-registered fields that need onChange stripping (must be stable — not inside JSX)
+  const aptReg   = register('apartment_number', { validate: v => /^\d{5,6}$/.test(v) || 'Enter a 5–6 digit apartment number' })
+  const phoneReg = register('phone_number',     { validate: v => /^[6-9]\d{9}$/.test(v) || 'Enter a valid 10-digit Indian mobile number (starts with 6–9)' })
 
   // ── Window state (driven by events.md toggles) ────────────────────────────
   const isCompetitiveClosed  = !competitiveOpen
@@ -494,7 +499,15 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Full Name <span className="text-red-500">*</span>
             </label>
-            <input {...register('full_name')} placeholder="Rajesh Kumar" className="input-field" />
+            <input
+              {...register('full_name', {
+                minLength: { value: 2, message: 'Full name must be at least 2 characters' },
+                maxLength: { value: 100, message: 'Name is too long' },
+                pattern:   { value: /^[a-zA-Z\s.'-]+$/, message: "Name can only contain letters, spaces, and . ' -" },
+              })}
+              placeholder="Rajesh Kumar"
+              className="input-field"
+            />
             {(fieldErrors.full_name || errors.full_name) && <FieldError message={fieldErrors.full_name ?? errors.full_name!.message!} />}
           </div>
 
@@ -503,7 +516,12 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
               <Home size={14} className="inline mr-1 text-slate-500" />
               Building &amp; Tower <span className="text-red-500">*</span>
             </label>
-            <select {...register('tower')} className="input-field">
+            <select
+              {...register('tower', {
+                validate: v => /^(Building 5 – Tower (10|[1-9])|Building 6 – Tower [1-6])$/.test(v) || 'Select a valid tower',
+              })}
+              className="input-field"
+            >
               <option value="">Select building &amp; tower…</option>
               <optgroup label="Building 5 (Tower 1 – 10)">
                 {B5_TOWERS.map(t => <option key={t} value={t}>{t}</option>)}
@@ -520,10 +538,11 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
               Apartment Number <span className="text-red-500">*</span>
             </label>
             <input
-              {...register('apartment_number')}
+              {...aptReg}
+              onChange={e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6); aptReg.onChange(e) }}
               placeholder="e.g. 50123 or 601234"
-              maxLength={6}
               inputMode="numeric"
+              maxLength={6}
               className="input-field"
             />
             <p className="text-xs text-slate-400 mt-1">Enter your full apartment number (5 or 6 digits)</p>
@@ -537,7 +556,14 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
             </label>
             <div className="flex">
               <span className="inline-flex items-center px-3 border border-r-0 border-slate-300 rounded-l-lg bg-slate-50 text-slate-500 text-sm">+91</span>
-              <input {...register('phone_number')} placeholder="9876543210" maxLength={10} className="input-field rounded-l-none" />
+              <input
+                {...phoneReg}
+                onChange={e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10); phoneReg.onChange(e) }}
+                placeholder="9876543210"
+                inputMode="numeric"
+                maxLength={10}
+                className="input-field rounded-l-none"
+              />
             </div>
             {(fieldErrors.phone_number || errors.phone_number) && <FieldError message={fieldErrors.phone_number ?? errors.phone_number!.message!} />}
           </div>
@@ -547,7 +573,15 @@ export default function RegistrationForm({ events, site, culturalOpen, competiti
               <Mail size={14} className="inline mr-1 text-slate-500" />
               Email Address <span className="text-red-500">*</span>
             </label>
-            <input {...register('email')} type="email" placeholder="rajesh@example.com" className="input-field" />
+            <input
+              {...register('email', {
+                pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Enter a valid email address' },
+                maxLength: { value: 200, message: 'Email too long' },
+              })}
+              type="email"
+              placeholder="rajesh@example.com"
+              className="input-field"
+            />
             {(fieldErrors.email || errors.email) && <FieldError message={fieldErrors.email ?? errors.email!.message!} />}
           </div>
 
