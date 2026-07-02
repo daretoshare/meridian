@@ -68,17 +68,24 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
 
   // ── Sport group for sorting competitive events ────────────────────────────
   const sportGroup = (name: string) => {
-    if (/^50m|^100m/i.test(name))          return '1-Running'
-    if (/lemon spoon/i.test(name))         return '2-LemonSpoon'
-    if (/^chess/i.test(name))              return '3-Chess'
-    if (/badminton singles/i.test(name))   return '4-BadmintonSingles'
-    if (/badminton doubles/i.test(name))   return '5-BadmintonDoubles'
-    if (/badminton mixed/i.test(name))     return '6-BadmintonMixed'
+    if (/toddlers race/i.test(name))        return '0-Toddlers'
+    if (/^50m|^100m/i.test(name))           return '1-Running'
+    if (/lemon spoon/i.test(name))          return '2-LemonSpoon'
+    if (/^chess/i.test(name))               return '3-Chess'
+    if (/badminton singles/i.test(name))    return '4-BadmintonSingles'
+    if (/badminton doubles/i.test(name))    return '5-BadmintonDoubles'
+    if (/badminton mixed/i.test(name))      return '6-BadmintonMixed'
     if (/table tennis singles/i.test(name)) return '7-TTSingles'
     if (/table tennis doubles/i.test(name)) return '8-TTDoubles'
-    if (/table tennis mixed/i.test(name))  return '9-TTMixed'
-    if (/treasure hunt/i.test(name))       return 'Z-Treasure'
+    if (/table tennis mixed/i.test(name))   return '9-TTMixed'
+    if (/treasure hunt/i.test(name))        return 'Z-Treasure'
     return 'M-' + name
+  }
+
+  // Extract the leading age number from a name like "Age 5 – 10" or "Age 15+"
+  const leadingAge = (name: string): number => {
+    const m = name.match(/age\s+(\d+)/i)
+    return m ? parseInt(m[1], 10) : 0
   }
 
   const AGE_GROUP_ORDER: Record<string, number> = { children: 0, teens: 1, adults: 2, seniors: 3, all: 4 }
@@ -86,7 +93,9 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
   const sortCompetitive = (a: Event, b: Event) => {
     const ga = sportGroup(a.name), gb = sportGroup(b.name)
     if (ga !== gb) return ga.localeCompare(gb)
-    return (AGE_GROUP_ORDER[a.age_group] ?? 9) - (AGE_GROUP_ORDER[b.age_group] ?? 9)
+    const ageDiff = (AGE_GROUP_ORDER[a.age_group] ?? 9) - (AGE_GROUP_ORDER[b.age_group] ?? 9)
+    if (ageDiff !== 0) return ageDiff
+    return leadingAge(a.name) - leadingAge(b.name)
   }
 
   const sortCultural = (a: Event, b: Event) =>

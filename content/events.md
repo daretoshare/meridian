@@ -38,7 +38,7 @@ events:
     slot_time: ""
     max_participants: 20
     location: ""
-    description: Fun dash for toddlers. Individual. Age up to 3.
+    description: Fun dash for toddlers. Individual. Age 1–3.
     is_team: false
     is_active: true
 
@@ -153,6 +153,30 @@ events:
     is_active: true
 
   # ── Badminton Singles ─────────────────────────────────────────────────────
+
+  - id: "e1000001-0000-0000-0000-000000000070"
+    name: Badminton Singles – Girls (Age 5 – 10)
+    registration_type: competitive
+    age_group: children
+    event_date: null
+    slot_time: ""
+    max_participants: 16
+    location: ""
+    description: Singles knockout. Individual. Girls aged 5–10.
+    is_team: false
+    is_active: true
+
+  - id: "e1000001-0000-0000-0000-000000000071"
+    name: Badminton Singles – Boys (Age 5 – 10)
+    registration_type: competitive
+    age_group: children
+    event_date: null
+    slot_time: ""
+    max_participants: 16
+    location: ""
+    description: Singles knockout. Individual. Boys aged 5–10.
+    is_team: false
+    is_active: true
 
   - id: "e1000001-0000-0000-0000-000000000032"
     name: Badminton Singles – Girls (Age 10 – 16)
