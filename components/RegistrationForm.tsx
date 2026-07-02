@@ -68,7 +68,7 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
 
   // ── Sport group for sorting competitive events ────────────────────────────
   const sportGroup = (name: string) => {
-    if (/toddlers race/i.test(name))        return '0-Toddlers'
+    if (/toddlers race/i.test(name))        return '0-Toddlers'  // always first regardless of age suffix
     if (/^50m|^100m/i.test(name))           return '1-Running'
     if (/lemon spoon/i.test(name))          return '2-LemonSpoon'
     if (/^chess/i.test(name))               return '3-Chess'

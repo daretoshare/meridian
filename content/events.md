@@ -31,7 +31,7 @@ events:
   # ── Running ───────────────────────────────────────────────────────────────
 
   - id: "e1000001-0000-0000-0000-000000000069"
-    name: Toddlers Race
+    name: Toddlers Race (Age 1 – 3)
     registration_type: competitive
     age_group: children
     event_date: null
