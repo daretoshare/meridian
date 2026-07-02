@@ -18,7 +18,7 @@ stat_age_groups_label: Age Groups
 stat_age_groups_value: All
 
 # ─── Registration Form ─────────────────────────────────────────
-form_section_personal: Participant Details (submit SEPARATE form for each participant from same household)
+form_section_personal: Participant Details  /n (submit SEPARATE form for each participant from same household)
 form_section_events: Select Events
 form_events_hint: >
   Choose one or more events. Each activity lists available age groups and time slots.
