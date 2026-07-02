@@ -59,11 +59,14 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
   const supabase = await createAdminSupabaseClient()
 
   // 3. Upsert profile
+  // onConflict on (email, full_name) so household members with different names
+  // at the same email each get their own profile row. Same name + email = same
+  // person, so we update their tower/phone in case details have changed.
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .upsert(
       { full_name, block: tower, apartment_number, phone_number, email },
-      { onConflict: 'email', ignoreDuplicates: false }
+      { onConflict: 'email,full_name', ignoreDuplicates: false }
     )
     .select('id')
     .single()

@@ -622,6 +622,9 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
                 <strong>Note:</strong> Your registration will remain tentative until payment is confirmed.
                 The organizing committee reserves the right to cancel unpaid registrations.
               </div>
+              <p className="text-[10px] leading-relaxed text-slate-400">
+                <strong className="text-slate-500">Disclaimer:</strong> By proceeding, you acknowledge that Meridian Park Management and the Organizing Committee shall not be held liable for any injury, loss, damage, or risk — including medical emergencies — arising during or in connection with any event. Participation is entirely at your own risk. Participants with medical conditions are advised to consult a physician before registering.
+              </p>
             </div>
             <div className="px-6 pb-5 flex gap-3">
               <button
