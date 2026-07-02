@@ -12,6 +12,7 @@ interface RegistrationRow {
   id: string
   status: 'confirmed' | 'waitlisted' | 'cancelled'
   reason: string | null
+  profileName: string
   events: {
     name: string
     age_group: string
@@ -64,26 +65,24 @@ export default function StatusPage() {
       const supabase = createClient()
 
       if (type === 'email') {
-        const { data: profile } = await supabase
+        const { data: profiles } = await supabase
           .from('profiles')
           .select('id, full_name')
           .eq('email', input.toLowerCase())
-          .single()
 
-        if (!profile) { setRows([]); return }
-        setMatchLabel(profile.full_name)
-        await fetchByProfileId(supabase, profile.id, setRows, setError)
+        if (!profiles?.length) { setRows([]); return }
+        setMatchLabel(profiles.map(p => p.full_name).join(', '))
+        await fetchByProfileIds(supabase, profiles, setRows, setError)
 
       } else if (type === 'phone') {
-        const { data: profile } = await supabase
+        const { data: profiles } = await supabase
           .from('profiles')
           .select('id, full_name')
           .eq('phone_number', input)
-          .single()
 
-        if (!profile) { setRows([]); return }
-        setMatchLabel(profile.full_name)
-        await fetchByProfileId(supabase, profile.id, setRows, setError)
+        if (!profiles?.length) { setRows([]); return }
+        setMatchLabel(profiles.map(p => p.full_name).join(', '))
+        await fetchByProfileIds(supabase, profiles, setRows, setError)
 
       } else {
         // Reg ID: UUID column — use a range query covering all UUIDs with this 8-char prefix
@@ -196,6 +195,7 @@ export default function StatusPage() {
                     <div className={`flex items-center gap-3 px-5 py-3 border-b ${cfg.cls}`}>
                       <Icon size={16} className="shrink-0" />
                       <span className="text-sm font-semibold">{cfg.label}</span>
+                      <span className="text-xs opacity-60">· {reg.profileName}</span>
                       <span className="ml-auto font-mono text-xs opacity-60">#{reg.id.slice(0, 8).toUpperCase()}</span>
                     </div>
 
@@ -250,21 +250,30 @@ export default function StatusPage() {
 }
 
 // ── Helper ────────────────────────────────────────────────────────────────────
-async function fetchByProfileId(
+async function fetchByProfileIds(
   supabase: ReturnType<typeof createClient>,
-  profileId: string,
+  profiles: { id: string; full_name: string }[],
   setRows: (r: RegistrationRow[]) => void,
   setError: (e: string) => void,
 ) {
+  const ids = profiles.map(p => p.id)
+  const nameById = Object.fromEntries(profiles.map(p => [p.id, p.full_name]))
+
   const { data, error } = await supabase
     .from('registrations')
     .select(`
-      id, status, reason,
+      id, status, reason, profile_id,
       events ( name, age_group, event_date, slot_time, location )
     `)
-    .eq('profile_id', profileId)
+    .in('profile_id', ids)
     .order('status', { ascending: true })
 
   if (error) { setError('Could not load registrations. Please try again.'); return }
-  setRows((data ?? []) as unknown as RegistrationRow[])
+
+  const rows = (data ?? []).map((r: any) => ({
+    ...r,
+    profileName: nameById[r.profile_id] ?? '',
+  })) as RegistrationRow[]
+
+  setRows(rows)
 }
