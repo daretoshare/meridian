@@ -36,7 +36,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 20
+    max_participants: 200
     location: ""
     description: Fun dash for toddlers. Individual. Age 1–3.
     is_team: false
@@ -48,7 +48,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 20
+    max_participants: 200
     location: ""
     description: 50-metre flat race. Individual. Age 3–5.
     is_team: false
@@ -60,7 +60,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 20
+    max_participants: 200
     location: ""
     description: 100-metre flat race. Individual. Age 5–8.
     is_team: false
@@ -72,7 +72,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 20
+    max_participants: 200
     location: ""
     description: 100-metre flat race. Individual. Age 8–12.
     is_team: false
@@ -84,7 +84,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 20
+    max_participants: 200
     location: ""
     description: Classic lemon-and-spoon race. Individual. Age 3–5.
     is_team: false
@@ -96,7 +96,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 20
+    max_participants: 200
     location: ""
     description: Classic lemon-and-spoon race. Individual. Age 5–8.
     is_team: false
@@ -108,7 +108,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 20
+    max_participants: 200
     location: ""
     description: Classic lemon-and-spoon race. Individual. Age 8–15.
     is_team: false
@@ -120,7 +120,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 20
+    max_participants: 200
     location: ""
     description: Classic lemon-and-spoon race. Individual. Age 15+.
     is_team: false
@@ -134,7 +134,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Swiss-format chess. Individual. Age up to 10.
     is_team: false
@@ -146,7 +146,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Swiss-format chess. Individual. Age 10 and above.
     is_team: false
@@ -160,7 +160,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Girls aged 5–10.
     is_team: false
@@ -172,7 +172,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Boys aged 5–10.
     is_team: false
@@ -184,7 +184,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Girls aged 10–16.
     is_team: false
@@ -196,7 +196,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Boys aged 10–16.
     is_team: false
@@ -208,7 +208,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Women aged 16+.
     is_team: false
@@ -220,7 +220,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Men aged 16+.
     is_team: false
@@ -234,7 +234,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Girls aged 10–16.
     is_team: true
@@ -246,7 +246,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Boys aged 10–16.
     is_team: true
@@ -258,7 +258,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Women aged 16+.
     is_team: true
@@ -270,7 +270,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Men aged 16+.
     is_team: true
@@ -284,7 +284,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Mixed doubles. Team of 1 man + 1 woman aged 16+.
     is_team: true
@@ -298,7 +298,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Girls aged 10–16.
     is_team: false
@@ -310,7 +310,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Boys aged 10–16.
     is_team: false
@@ -322,7 +322,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Women aged 16+.
     is_team: false
@@ -334,7 +334,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 16
+    max_participants: 200
     location: ""
     description: Singles knockout. Individual. Men aged 16+.
     is_team: false
@@ -348,7 +348,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Girls aged 10–16.
     is_team: true
@@ -360,7 +360,7 @@ events:
     age_group: teens
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Boys aged 10–16.
     is_team: true
@@ -372,7 +372,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Women aged 16+.
     is_team: true
@@ -384,7 +384,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Men aged 16+.
     is_team: true
@@ -398,7 +398,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 12
+    max_participants: 200
     location: ""
     description: Mixed doubles. Team of 1 man + 1 woman aged 16+.
     is_team: true
@@ -412,7 +412,7 @@ events:
     age_group: all
     event_date: null
     slot_time: ""
-    max_participants: 50
+    max_participants: 200
     location: ""
     description: Clue-based hunt across the society. Teams of 3–5.
     is_team: true
@@ -434,7 +434,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 40
+    max_participants: 200
     location: ""
     description: Group choreography, 3–15 members. Register as a group.
     is_team: true
@@ -446,7 +446,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 40
+    max_participants: 200
     location: ""
     description: Group choreography, 3–15 members. Register as a group.
     is_team: true
@@ -460,7 +460,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 40
+    max_participants: 200
     location: ""
     description: Group vocal, 3–15 members. Any songs. Register as a group.
     is_team: true
@@ -472,7 +472,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 40
+    max_participants: 200
     location: ""
     description: Group vocal, 3–15 members. Patriotic/folk encouraged. Register as a group.
     is_team: true
@@ -486,7 +486,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 30
+    max_participants: 200
     location: ""
     description: Solo dance, any style. 3–5 min. Individual.
     is_team: false
@@ -498,7 +498,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 30
+    max_participants: 200
     location: ""
     description: Solo dance, any style. 3–5 min. Individual.
     is_team: false
@@ -512,7 +512,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 30
+    max_participants: 200
     location: ""
     description: Solo singing, any song. 3–4 min slot. Individual.
     is_team: false
@@ -524,7 +524,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 30
+    max_participants: 200
     location: ""
     description: Solo singing, any language. 3–5 min slot. Individual.
     is_team: false
@@ -538,7 +538,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 35
+    max_participants: 200
     location: ""
     description: Patriotic or character costume. Walk the ramp. Individual.
     is_team: false
@@ -550,7 +550,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 25
+    max_participants: 200
     location: ""
     description: Showcase India's diverse regional traditional attire. Individual.
     is_team: false
@@ -564,7 +564,7 @@ events:
     age_group: all
     event_date: null
     slot_time: ""
-    max_participants: 25
+    max_participants: 200
     location: ""
     description: Solo instrumental performance. 5 min slot. Bring your own instrument.
     is_team: false
@@ -578,7 +578,7 @@ events:
     age_group: children
     event_date: null
     slot_time: ""
-    max_participants: 25
+    max_participants: 200
     location: ""
     description: Fun elimination rounds for kids. Individual.
     is_team: false
@@ -590,7 +590,7 @@ events:
     age_group: adults
     event_date: null
     slot_time: ""
-    max_participants: 25
+    max_participants: 200
     location: ""
     description: Fun elimination rounds for adults. Individual.
     is_team: false
@@ -604,7 +604,7 @@ events:
     age_group: all
     event_date: null
     slot_time: ""
-    max_participants: 80
+    max_participants: 200
     location: ""
     description: Inter-tower team competition. Teams of 8.
     is_team: true
@@ -618,7 +618,7 @@ events:
     age_group: all
     event_date: "2026-08-09"
     slot_time: ""
-    max_participants: 50
+    max_participants: 200
     location: ""
     description: Drawing, painting, craft, or any creative expression. No age bar. A week prior to 15th Aug.
     is_team: false
@@ -632,7 +632,7 @@ events:
     age_group: all
     event_date: "2026-08-15"
     slot_time: "After Flag Hoisting"
-    max_participants: 30
+    max_participants: 200
     location: ""
     description: Patriotic songs immediately after the flag hoisting ceremony on 15th Aug.
     is_team: false
@@ -644,7 +644,7 @@ events:
     age_group: all
     event_date: "2026-08-15"
     slot_time: "After Flag Hoisting"
-    max_participants: 10
+    max_participants: 200
     location: ""
     description: Short patriotic speech immediately after the flag hoisting ceremony on 15th Aug. 3–5 min.
     is_team: false
