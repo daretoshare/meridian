@@ -58,6 +58,19 @@ export default async function HomePage() {
           <Flag size={12} />
           {site.event_badge}
         </div>
+
+        {/* Event logo */}
+        <div className="flex justify-center mb-5">
+          <Image
+            src="/event-logo.png"
+            alt="Independence Day 2026 — TPC Meridian Park"
+            width={300}
+            height={222}
+            className="object-contain drop-shadow-sm"
+            priority
+          />
+        </div>
+
         <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
           {site.hero_heading
             .split(site.society_name)

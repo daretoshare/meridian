@@ -1,12 +1,12 @@
 ---
 # ─── Society Identity ──────────────────────────────────────────
-society_name: Meridian Park
+society_name: TPC Meridian Park
 society_subtitle: Housing Society | Cultural Committee
 admin_label: Admin
 
 # ─── Nav / Hero ────────────────────────────────────────────────
 event_badge: "Independence Day 2026"
-hero_heading: "Celebrate Together at Meridian Park"
+hero_heading: "Celebrate Together at TPC Meridian Park"
 hero_subtext: >
   Register for Independence Day events — painting, chess, badminton, and more.
   One form, multiple events
