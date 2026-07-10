@@ -365,6 +365,16 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
                     </span>
                   )}
                 </div>
+                {/* Date line */}
+                {((event as any).slot_time || (event as any).event_date) && (
+                  <p className={`text-xs mt-0.5 flex items-center gap-1 ${disabled ? 'text-slate-300' : 'text-slate-400'}`}>
+                    <Calendar size={10} className="shrink-0" />
+                    {(event as any).slot_time
+                      ? (event as any).slot_time
+                      : new Date((event as any).event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+                    }
+                  </p>
+                )}
               </div>
 
               {/* Age group badge */}
