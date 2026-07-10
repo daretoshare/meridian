@@ -7,7 +7,7 @@ import { registerForEvents } from '@/actions/register'
 import type { Event } from '@/types/database'
 import type { SiteContent, RegistrationStatus } from '@/lib/content'
 import {
-  CheckCircle, AlertCircle, Loader2, Calendar, User, Home, Phone, Mail,
+  CheckCircle, AlertCircle, Loader2, Calendar, CalendarDays, User, Home, Phone, Mail,
   ExternalLink, FileText, Lock, Clock, Users, Check, IndianRupee, X, ChevronDown,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -37,6 +37,25 @@ interface Props {
 
 function daysUntil(d: Date): number {
   return Math.ceil((d.getTime() - Date.now()) / 86_400_000)
+}
+
+// Format event date with day name. If slot_time spans two days (e.g. badminton
+// "25–26 July"), derive both day names from event_date + event_date+1.
+function formatEventDate(eventDate: string | null, slotTime: string): string | null {
+  if (!eventDate && !slotTime) return null
+  if (!eventDate) return slotTime
+
+  const d = new Date(eventDate + 'T00:00:00')
+  const day = d.toLocaleDateString('en-IN', { weekday: 'short' })  // "Sat"
+
+  if (slotTime) {
+    // Two-day span — show both day names
+    const d2 = new Date(d); d2.setDate(d.getDate() + 1)
+    const day2 = d2.toLocaleDateString('en-IN', { weekday: 'short' })
+    return `${day} – ${day2}, ${slotTime}`
+  }
+
+  return `${day}, ${d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
 }
 
 export default function RegistrationForm({ events, site, culturalStatus, competitiveStatus }: Props) {
@@ -365,15 +384,18 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
                     </span>
                   )}
                 </div>
-                {/* Date line */}
-                {((event as any).slot_time || (event as any).event_date) && (
-                  <p className={`text-xs mt-0.5 flex items-center gap-1 ${disabled ? 'text-slate-300' : 'text-slate-400'}`}>
-                    <Calendar size={10} className="shrink-0" />
-                    {(event as any).slot_time
-                      ? (event as any).slot_time
-                      : new Date((event as any).event_date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-                    }
-                  </p>
+                {/* Date pill */}
+                {formatEventDate((event as any).event_date, (event as any).slot_time) && (
+                  <span className={`inline-flex items-center gap-1 text-xs font-medium mt-1 px-2 py-0.5 rounded-full border
+                    ${disabled
+                      ? 'text-slate-300 bg-slate-50 border-slate-100'
+                      : isSelected
+                      ? 'text-orange-700 bg-orange-50 border-orange-200'
+                      : 'text-indigo-600 bg-indigo-50 border-indigo-100'
+                    }`}>
+                    <CalendarDays size={10} className="shrink-0" />
+                    {formatEventDate((event as any).event_date, (event as any).slot_time)}
+                  </span>
                 )}
               </div>
 
