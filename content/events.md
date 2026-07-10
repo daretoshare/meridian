@@ -34,7 +34,7 @@ events:
     name: Toddlers Race (Age 1 – 3)
     registration_type: competitive
     age_group: children
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -46,7 +46,7 @@ events:
     name: 50m Run (Age 3 – 5)
     registration_type: competitive
     age_group: children
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -58,7 +58,7 @@ events:
     name: 100m Run (Age 5 – 8)
     registration_type: competitive
     age_group: children
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -70,7 +70,7 @@ events:
     name: 100m Run (Age 8 – 12)
     registration_type: competitive
     age_group: children
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -82,7 +82,7 @@ events:
     name: Lemon Spoon Race (Age 3 – 5)
     registration_type: competitive
     age_group: children
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -94,7 +94,7 @@ events:
     name: Lemon Spoon Race (Age 5 – 8)
     registration_type: competitive
     age_group: children
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -106,7 +106,7 @@ events:
     name: Lemon Spoon Race (Age 8 – 15)
     registration_type: competitive
     age_group: children
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -118,7 +118,7 @@ events:
     name: Lemon Spoon Race (Age 15+)
     registration_type: competitive
     age_group: teens
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -132,7 +132,7 @@ events:
     name: Chess (Age upto 10)
     registration_type: competitive
     age_group: children
-    event_date: null
+    event_date: "2026-07-26"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -144,7 +144,7 @@ events:
     name: Chess (Age 10+)
     registration_type: competitive
     age_group: teens
-    event_date: null
+    event_date: "2026-07-26"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -158,8 +158,8 @@ events:
     name: Badminton Singles – Girls (Age 5 – 10)
     registration_type: competitive
     age_group: children
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Singles knockout. Individual. Girls aged 5–10.
@@ -170,8 +170,8 @@ events:
     name: Badminton Singles – Boys (Age 5 – 10)
     registration_type: competitive
     age_group: children
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Singles knockout. Individual. Boys aged 5–10.
@@ -182,8 +182,8 @@ events:
     name: Badminton Singles – Girls (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Singles knockout. Individual. Girls aged 10–16.
@@ -194,8 +194,8 @@ events:
     name: Badminton Singles – Boys (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Singles knockout. Individual. Boys aged 10–16.
@@ -206,8 +206,8 @@ events:
     name: Badminton Singles – Women (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Singles knockout. Individual. Women aged 16+.
@@ -218,8 +218,8 @@ events:
     name: Badminton Singles – Men (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Singles knockout. Individual. Men aged 16+.
@@ -232,8 +232,8 @@ events:
     name: Badminton Doubles – Girls (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Girls aged 10–16.
@@ -244,8 +244,8 @@ events:
     name: Badminton Doubles – Boys (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Boys aged 10–16.
@@ -256,8 +256,8 @@ events:
     name: Badminton Doubles – Women (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Women aged 16+.
@@ -268,8 +268,8 @@ events:
     name: Badminton Doubles – Men (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Doubles knockout. Team of 2. Men aged 16+.
@@ -282,8 +282,8 @@ events:
     name: Badminton Mixed Doubles (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
-    slot_time: ""
+    event_date: "2026-07-25"
+    slot_time: "25–26 July"
     max_participants: 200
     location: ""
     description: Mixed doubles. Team of 1 man + 1 woman aged 16+.
@@ -296,7 +296,7 @@ events:
     name: Table Tennis Singles – Girls (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -308,7 +308,7 @@ events:
     name: Table Tennis Singles – Boys (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -320,7 +320,7 @@ events:
     name: Table Tennis Singles – Women (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -332,7 +332,7 @@ events:
     name: Table Tennis Singles – Men (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -346,7 +346,7 @@ events:
     name: Table Tennis Doubles – Girls (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -358,7 +358,7 @@ events:
     name: Table Tennis Doubles – Boys (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -370,7 +370,7 @@ events:
     name: Table Tennis Doubles – Women (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -382,7 +382,7 @@ events:
     name: Table Tennis Doubles – Men (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -396,7 +396,7 @@ events:
     name: Table Tennis Mixed Doubles (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -410,7 +410,7 @@ events:
     name: Treasure Hunt
     registration_type: competitive
     age_group: all
-    event_date: null
+    event_date: "2026-08-09"
     slot_time: ""
     max_participants: 200
     location: ""
