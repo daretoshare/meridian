@@ -296,7 +296,7 @@ events:
     name: Table Tennis Singles – Girls (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: "2026-08-09"
+    event_date: "2026-08-08"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -308,7 +308,7 @@ events:
     name: Table Tennis Singles – Boys (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: "2026-08-09"
+    event_date: "2026-08-08"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -320,7 +320,7 @@ events:
     name: Table Tennis Singles – Women (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: "2026-08-09"
+    event_date: "2026-08-08"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -332,7 +332,7 @@ events:
     name: Table Tennis Singles – Men (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: "2026-08-09"
+    event_date: "2026-08-08"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -346,7 +346,7 @@ events:
     name: Table Tennis Doubles – Girls (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: "2026-08-09"
+    event_date: "2026-08-08"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -358,7 +358,7 @@ events:
     name: Table Tennis Doubles – Boys (Age 10 – 16)
     registration_type: competitive
     age_group: teens
-    event_date: "2026-08-09"
+    event_date: "2026-08-08"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -370,7 +370,7 @@ events:
     name: Table Tennis Doubles – Women (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: "2026-08-09"
+    event_date: "2026-08-08"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -382,7 +382,7 @@ events:
     name: Table Tennis Doubles – Men (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: "2026-08-09"
+    event_date: "2026-08-08"
     slot_time: ""
     max_participants: 200
     location: ""
@@ -396,7 +396,7 @@ events:
     name: Table Tennis Mixed Doubles (Age 16+)
     registration_type: competitive
     age_group: adults
-    event_date: "2026-08-09"
+    event_date: "2026-08-08"
     slot_time: ""
     max_participants: 200
     location: ""
