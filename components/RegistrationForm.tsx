@@ -187,8 +187,17 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
     return leadingAge(a.name) - leadingAge(b.name)
   }
 
-  const sortCultural = (a: Event, b: Event) =>
-    (AGE_GROUP_ORDER[a.age_group] ?? 9) - (AGE_GROUP_ORDER[b.age_group] ?? 9)
+  const culturalSortPriority = (e: Event): number => {
+    if (/express your creative freedom/i.test(e.name)) return 0   // 9 Aug — always first
+    if (/after flag hoisting/i.test((e as any).slot_time ?? ''))   return 1   // flag hoisting events
+    return 2                                                        // rest, ordered by age group
+  }
+
+  const sortCultural = (a: Event, b: Event) => {
+    const pa = culturalSortPriority(a), pb = culturalSortPriority(b)
+    if (pa !== pb) return pa - pb
+    return (AGE_GROUP_ORDER[a.age_group] ?? 9) - (AGE_GROUP_ORDER[b.age_group] ?? 9)
+  }
 
   // ── Split events ──────────────────────────────────────────────────────────
   const competitiveEvents = useMemo(() =>
