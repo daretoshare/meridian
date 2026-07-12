@@ -571,7 +571,7 @@ events:
     age_group: all
     event_date: "2026-08-15"
     slot_time: "After Flag Hoisting"
-    max_participants: 200
+    max_participants: 5
     location: ""
     description: Patriotic songs immediately after the flag hoisting ceremony on 15th Aug.
     is_team: false
@@ -583,7 +583,7 @@ events:
     age_group: all
     event_date: "2026-08-15"
     slot_time: "After Flag Hoisting"
-    max_participants: 200
+    max_participants: 2
     location: ""
     description: Short patriotic speech immediately after the flag hoisting ceremony on 15th Aug. 3–5 min.
     is_team: false
