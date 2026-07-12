@@ -52,14 +52,17 @@ function formatEventDate(eventDate: string | null, slotTime: string): string | n
   const d = new Date(eventDate + 'T00:00:00')
   const day = d.toLocaleDateString('en-IN', { weekday: 'short' })  // "Sat"
 
-  if (slotTime) {
-    // Two-day span — show both day names
+  // Only treat slot_time as a two-day date range if it contains a numeric range like "25–26 July"
+  const isDateRange = slotTime && /\d+\s*[–-]\s*\d+/.test(slotTime)
+
+  if (isDateRange) {
     const d2 = new Date(d); d2.setDate(d.getDate() + 1)
     const day2 = d2.toLocaleDateString('en-IN', { weekday: 'short' })
     return `${day} – ${day2}, ${slotTime}`
   }
 
-  return `${day}, ${d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+  const datePart = `${day}, ${d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+  return slotTime ? `${datePart} · ${slotTime}` : datePart
 }
 
 const SESSION_KEY = 'cultural_unlocked'
