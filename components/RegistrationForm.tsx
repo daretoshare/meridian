@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import type { RegistrationSummary } from '@/actions/register'
+import { checkCulturalPassword } from '@/actions/culturalAccess'
 
 // ── Registration window constants ─────────────────────────────────────────────
 const COMPETITIVE_DEADLINE  = new Date('2026-07-12T00:00:00') // closes end-of-day July 11
@@ -35,6 +36,7 @@ interface Props {
   culturalStatus: RegistrationStatus
   competitiveStatus: RegistrationStatus
   registrationCounts: Record<string, number>
+  culturalPasswordRequired: boolean
 }
 
 function daysUntil(d: Date): number {
@@ -60,7 +62,6 @@ function formatEventDate(eventDate: string | null, slotTime: string): string | n
   return `${day}, ${d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
 }
 
-const CULTURAL_PASSWORD = process.env.NEXT_PUBLIC_CULTURAL_PASSWORD ?? ''
 const SESSION_KEY = 'cultural_unlocked'
 
 function SlotBadge({ count, max }: { count: number; max: number }) {
@@ -99,7 +100,7 @@ function SlotBadge({ count, max }: { count: number; max: number }) {
   )
 }
 
-export default function RegistrationForm({ events, site, culturalStatus, competitiveStatus, registrationCounts }: Props) {
+export default function RegistrationForm({ events, site, culturalStatus, competitiveStatus, registrationCounts, culturalPasswordRequired }: Props) {
   const [isPending, startTransition] = useTransition()
   const [result, setResult]         = useState<{
     success: boolean; message: string; detail?: string; registrations?: RegistrationSummary[]
@@ -112,10 +113,11 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
   const [eventTeamDetails, setEventTeamDetails] = useState<Record<string, { team_name: string; members: TeamMember[] }>>({})
   const [openAccordions, setOpenAccordions]     = useState<Set<string>>(new Set())
   const [tmErrors, setTmErrors]                 = useState<Record<string, Record<number, Partial<Record<keyof TeamMember, string>>>>>({})
-  const [culturalUnlocked, setCulturalUnlocked] = useState(false)
-  const [passwordInput, setPasswordInput]       = useState('')
-  const [passwordError, setPasswordError]       = useState(false)
-  const [showPassword, setShowPassword]         = useState(false)
+  const [culturalUnlocked, setCulturalUnlocked]   = useState(false)
+  const [passwordInput, setPasswordInput]         = useState('')
+  const [passwordError, setPasswordError]         = useState(false)
+  const [showPassword, setShowPassword]           = useState(false)
+  const [isCheckingPw, startPasswordTransition]   = useTransition()
 
   // Restore unlock from sessionStorage on mount
   useEffect(() => {
@@ -125,13 +127,16 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
   }, [])
 
   const unlockCultural = () => {
-    if (CULTURAL_PASSWORD && passwordInput === CULTURAL_PASSWORD) {
-      setCulturalUnlocked(true)
-      sessionStorage.setItem(SESSION_KEY, '1')
-      setPasswordError(false)
-    } else {
-      setPasswordError(true)
-    }
+    startPasswordTransition(async () => {
+      const ok = await checkCulturalPassword(passwordInput)
+      if (ok) {
+        setCulturalUnlocked(true)
+        sessionStorage.setItem(SESSION_KEY, '1')
+        setPasswordError(false)
+      } else {
+        setPasswordError(true)
+      }
+    })
   }
 
   const { register, getValues, formState: { errors }, reset } = useForm<RegistrationFormData>({
@@ -866,7 +871,7 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
             <div className="flex items-start gap-3 p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-800">
               <Sparkles size={16} className="shrink-0 mt-0.5 text-purple-500" />
               <p className="text-sm">
-                <strong>Musical Chair</strong> and <strong>Tug of War</strong> are surprise events — no registration needed, just show up and enjoy!
+                We have a few <strong>surprise events</strong> planned — no registration needed, just show up and enjoy!
               </p>
             </div>
 
@@ -893,7 +898,7 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
                 </div>
 
                 {/* Password gate — shown only when a password is configured and not yet unlocked */}
-                {CULTURAL_PASSWORD && !culturalUnlocked ? (
+                {culturalPasswordRequired && !culturalUnlocked ? (
                   <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 space-y-3">
                     <p className="text-sm font-semibold text-amber-800 flex items-center gap-2">
                       <Lock size={15} className="text-amber-600" />
@@ -920,9 +925,10 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
                       <button
                         type="button"
                         onClick={unlockCultural}
-                        className="px-4 py-2 text-sm font-semibold bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors whitespace-nowrap"
+                        disabled={isCheckingPw}
+                        className="px-4 py-2 text-sm font-semibold bg-amber-500 hover:bg-amber-600 disabled:opacity-60 text-white rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5"
                       >
-                        Unlock
+                        {isCheckingPw ? <><Loader2 size={13} className="animate-spin" /> Checking…</> : 'Unlock'}
                       </button>
                     </div>
                     {passwordError && <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle size={12} /> Incorrect password. Please try again.</p>}
