@@ -58,6 +58,33 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
   // It bypasses RLS, which is correct: the server action is the trust boundary.
   const supabase = await createAdminSupabaseClient()
 
+  // 3a. Check capacity for each requested event
+  const { data: countRows } = await supabase
+    .from('registrations')
+    .select('event_id')
+    .in('event_id', event_ids)
+    .in('status', ['confirmed', 'waitlisted'])
+
+  const currentCounts: Record<string, number> = {}
+  for (const row of countRows ?? []) {
+    currentCounts[row.event_id] = (currentCounts[row.event_id] ?? 0) + 1
+  }
+
+  const eventDetails = Object.fromEntries(allEvents.map(e => [e.id, e]))
+  const fullEventIds = event_ids.filter(id => {
+    const max = (eventDetails[id] as any)?.max_participants ?? 9999
+    return (currentCounts[id] ?? 0) >= Math.floor(max * 1.5)
+  })
+
+  if (fullEventIds.length > 0) {
+    const fullNames = fullEventIds.map(id => eventMap[id] ?? id).join(', ')
+    return {
+      success: false,
+      errors: null,
+      message: `The following event(s) are fully booked: ${fullNames}. Please try other events.`,
+    }
+  }
+
   // 3. Upsert profile
   // onConflict on (email, full_name) so household members with different names
   // at the same email each get their own profile row. Same name + email = same
@@ -92,7 +119,11 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
         .insert({
           profile_id: profile.id,
           event_id,
-          status: 'confirmed',
+          status: (() => {
+          const max = (eventDetails[event_id] as any)?.max_participants ?? 9999
+          const count = currentCounts[event_id] ?? 0
+          return count < max ? 'confirmed' : 'waitlisted'
+        })(),
           team_name:    teamEventIds.has(event_id) && event_team_details?.[event_id]?.team_name
             ? event_team_details[event_id].team_name
             : null,
@@ -169,6 +200,19 @@ export async function registerForEvents(formData: RegistrationFormData): Promise
     registeredCount,
     registrations: registrationSummaries,
   }
+}
+
+export async function getRegistrationCounts(): Promise<Record<string, number>> {
+  const supabase = await createAdminSupabaseClient()
+  const { data } = await (supabase as any)
+    .from('registrations')
+    .select('event_id')
+    .in('status', ['confirmed', 'waitlisted'])
+  const counts: Record<string, number> = {}
+  for (const row of data ?? []) {
+    counts[row.event_id] = (counts[row.event_id] ?? 0) + 1
+  }
+  return counts
 }
 
 export async function getActiveEvents() {

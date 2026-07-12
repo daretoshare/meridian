@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useMemo } from 'react'
+import { useState, useTransition, useMemo, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { registrationSchema, teamMemberSchema, type RegistrationFormData, type TeamMember } from '@/lib/validations'
 import { registerForEvents } from '@/actions/register'
@@ -9,6 +9,7 @@ import type { SiteContent, RegistrationStatus } from '@/lib/content'
 import {
   CheckCircle, AlertCircle, Loader2, Calendar, CalendarDays, User, Home, Phone, Mail,
   ExternalLink, FileText, Lock, Clock, Users, Check, IndianRupee, X, ChevronDown,
+  Eye, EyeOff, Sparkles,
 } from 'lucide-react'
 import Link from 'next/link'
 import type { RegistrationSummary } from '@/actions/register'
@@ -33,6 +34,7 @@ interface Props {
   site: SiteContent
   culturalStatus: RegistrationStatus
   competitiveStatus: RegistrationStatus
+  registrationCounts: Record<string, number>
 }
 
 function daysUntil(d: Date): number {
@@ -58,7 +60,46 @@ function formatEventDate(eventDate: string | null, slotTime: string): string | n
   return `${day}, ${d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
 }
 
-export default function RegistrationForm({ events, site, culturalStatus, competitiveStatus }: Props) {
+const CULTURAL_PASSWORD = process.env.NEXT_PUBLIC_CULTURAL_PASSWORD ?? ''
+const SESSION_KEY = 'cultural_unlocked'
+
+function SlotBadge({ count, max }: { count: number; max: number }) {
+  const waitlistCap = Math.floor(max * 1.5)
+  const remaining   = max - count
+  const isFull      = count >= waitlistCap
+  const isWaitlist  = !isFull && count >= max
+  const isAlmostFull = !isWaitlist && !isFull && remaining <= Math.ceil(max * 0.2)
+
+  if (isFull) {
+    return (
+      <span className="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full bg-red-100 text-red-700 border border-red-200">
+        Full
+      </span>
+    )
+  }
+  if (isWaitlist) {
+    const waitRemaining = waitlistCap - count
+    return (
+      <span className="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
+        Waitlist · {waitRemaining} left
+      </span>
+    )
+  }
+  if (isAlmostFull) {
+    return (
+      <span className="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 border border-orange-200">
+        {remaining} slot{remaining !== 1 ? 's' : ''} left
+      </span>
+    )
+  }
+  return (
+    <span className="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200">
+      {remaining} slot{remaining !== 1 ? 's' : ''} left
+    </span>
+  )
+}
+
+export default function RegistrationForm({ events, site, culturalStatus, competitiveStatus, registrationCounts }: Props) {
   const [isPending, startTransition] = useTransition()
   const [result, setResult]         = useState<{
     success: boolean; message: string; detail?: string; registrations?: RegistrationSummary[]
@@ -71,6 +112,27 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
   const [eventTeamDetails, setEventTeamDetails] = useState<Record<string, { team_name: string; members: TeamMember[] }>>({})
   const [openAccordions, setOpenAccordions]     = useState<Set<string>>(new Set())
   const [tmErrors, setTmErrors]                 = useState<Record<string, Record<number, Partial<Record<keyof TeamMember, string>>>>>({})
+  const [culturalUnlocked, setCulturalUnlocked] = useState(false)
+  const [passwordInput, setPasswordInput]       = useState('')
+  const [passwordError, setPasswordError]       = useState(false)
+  const [showPassword, setShowPassword]         = useState(false)
+
+  // Restore unlock from sessionStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage.getItem(SESSION_KEY) === '1') {
+      setCulturalUnlocked(true)
+    }
+  }, [])
+
+  const unlockCultural = () => {
+    if (CULTURAL_PASSWORD && passwordInput === CULTURAL_PASSWORD) {
+      setCulturalUnlocked(true)
+      sessionStorage.setItem(SESSION_KEY, '1')
+      setPasswordError(false)
+    } else {
+      setPasswordError(true)
+    }
+  }
 
   const { register, getValues, formState: { errors }, reset } = useForm<RegistrationFormData>({
     defaultValues: { event_ids: [] },
@@ -332,6 +394,7 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
     evts: Event[],
     disabled: boolean,
     reason?: 'closed' | 'soon',
+    showSlots = false,
   ) => (
     <div className="space-y-2">
       {evts.map(event => {
@@ -339,17 +402,21 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
         const isTeam        = (event as any).is_team === true
         const detail        = getTeamDetail(event.id)
         const accordionOpen = openAccordions.has(event.id)
+        const maxPax        = (event as any).max_participants as number ?? 9999
+        const count         = registrationCounts[event.id] ?? 0
+        const isFull        = showSlots && count >= Math.floor(maxPax * 1.5)
+        const effectiveDisabled = disabled || isFull
 
         return (
           <div key={event.id} className="space-y-1">
             {/* Event card */}
             <button
               type="button"
-              onClick={() => toggleEvent(event.id, disabled)}
-              disabled={disabled}
+              onClick={() => toggleEvent(event.id, effectiveDisabled)}
+              disabled={effectiveDisabled}
               className={`
                 w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all
-                ${disabled
+                ${effectiveDisabled
                   ? 'border-slate-100 bg-slate-50 cursor-not-allowed opacity-55'
                   : isSelected
                   ? 'border-orange-400 bg-orange-50 shadow-sm'
@@ -359,23 +426,26 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
               {/* Circle indicator */}
               <div className={`
                 shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center
-                ${isSelected && !disabled
+                ${isSelected && !effectiveDisabled
                   ? 'border-orange-500 bg-orange-500'
-                  : disabled && reason === 'closed'
+                  : effectiveDisabled && reason === 'closed'
                   ? 'border-slate-200 bg-slate-100'
-                  : disabled && reason === 'soon'
+                  : effectiveDisabled && reason === 'soon'
                   ? 'border-blue-200 bg-blue-50'
+                  : isFull
+                  ? 'border-red-200 bg-red-50'
                   : 'border-slate-300 bg-white'}
               `}>
-                {isSelected && !disabled        && <Check size={11} className="text-white" />}
-                {disabled && reason === 'closed' && <Lock  size={9}  className="text-slate-300" />}
-                {disabled && reason === 'soon'   && <Clock size={9}  className="text-blue-300" />}
+                {isSelected && !effectiveDisabled  && <Check size={11} className="text-white" />}
+                {!isFull && disabled && reason === 'closed' && <Lock  size={9}  className="text-slate-300" />}
+                {!isFull && disabled && reason === 'soon'   && <Clock size={9}  className="text-blue-300" />}
+                {isFull                                      && <Lock  size={9}  className="text-red-300" />}
               </div>
 
               {/* Event info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className={`text-sm font-semibold ${disabled ? 'text-slate-400' : isSelected ? 'text-orange-900' : 'text-slate-800'}`}>
+                  <span className={`text-sm font-semibold ${effectiveDisabled ? 'text-slate-400' : isSelected ? 'text-orange-900' : 'text-slate-800'}`}>
                     {event.name}
                   </span>
                   {isTeam && (
@@ -387,7 +457,7 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
                 {/* Date pill */}
                 {formatEventDate((event as any).event_date, (event as any).slot_time) && (
                   <span className={`inline-flex items-center gap-1 text-xs font-medium mt-1 px-2 py-0.5 rounded-full border
-                    ${disabled
+                    ${effectiveDisabled
                       ? 'text-slate-300 bg-slate-50 border-slate-100'
                       : isSelected
                       ? 'text-orange-700 bg-orange-50 border-orange-200'
@@ -399,7 +469,10 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
                 )}
               </div>
 
-              {/* Age group badge */}
+              {/* Slot badge (for events with limited slots) + Age group badge */}
+              {showSlots && maxPax < 500 && (
+                <SlotBadge count={count} max={maxPax} />
+              )}
               <span className={`shrink-0 text-xs font-medium px-2 py-0.5 rounded-full border hidden sm:inline-flex
                 ${AGE_GROUP_COLORS[event.age_group] ?? AGE_GROUP_COLORS.all}`}>
                 {event.age_group}
@@ -407,7 +480,7 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
             </button>
 
             {/* Per-event team member accordion (only when selected + is_team + not disabled) */}
-            {isSelected && isTeam && !disabled && (
+            {isSelected && isTeam && !effectiveDisabled && (
               <div className="ml-6 rounded-xl border border-blue-200 bg-blue-50 overflow-hidden">
                 {/* Accordion header */}
                 <button
@@ -788,6 +861,15 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
           </div>
 
           <div className="p-4 space-y-3">
+
+            {/* Surprise events note — always visible */}
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-800">
+              <Sparkles size={16} className="shrink-0 mt-0.5 text-purple-500" />
+              <p className="text-sm">
+                <strong>Musical Chair</strong> and <strong>Tug of War</strong> are surprise events — no registration needed, just show up and enjoy!
+              </p>
+            </div>
+
             {culturalStatus === 'pending' && (
               <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
                 <Clock size={16} className="shrink-0 mt-0.5" />
@@ -801,18 +883,61 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
               </div>
             )}
             {culturalStatus === 'open' && (
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
-                <CheckCircle size={16} className="shrink-0 mt-0.5 text-emerald-600" />
-                <div className="text-sm space-y-1">
-                  <p><strong>No participation fee</strong> for cultural events. Participants are responsible for bringing their own consumables, props, costumes, and instruments.</p>
-                  <p className="text-emerald-700"><strong>Schedule note:</strong> <em>Express Your Creative Freedom</em> will be conducted a week prior — on <strong>8–9 August</strong>. All other cultural events will be held on <strong>15 August 2026</strong> (Independence Day).</p>
+              <>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
+                  <CheckCircle size={16} className="shrink-0 mt-0.5 text-emerald-600" />
+                  <div className="text-sm space-y-1">
+                    <p><strong>No participation fee</strong> for cultural events. Participants are responsible for bringing their own consumables, props, costumes, and instruments.</p>
+                    <p className="text-emerald-700"><strong>Schedule note:</strong> <em>Express Your Creative Freedom</em> will be conducted a week prior — on <strong>9 August</strong>. All other cultural events will be held on <strong>15 August 2026</strong> (Independence Day).</p>
+                  </div>
                 </div>
-              </div>
+
+                {/* Password gate — shown only when a password is configured and not yet unlocked */}
+                {CULTURAL_PASSWORD && !culturalUnlocked ? (
+                  <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 space-y-3">
+                    <p className="text-sm font-semibold text-amber-800 flex items-center gap-2">
+                      <Lock size={15} className="text-amber-600" />
+                      Cultural registration is currently restricted to authorised preview.
+                    </p>
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          value={passwordInput}
+                          onChange={e => { setPasswordInput(e.target.value); setPasswordError(false) }}
+                          onKeyDown={e => e.key === 'Enter' && unlockCultural()}
+                          placeholder="Enter access password"
+                          className={`w-full border rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 ${passwordError ? 'border-red-400 focus:ring-red-300' : 'border-amber-300 focus:ring-amber-300'} bg-white`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(v => !v)}
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-amber-400 hover:text-amber-700"
+                        >
+                          {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={unlockCultural}
+                        className="px-4 py-2 text-sm font-semibold bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors whitespace-nowrap"
+                      >
+                        Unlock
+                      </button>
+                    </div>
+                    {passwordError && <p className="text-xs text-red-600 flex items-center gap-1"><AlertCircle size={12} /> Incorrect password. Please try again.</p>}
+                  </div>
+                ) : (
+                  culturalEvents.length === 0
+                    ? <p className="text-sm text-slate-400 py-8 text-center">No cultural events available.</p>
+                    : renderFlatList(culturalEvents, false, undefined, true)
+                )}
+              </>
             )}
-            {culturalEvents.length === 0
-              ? <p className="text-sm text-slate-400 py-8 text-center">No cultural events available.</p>
-              : renderFlatList(culturalEvents, isCulturalLocked, 'soon')
-            }
+
+            {culturalStatus !== 'open' && culturalEvents.length > 0 && (
+              renderFlatList(culturalEvents, true, culturalStatus === 'closed' ? 'closed' : 'soon')
+            )}
           </div>
         </div>
       </section>

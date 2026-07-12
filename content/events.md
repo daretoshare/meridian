@@ -12,7 +12,7 @@
 # │  REGISTRATION TOGGLES — flip these to open / close each category          │
 # └───────────────────────────────────────────────────────────────────────────┘
 competitive_registration_status: open     # pending | open | closed
-cultural_registration_status: pending     # pending | open | closed
+cultural_registration_status: open        # pending | open | closed
 
 #
 # SCHEDULE
@@ -419,198 +419,137 @@ events:
     is_active: true
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # CULTURAL EVENTS — 15 Aug (Independence Day), except Creative Freedom (8–9 Aug)
+  # CULTURAL EVENTS — 15 Aug (Independence Day), except Creative Freedom (9 Aug)
   # No participation fee. Participants must bring their own consumables / props.
-  # Ordered: Group Dance → Group Singing → Solo Dance → Solo Singing →
-  #          Fancy Dress → Fashion Show → Musical Instruments →
-  #          Musical Chair → Tug of War → Creative Freedom → Flag Hoisting events
+  # max_participants = confirmed slots. Waitlist = 50% extra (floor(max * 1.5)).
+  # Surprise events (Musical Chair, Tug of War) need no registration.
   # ═══════════════════════════════════════════════════════════════════════════
 
-  # ── Group Dance ───────────────────────────────────────────────────────────
+  # ── Solo Singing / Poem ───────────────────────────────────────────────────
 
-  - id: "e1000001-0000-0000-0000-000000000025"
-    name: Group Dance (Age Till 15)
+  - id: "e1000001-0000-0000-0000-000000000004"
+    name: Solo Singing / Poem (Age Till 15)
     registration_type: cultural
     age_group: children
-    event_date: null
+    event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 200
+    max_participants: 5
     location: ""
-    description: Group choreography, 3–15 members. Register as a group.
-    is_team: true
+    description: Solo singing or poem recitation. 2 min slot. Individual. Age up to 15.
+    is_team: false
     is_active: true
 
-  - id: "e1000001-0000-0000-0000-000000000063"
-    name: Group Dance (Age 15+)
+  - id: "e1000001-0000-0000-0000-000000000023"
+    name: Solo Singing (Age 15+)
     registration_type: cultural
     age_group: adults
-    event_date: null
+    event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 200
+    max_participants: 5
     location: ""
-    description: Group choreography, 3–15 members. Register as a group.
-    is_team: true
+    description: Solo singing, any language. 2 min slot. Individual. Age 15+.
+    is_team: false
     is_active: true
 
   # ── Group Singing ─────────────────────────────────────────────────────────
 
-  - id: "e1000001-0000-0000-0000-000000000006"
-    name: Group Singing (Age Till 15)
+  - id: "e1000001-0000-0000-0000-000000000072"
+    name: Group Singing
     registration_type: cultural
-    age_group: children
-    event_date: null
+    age_group: all
+    event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 200
+    max_participants: 5
     location: ""
-    description: Group vocal, 3–15 members. Any songs. Register as a group.
+    description: Group vocal performance, any age. 4 min slot. Register as a group.
     is_team: true
     is_active: true
 
-  - id: "e1000001-0000-0000-0000-000000000062"
-    name: Group Singing (Age 15+)
+  # ── Melody Makers – Instrumental ─────────────────────────────────────────
+
+  - id: "e1000001-0000-0000-0000-000000000024"
+    name: Melody Makers – Instrumental
     registration_type: cultural
-    age_group: adults
-    event_date: null
+    age_group: all
+    event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 200
+    max_participants: 5
     location: ""
-    description: Group vocal, 3–15 members. Patriotic/folk encouraged. Register as a group.
-    is_team: true
+    description: Solo or group instrumental performance. 3 min slot. Bring your own instrument.
+    is_team: false
     is_active: true
 
   # ── Solo Dance ────────────────────────────────────────────────────────────
 
   - id: "e1000001-0000-0000-0000-000000000005"
-    name: Dance (Age Till 15)
+    name: Solo Dance (Age Till 15)
     registration_type: cultural
     age_group: children
-    event_date: null
+    event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 200
+    max_participants: 7
     location: ""
-    description: Solo dance, any style. 3–5 min. Individual.
+    description: Solo dance, any style. 3 min slot. Individual. Age up to 15.
     is_team: false
     is_active: true
 
-  - id: "e1000001-0000-0000-0000-000000000055"
-    name: Dance (Age 15+)
-    registration_type: cultural
-    age_group: adults
-    event_date: null
-    slot_time: ""
-    max_participants: 200
-    location: ""
-    description: Solo dance, any style. 3–5 min. Individual.
-    is_team: false
-    is_active: true
+  # ── Group Dance ───────────────────────────────────────────────────────────
 
-  # ── Solo Singing ──────────────────────────────────────────────────────────
-
-  - id: "e1000001-0000-0000-0000-000000000004"
-    name: Singing (Age Till 15)
-    registration_type: cultural
-    age_group: children
-    event_date: null
-    slot_time: ""
-    max_participants: 200
-    location: ""
-    description: Solo singing, any song. 3–4 min slot. Individual.
-    is_team: false
-    is_active: true
-
-  - id: "e1000001-0000-0000-0000-000000000023"
-    name: Singing (Age 15+)
-    registration_type: cultural
-    age_group: adults
-    event_date: null
-    slot_time: ""
-    max_participants: 200
-    location: ""
-    description: Solo singing, any language. 3–5 min slot. Individual.
-    is_team: false
-    is_active: true
-
-  # ── Fancy Dress & Fashion ─────────────────────────────────────────────────
-
-  - id: "e1000001-0000-0000-0000-000000000007"
-    name: Fancy Dress (Age Till 15)
-    registration_type: cultural
-    age_group: children
-    event_date: null
-    slot_time: ""
-    max_participants: 200
-    location: ""
-    description: Patriotic or character costume. Walk the ramp. Individual.
-    is_team: false
-    is_active: true
-
-  - id: "e1000001-0000-0000-0000-000000000056"
-    name: Fashion Show – Regional Attire (Age 15+)
-    registration_type: cultural
-    age_group: adults
-    event_date: null
-    slot_time: ""
-    max_participants: 200
-    location: ""
-    description: Showcase India's diverse regional traditional attire. Individual.
-    is_team: false
-    is_active: true
-
-  # ── Musical Instruments ───────────────────────────────────────────────────
-
-  - id: "e1000001-0000-0000-0000-000000000024"
-    name: Musical Instruments
+  - id: "e1000001-0000-0000-0000-000000000073"
+    name: Group Dance
     registration_type: cultural
     age_group: all
-    event_date: null
+    event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 200
+    max_participants: 7
     location: ""
-    description: Solo instrumental performance. 5 min slot. Bring your own instrument.
-    is_team: false
-    is_active: true
-
-  # ── Musical Chair ─────────────────────────────────────────────────────────
-
-  - id: "e1000001-0000-0000-0000-000000000008"
-    name: Musical Chair (Age Till 15)
-    registration_type: cultural
-    age_group: children
-    event_date: null
-    slot_time: ""
-    max_participants: 200
-    location: ""
-    description: Fun elimination rounds for kids. Individual.
-    is_team: false
-    is_active: true
-
-  - id: "e1000001-0000-0000-0000-000000000058"
-    name: Musical Chair (Age 15+)
-    registration_type: cultural
-    age_group: adults
-    event_date: null
-    slot_time: ""
-    max_participants: 200
-    location: ""
-    description: Fun elimination rounds for adults. Individual.
-    is_team: false
-    is_active: true
-
-  # ── Tug of War (moved from competitive) ───────────────────────────────────
-
-  - id: "e1000001-0000-0000-0000-000000000020"
-    name: Tug of War
-    registration_type: cultural
-    age_group: all
-    event_date: null
-    slot_time: ""
-    max_participants: 200
-    location: ""
-    description: Inter-tower team competition. Teams of 8.
+    description: Group choreography, any age. 5 min slot. Register as a group.
     is_team: true
     is_active: true
 
-  # ── Creative Freedom (8–9 Aug, a week before Independence Day) ────────────
+  # ── Regional Dance ────────────────────────────────────────────────────────
+
+  - id: "e1000001-0000-0000-0000-000000000074"
+    name: Regional Dance – Group
+    registration_type: cultural
+    age_group: all
+    event_date: "2026-08-15"
+    slot_time: ""
+    max_participants: 5
+    location: ""
+    description: Group regional/folk dance, no age bar. 5 min slot. Register as a group.
+    is_team: true
+    is_active: true
+
+  # ── Regional Fashion Show ─────────────────────────────────────────────────
+
+  - id: "e1000001-0000-0000-0000-000000000056"
+    name: Regional Fashion Show (Age 50+)
+    registration_type: cultural
+    age_group: seniors
+    event_date: "2026-08-15"
+    slot_time: ""
+    max_participants: 200
+    location: ""
+    description: Showcase India's diverse regional traditional attire. Age 50+. Walk the ramp.
+    is_team: false
+    is_active: true
+
+  # ── Fancy Dress ───────────────────────────────────────────────────────────
+
+  - id: "e1000001-0000-0000-0000-000000000007"
+    name: Fancy Dress (Age 0 – 10) – Independence Day Theme
+    registration_type: cultural
+    age_group: children
+    event_date: "2026-08-15"
+    slot_time: ""
+    max_participants: 200
+    location: ""
+    description: Patriotic or Independence Day themed costume. Walk the ramp. Age 0–10.
+    is_team: false
+    is_active: true
+
+  # ── Creative Freedom (9 Aug, a week before Independence Day) ─────────────
 
   - id: "e1000001-0000-0000-0000-000000000059"
     name: Express Your Creative Freedom

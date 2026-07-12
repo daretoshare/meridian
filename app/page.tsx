@@ -1,4 +1,4 @@
-import { getActiveEvents } from '@/actions/register'
+import { getActiveEvents, getRegistrationCounts } from '@/actions/register'
 import { getSiteContent, getCulturalRegistrationStatus, getCompetitiveRegistrationStatus } from '@/lib/content'
 import RegistrationForm from '@/components/RegistrationForm'
 import { Flag, Shield, ClipboardList } from 'lucide-react'
@@ -8,8 +8,9 @@ import Image from 'next/image'
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const [events, site] = await Promise.all([
+  const [events, registrationCounts, site] = await Promise.all([
     getActiveEvents(),
+    getRegistrationCounts(),
     Promise.resolve(getSiteContent()),
   ])
   const culturalStatus    = getCulturalRegistrationStatus()
@@ -105,7 +106,7 @@ export default async function HomePage() {
       {/* Form Card */}
       <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-16">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-100 p-6 sm:p-8">
-          <RegistrationForm events={events} site={site} culturalStatus={culturalStatus} competitiveStatus={competitiveStatus} />
+          <RegistrationForm events={events} site={site} culturalStatus={culturalStatus} competitiveStatus={competitiveStatus} registrationCounts={registrationCounts} />
         </div>
         <p className="text-center text-xs text-slate-400 mt-6">{site.form_footer_note}</p>
       </main>
