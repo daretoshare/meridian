@@ -2,6 +2,7 @@ import { getActiveEvents, getRegistrationCounts } from '@/actions/register'
 import { isCulturalPasswordRequired } from '@/actions/culturalAccess'
 import { getSiteContent, getCulturalRegistrationStatus, getCompetitiveRegistrationStatus } from '@/lib/content'
 import RegistrationForm from '@/components/RegistrationForm'
+import AnnouncementBar from '@/components/AnnouncementBar'
 import { Flag, Shield, ClipboardList } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -54,6 +55,9 @@ export default async function HomePage() {
           </div>
         </div>
       </header>
+
+      {/* Announcement banner */}
+      <AnnouncementBar culturalStatus={culturalStatus} competitiveStatus={competitiveStatus} />
 
       {/* Hero */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 pt-12 pb-8 text-center">

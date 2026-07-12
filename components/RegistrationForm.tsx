@@ -867,14 +867,6 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
 
           <div className="p-4 space-y-3">
 
-            {/* Surprise events note — always visible */}
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-800">
-              <Sparkles size={16} className="shrink-0 mt-0.5 text-purple-500" />
-              <p className="text-sm">
-                We have a few <strong>surprise events</strong> planned — no registration needed, just show up and enjoy!
-              </p>
-            </div>
-
             {culturalStatus === 'pending' && (
               <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
                 <Clock size={16} className="shrink-0 mt-0.5" />
@@ -1043,6 +1035,14 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
           </div>
         </div>
       )}
+
+      {/* ── Surprise events note ─────────────────────────────────────────── */}
+      <div className="flex items-start gap-3 p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-800">
+        <Sparkles size={16} className="shrink-0 mt-0.5 text-purple-500" />
+        <p className="text-sm">
+          We have a few <strong>surprise events</strong> planned — no registration needed, just show up and enjoy!
+        </p>
+      </div>
 
       {/* ── Submit ────────────────────────────────────────────────────────── */}
       <button
