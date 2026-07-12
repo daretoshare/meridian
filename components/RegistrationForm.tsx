@@ -1040,7 +1040,7 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
       <div className="flex items-start gap-3 p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-800">
         <Sparkles size={16} className="shrink-0 mt-0.5 text-purple-500" />
         <p className="text-sm">
-          We have a few <strong>surprise events</strong> planned — no registration needed, just show up and enjoy!
+          We have a few <strong>surprise events</strong> planned on <strong>15 August</strong> — no registration needed, just show up and enjoy!
         </p>
       </div>
 
