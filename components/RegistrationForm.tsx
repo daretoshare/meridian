@@ -111,8 +111,10 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
   const [selectedEvents, setSelectedEvents]     = useState<string[]>([])
   const [fieldErrors, setFieldErrors]           = useState<Record<string, string>>({})
   const [submittedVals, setSubmittedVals]       = useState<Partial<RegistrationFormData>>({})
-  const [feeConsented, setFeeConsented]         = useState(false)
-  const [showFeeModal, setShowFeeModal]         = useState(false)
+  const [feeConsented, setFeeConsented]             = useState(false)
+  const [showFeeModal, setShowFeeModal]             = useState(false)
+  const [culturalConsented, setCulturalConsented]   = useState(false)
+  const [showCulturalModal, setShowCulturalModal]   = useState(false)
   const [eventTeamDetails, setEventTeamDetails] = useState<Record<string, { team_name: string; members: TeamMember[] }>>({})
   const [openAccordions, setOpenAccordions]     = useState<Set<string>>(new Set())
   const [tmErrors, setTmErrors]                 = useState<Record<string, Record<number, Partial<Record<keyof TeamMember, string>>>>>({})
@@ -215,7 +217,9 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
   // ── Toggle ───────────────────────────────────────────────────────────────
   const toggleEvent = (id: string, disabled: boolean) => {
     if (disabled) return
-    if (!feeConsented) { setShowFeeModal(true); return }
+    const isCultural = (eventMap[id] as any)?.registration_type === 'cultural'
+    if (isCultural && !culturalConsented) { setShowCulturalModal(true); return }
+    if (!isCultural && !feeConsented)     { setShowFeeModal(true); return }
     const isCurrentlySelected = selectedEvents.includes(id)
     setSelectedEvents(prev => isCurrentlySelected ? prev.filter(e => e !== id) : [...prev, id])
     if (isCurrentlySelected) {
@@ -760,6 +764,92 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
         </div>
       )}
 
+      {/* ── Cultural Terms Modal ─────────────────────────────────────────── */}
+      {showCulturalModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden max-h-[90vh] flex flex-col">
+            {/* Header */}
+            <div className="bg-emerald-50 border-b border-emerald-200 px-6 py-4 flex items-center gap-3 shrink-0">
+              <span className="text-xl">🎭</span>
+              <h2 className="font-bold text-emerald-900 text-lg">Cultural Events — Terms</h2>
+              <button onClick={() => setShowCulturalModal(false)} className="ml-auto text-emerald-400 hover:text-emerald-700">
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5 space-y-4 text-sm text-slate-700 overflow-y-auto">
+
+              {/* Free entry */}
+              <div className="flex items-start gap-3 p-3 bg-green-50 border border-green-200 rounded-xl">
+                <CheckCircle size={16} className="text-green-600 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-green-800">No Participation Fee</p>
+                  <p className="text-green-700 text-xs mt-0.5">Cultural events are completely free. There is no registration fee.</p>
+                </div>
+              </div>
+
+              {/* What to bring */}
+              <div>
+                <p className="font-semibold text-slate-800 mb-1">What to bring</p>
+                <p className="text-slate-600">
+                  Participants are responsible for bringing their own consumables, props, costumes, and instruments relevant to their event.
+                </p>
+              </div>
+
+              {/* Schedule */}
+              <div>
+                <p className="font-semibold text-slate-800 mb-2">Event Schedule</p>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-3 px-3 py-2.5 bg-indigo-50 border border-indigo-100 rounded-lg">
+                    <Calendar size={14} className="text-indigo-500 shrink-0 mt-0.5" />
+                    <div className="text-xs">
+                      <p className="font-semibold text-indigo-800">9 August 2026</p>
+                      <p className="text-indigo-600 mt-0.5">Express Your Creative Freedom</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 px-3 py-2.5 bg-orange-50 border border-orange-100 rounded-lg">
+                    <Calendar size={14} className="text-orange-500 shrink-0 mt-0.5" />
+                    <div className="text-xs">
+                      <p className="font-semibold text-orange-800">15 August 2026 — Independence Day</p>
+                      <p className="text-orange-600 mt-0.5">All other cultural events including Flag Hoisting performances</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Slots & waitlist */}
+              <div>
+                <p className="font-semibold text-slate-800 mb-1">Registration & Slots</p>
+                <p className="text-slate-600">
+                  Registrations are accepted on a <strong>first-come, first-served</strong> basis. Each event has a limited number of confirmed slots. Once confirmed slots fill, a waitlist may be opened — waitlisted participants will be accommodated subject to availability.
+                </p>
+              </div>
+
+              {/* What happens next */}
+              <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-amber-800 text-xs">
+                <strong>What happens next:</strong> A volunteer from the organizing committee will get in touch with all registered participants once the registration window closes with further details.
+              </div>
+
+              {/* Disclaimer */}
+              <p className="text-[10px] leading-relaxed text-slate-400">
+                <strong className="text-slate-500">Disclaimer:</strong> By proceeding, you acknowledge that Meridian Park Management and the Organizing Committee shall not be held liable for any injury, loss, damage, or risk — including medical emergencies — arising during or in connection with any event. Participation is entirely at your own risk. Participants with medical conditions are advised to consult a physician before registering.
+              </p>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 pb-5 pt-3 shrink-0 border-t border-slate-100">
+              <button
+                onClick={() => { setCulturalConsented(true); setShowCulturalModal(false) }}
+                className="w-full py-2.5 text-sm font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition-colors"
+              >
+                I Understand — Select Cultural Events
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Event Selection ──────────────────────────────────────────────── */}
       <section className="space-y-6">
         <div>
@@ -769,31 +859,6 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
           </h2>
           <p className="text-sm text-slate-500 mt-1 mb-2">{site.form_events_hint}</p>
         </div>
-
-        {/* Fee consent gate */}
-        {!feeConsented && (
-          <button
-            type="button"
-            onClick={() => setShowFeeModal(true)}
-            className="w-full flex items-center gap-4 p-4 bg-orange-50 border-2 border-orange-200 border-dashed rounded-2xl hover:border-orange-400 hover:bg-orange-100 transition-colors group"
-          >
-            <div className="w-10 h-10 bg-orange-100 group-hover:bg-orange-200 rounded-xl flex items-center justify-center shrink-0 transition-colors">
-              <IndianRupee size={20} className="text-orange-600" />
-            </div>
-            <div className="text-left">
-              <p className="font-semibold text-orange-900 text-sm">Review &amp; Accept Participation Fee</p>
-              <p className="text-xs text-orange-700 mt-0.5">₹ 150 per participant · Click to read terms and unlock event selection</p>
-            </div>
-            <Lock size={16} className="ml-auto text-orange-400 shrink-0" />
-          </button>
-        )}
-
-        {feeConsented && (
-          <div className="flex items-center gap-2.5 px-4 py-2.5 bg-green-50 border border-green-200 rounded-xl text-sm text-green-800">
-            <CheckCircle size={15} className="text-green-600 shrink-0" />
-            <span>Participation fee accepted — ₹ 150 per participant. A volunteer will contact you with payment details after the registration window closes.</span>
-          </div>
-        )}
 
         {/* ── COMPETITIVE ─────────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-slate-200 overflow-hidden">
@@ -823,21 +888,45 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
             )}
           </div>
 
-          <div className="p-4">
+          <div className="p-4 space-y-3">
+            {/* Fee consent gate — inside competitive section */}
+            {competitiveStatus === 'open' && !feeConsented && (
+              <button
+                type="button"
+                onClick={() => setShowFeeModal(true)}
+                className="w-full flex items-center gap-4 p-4 bg-orange-50 border-2 border-orange-200 border-dashed rounded-2xl hover:border-orange-400 hover:bg-orange-100 transition-colors group"
+              >
+                <div className="w-10 h-10 bg-orange-100 group-hover:bg-orange-200 rounded-xl flex items-center justify-center shrink-0 transition-colors">
+                  <IndianRupee size={20} className="text-orange-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold text-orange-900 text-sm">Review &amp; Accept Participation Fee</p>
+                  <p className="text-xs text-orange-700 mt-0.5">₹ 150 per participant · Click to read terms and unlock event selection</p>
+                </div>
+                <Lock size={16} className="ml-auto text-orange-400 shrink-0" />
+              </button>
+            )}
+            {competitiveStatus === 'open' && feeConsented && (
+              <div className="flex items-center gap-2.5 px-4 py-2.5 bg-green-50 border border-green-200 rounded-xl text-sm text-green-800">
+                <CheckCircle size={15} className="text-green-600 shrink-0" />
+                <span>Participation fee accepted — ₹ 150 per participant. A volunteer will contact you with payment details after the registration window closes.</span>
+              </div>
+            )}
+
             {competitiveStatus === 'pending' && (
-              <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
                 <Clock size={16} className="shrink-0 mt-0.5" />
                 <p className="text-sm">Registration for competitive events has not started yet. Check back soon!</p>
               </div>
             )}
             {competitiveStatus === 'closed' && (
-              <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-red-50 border border-red-200 text-red-800">
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-200 text-red-800">
                 <Lock size={16} className="shrink-0 mt-0.5" />
                 <p className="text-sm">Registration for competitive events is now closed.</p>
               </div>
             )}
             {competitiveStatus === 'open' && (
-              <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">
                 <AlertCircle size={16} className="shrink-0 mt-0.5" />
                 <p className="text-sm">Events will be conducted on weekends — <strong>25–26 July</strong> and <strong>8–9 August 2026</strong>. Exact schedule will be shared closer to the date.</p>
               </div>
@@ -893,15 +982,30 @@ export default function RegistrationForm({ events, site, culturalStatus, competi
             )}
             {culturalStatus === 'open' && (
               <>
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
-                  <CheckCircle size={16} className="shrink-0 mt-0.5 text-emerald-600" />
-                  <div className="text-sm space-y-1">
-                    <p><strong>No participation fee</strong> for cultural events. Participants are responsible for bringing their own consumables, props, costumes, and instruments.</p>
-                    <p className="text-emerald-700"><strong>Schedule note:</strong> <em>Express Your Creative Freedom</em> will be conducted a week prior — on <strong>9 August</strong>. All other cultural events will be held on <strong>15 August 2026</strong> (Independence Day).</p>
+                {/* Cultural consent gate */}
+                {!culturalConsented ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowCulturalModal(true)}
+                    className="w-full flex items-center gap-4 p-4 bg-emerald-50 border-2 border-emerald-200 border-dashed rounded-2xl hover:border-emerald-400 hover:bg-emerald-100 transition-colors group"
+                  >
+                    <div className="w-10 h-10 bg-emerald-100 group-hover:bg-emerald-200 rounded-xl flex items-center justify-center shrink-0 transition-colors">
+                      <span className="text-lg">🎭</span>
+                    </div>
+                    <div className="text-left">
+                      <p className="font-semibold text-emerald-900 text-sm">Review &amp; Accept Cultural Event Terms</p>
+                      <p className="text-xs text-emerald-700 mt-0.5">Free to participate · Click to read terms and unlock event selection</p>
+                    </div>
+                    <Lock size={16} className="ml-auto text-emerald-400 shrink-0" />
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2.5 px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-800">
+                    <CheckCircle size={15} className="text-emerald-600 shrink-0" />
+                    <span>Cultural event terms accepted — no participation fee. A volunteer will get in touch after the registration window closes.</span>
                   </div>
-                </div>
+                )}
 
-                {/* Password gate — shown only when a password is configured and not yet unlocked */}
+                {/* Password gate */}
                 {culturalPasswordRequired && !culturalUnlocked ? (
                   <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 space-y-3">
                     <p className="text-sm font-semibold text-amber-800 flex items-center gap-2">
