@@ -12,7 +12,7 @@
 # │  REGISTRATION TOGGLES — flip these to open / close each category          │
 # └───────────────────────────────────────────────────────────────────────────┘
 competitive_registration_status: open     # pending | open | closed
-cultural_registration_status: pending        # pending | open | closed
+cultural_registration_status: open        # pending | open | closed
 
 #
 # SCHEDULE
@@ -529,7 +529,7 @@ events:
     age_group: seniors
     event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 200
+    max_participants: 25
     location: ""
     description: Showcase India's diverse regional traditional attire. Age 50+. Walk the ramp.
     is_team: false
@@ -543,7 +543,7 @@ events:
     age_group: children
     event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 200
+    max_participants: 25
     location: ""
     description: Patriotic or Independence Day themed costume. Walk the ramp. Age 0–10.
     is_team: false
