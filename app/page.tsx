@@ -3,6 +3,7 @@ import { isCulturalPasswordRequired } from '@/actions/culturalAccess'
 import { getSiteContent, getCulturalRegistrationStatus, getCompetitiveRegistrationStatus } from '@/lib/content'
 import RegistrationForm from '@/components/RegistrationForm'
 import AnnouncementBar from '@/components/AnnouncementBar'
+import CountdownBanner from '@/components/CountdownBanner'
 import { Flag, Shield, ClipboardList } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -55,6 +56,9 @@ export default async function HomePage() {
           </div>
         </div>
       </header>
+
+      {/* Countdown — auto-hides at 8 PM IST */}
+      <CountdownBanner />
 
       {/* Announcement banner */}
       <AnnouncementBar culturalStatus={culturalStatus} competitiveStatus={competitiveStatus} />
