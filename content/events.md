@@ -12,7 +12,7 @@
 # │  REGISTRATION TOGGLES — flip these to open / close each category          │
 # └───────────────────────────────────────────────────────────────────────────┘
 competitive_registration_status: open     # pending | open | closed
-cultural_registration_status: open        # pending | open | closed
+cultural_registration_status: pending        # pending | open | closed
 
 #
 # SCHEDULE
