@@ -529,7 +529,7 @@ events:
     age_group: seniors
     event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 25
+    max_participants: 20
     location: ""
     description: Showcase India's diverse regional traditional attire. Age 50+. Walk the ramp.
     is_team: false
@@ -543,7 +543,7 @@ events:
     age_group: children
     event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 25
+    max_participants: 30
     location: ""
     description: Patriotic or Independence Day themed costume. Walk the ramp. Age 0–10.
     is_team: false
