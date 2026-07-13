@@ -543,7 +543,7 @@ events:
     age_group: children
     event_date: "2026-08-15"
     slot_time: ""
-    max_participants: 30
+    max_participants: 29
     location: ""
     description: Patriotic or Independence Day themed costume. Walk the ramp. Age 0–10.
     is_team: false
