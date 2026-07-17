@@ -17,12 +17,6 @@ export default function AnnouncementBar({ culturalStatus, competitiveStatus }: P
   if (!showCultural && !showCompetitive) return null
 
   const messages = [
-    ...(showCompetitive ? [{
-      emoji: '🏆',
-      text: 'Competitive event registrations close today at 5 PM IST — last chance to register!',
-      accent: 'from-red-500 to-orange-500',
-      dot: 'bg-red-200',
-    }] : []),
     ...(showCultural ? [{
       emoji: '🎭',
       text: 'Cultural event registrations are open — closes 20 July 2026. Register now!',
