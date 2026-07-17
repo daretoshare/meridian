@@ -8,7 +8,7 @@ interface Props {
   competitiveStatus: RegistrationStatus
 }
 
-const INTERVAL = 4000 // ms per message
+const INTERVAL = 3500
 
 export default function AnnouncementBar({ culturalStatus, competitiveStatus }: Props) {
   const showCultural    = culturalStatus === 'open'
@@ -17,26 +17,35 @@ export default function AnnouncementBar({ culturalStatus, competitiveStatus }: P
   if (!showCultural && !showCompetitive) return null
 
   const messages = [
-    ...(showCultural    ? [{ emoji: '🎭', text: 'Cultural event registrations are now open — register today!' }] : []),
-    ...(showCompetitive ? [{ emoji: '🏆', text: 'Competitive event registrations closing soon — hurry up and register!' }] : []),
+    ...(showCompetitive ? [{
+      emoji: '🏆',
+      text: 'Competitive event registrations close today at 5 PM IST — last chance to register!',
+      accent: 'from-red-500 to-orange-500',
+      dot: 'bg-red-200',
+    }] : []),
+    ...(showCultural ? [{
+      emoji: '🎭',
+      text: 'Cultural event registrations are open — closes 20 July 2026. Register now!',
+      accent: 'from-emerald-500 to-teal-500',
+      dot: 'bg-emerald-200',
+    }] : []),
   ]
 
   return <Ticker messages={messages} />
 }
 
-function Ticker({ messages }: { messages: { emoji: string; text: string }[] }) {
+function Ticker({ messages }: { messages: { emoji: string; text: string; accent: string; dot: string }[] }) {
   const [active, setActive]   = useState(0)
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     if (messages.length <= 1) return
     const id = setInterval(() => {
-      // fade out → swap → fade in
       setVisible(false)
       setTimeout(() => {
         setActive(i => (i + 1) % messages.length)
         setVisible(true)
-      }, 350)
+      }, 400)
     }, INTERVAL)
     return () => clearInterval(id)
   }, [messages.length])
@@ -44,25 +53,34 @@ function Ticker({ messages }: { messages: { emoji: string; text: string }[] }) {
   const msg = messages[active]
 
   return (
-    <div className="bg-gradient-to-r from-orange-500 to-green-600 text-white py-2.5 px-4">
-      <div className="max-w-3xl mx-auto flex items-center justify-center gap-3">
+    <div className={`relative bg-gradient-to-r ${msg.accent} text-white overflow-hidden transition-all duration-500`}>
+      {/* Subtle moving highlight */}
+      <div
+        className="absolute inset-0 opacity-15 pointer-events-none"
+        style={{
+          background: 'linear-gradient(90deg, transparent 20%, white 50%, transparent 80%)',
+          animation: 'sweep 3s ease-in-out infinite',
+        }}
+      />
+
+      <div className="relative max-w-3xl mx-auto px-4 py-2.5 flex items-center justify-center gap-3">
         {/* Pulsing dot */}
         <span className="relative flex h-2.5 w-2.5 shrink-0">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-60" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
+          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${msg.dot} opacity-75`} />
+          <span className={`relative inline-flex rounded-full h-2.5 w-2.5 bg-white`} />
         </span>
 
-        {/* Message — fades between items */}
+        {/* Message */}
         <p
-          className="text-sm font-semibold text-center leading-snug transition-opacity duration-300"
+          className="text-sm font-semibold text-center leading-snug transition-opacity duration-400"
           style={{ opacity: visible ? 1 : 0 }}
         >
           {msg.emoji} {msg.text}
         </p>
 
-        {/* Dot indicators (only when >1 message) */}
+        {/* Dot indicators */}
         {messages.length > 1 && (
-          <div className="flex items-center gap-1 shrink-0 ml-1">
+          <div className="flex items-center gap-1 shrink-0">
             {messages.map((_, i) => (
               <span
                 key={i}
@@ -74,6 +92,13 @@ function Ticker({ messages }: { messages: { emoji: string; text: string }[] }) {
           </div>
         )}
       </div>
+
+      <style>{`
+        @keyframes sweep {
+          0%   { transform: translateX(-100%); }
+          100% { transform: translateX(200%); }
+        }
+      `}</style>
     </div>
   )
 }
