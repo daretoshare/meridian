@@ -41,10 +41,10 @@ export default async function HomePage() {
           <div className="flex items-center gap-4">
             <Link
               href="/scores"
-              className="flex items-center gap-1.5 text-sm text-orange-600 hover:text-orange-800 font-medium transition-colors"
+              className="flex items-center gap-1.5 text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-full transition-colors shadow-sm"
             >
-              <Trophy size={14} />
-              Tournament Scores
+              <Trophy size={13} />
+              Scores &amp; Rules
             </Link>
             <Link
               href="/status"
@@ -118,6 +118,23 @@ export default async function HomePage() {
           <div className="w-px h-8 bg-slate-200" />
           <Stat label={site.stat_age_groups_label} value={site.stat_age_groups_value} />
         </div>
+      </section>
+
+      {/* Scores CTA */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
+        <Link
+          href="/scores"
+          className="group flex items-center justify-between gap-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-2xl px-6 py-4 shadow-md transition-all"
+        >
+          <div className="flex items-center gap-4">
+            <span className="text-3xl leading-none">🏆</span>
+            <div>
+              <p className="font-bold text-base leading-tight">Tournament Scores &amp; Rules</p>
+              <p className="text-sm text-orange-100 mt-0.5">Live scores · Full schedules · Game rules · Livestream</p>
+            </div>
+          </div>
+          <span className="text-orange-200 group-hover:translate-x-1 transition-transform text-xl font-bold shrink-0">→</span>
+        </Link>
       </section>
 
       {/* Form Card */}
