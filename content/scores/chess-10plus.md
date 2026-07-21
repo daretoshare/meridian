@@ -5,7 +5,7 @@ sport: chess
 status: upcoming
 live_stream_url: "https://www.youtube.com/live/CHESS_STREAM_PLACEHOLDER"
 event_date: "2026-07-26"
-event_time: "TBD"
+event_time: "Sat 2:00 PM (Group Stage) · Sun 11:00 AM (Knockout)"
 
 time_controls:
   groups: "5+5 Blitz"
@@ -133,6 +133,30 @@ knockout:
 - Time control: **5 minutes + 5 seconds increment (Blitz)**
 - Scoring: Win = 1 pt, Draw = ½ pt, Loss = 0, Bye = 1 pt
 - Tiebreaks: Head-to-head → Sonneborn-Berger → Most wins
+
+### Event Schedule
+
+**Saturday — Group Stage (Blitz 5+5), starts 2:00 PM**
+
+| Time | Activity |
+|------|----------|
+| 2:00 PM | Registration, board & clock setup |
+| 2:15 PM | Round 1 (Group A + B in parallel) |
+| 2:40 PM | Round 2 |
+| 3:05 PM | Round 3 (Group B round-robin complete) |
+| 3:30 PM | Tea Break (20 min) |
+| 3:50 PM | Round 4 (Group A only; Group B friendlies/rest) |
+| 4:15 PM | Round 5 (Group A only) |
+| 4:40 PM | Group stage ends; standings finalized, qualifiers set |
+
+**Sunday — Knockout Stage, starts 11:00 AM**
+
+| Time | Activity |
+|------|----------|
+| 11:00 AM | Arrival & pairings announced |
+| 11:15 AM | Semifinals SF1 & SF2 (best-of-2 Blitz 5+5) |
+| 12:15 PM | Lunch Break (45 min) |
+| 1:00 PM | Final & 3rd-place match (best-of-2 Rapid 15+10) |
 
 ### Knockout Stage
 - Top 2 from each group advance: A1, A2, B1, B2
