@@ -4,7 +4,7 @@ import { getSiteContent, getCulturalRegistrationStatus, getCompetitiveRegistrati
 import RegistrationForm from '@/components/RegistrationForm'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import CountdownBanner from '@/components/CountdownBanner'
-import { Flag, Shield, ClipboardList } from 'lucide-react'
+import { Flag, Shield, ClipboardList, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -39,6 +39,13 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <Link
+              href="/scores"
+              className="flex items-center gap-1.5 text-sm text-orange-600 hover:text-orange-800 font-medium transition-colors"
+            >
+              <Trophy size={14} />
+              Tournament Scores
+            </Link>
             <Link
               href="/status"
               className="flex items-center gap-1.5 text-sm text-orange-600 hover:text-orange-800 font-medium transition-colors"
