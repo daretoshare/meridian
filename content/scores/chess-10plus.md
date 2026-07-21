@@ -5,6 +5,7 @@ sport: chess
 status: upcoming
 live_stream_url: "https://www.youtube.com/live/CHESS_STREAM_PLACEHOLDER"
 event_date: "2026-07-26"
+event_time: "TBD"
 
 time_controls:
   groups: "5+5 Blitz"

@@ -65,6 +65,9 @@ export default function ScoresPage() {
                       <div>
                         <h2 className="font-bold text-slate-800 text-base leading-tight">{t.title}</h2>
                         <p className="text-xs text-slate-500 mt-0.5">{date}</p>
+                        {t.event_time && (
+                          <p className="text-xs text-orange-600 font-medium mt-0.5">{t.event_time}</p>
+                        )}
                       </div>
                     </div>
                     <span

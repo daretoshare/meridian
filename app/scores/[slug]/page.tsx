@@ -167,6 +167,9 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
                     {badge.label}
                   </span>
                   <span className="text-xs text-slate-500">{date}</span>
+                  {t.event_time && (
+                    <span className="text-xs font-medium text-orange-600">{t.event_time}</span>
+                  )}
                 </div>
               </div>
             </div>

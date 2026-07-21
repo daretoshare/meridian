@@ -37,6 +37,7 @@ export interface Tournament {
   status: 'upcoming' | 'ongoing' | 'completed'
   live_stream_url: string
   event_date: string
+  event_time?: string
   time_controls: {
     groups: string
     semifinals: string
@@ -83,6 +84,7 @@ export function listTournaments(): Array<{
   sport: string
   status: string
   event_date: string
+  event_time?: string
   live_stream_url: string
 }> {
   if (!fs.existsSync(SCORES_DIR)) return []
@@ -97,6 +99,7 @@ export function listTournaments(): Array<{
       sport: data.sport as string,
       status: data.status as string,
       event_date: data.event_date as string,
+      event_time: (data.event_time as string | undefined) ?? undefined,
       live_stream_url: data.live_stream_url as string,
     }
   })
