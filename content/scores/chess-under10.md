@@ -4,7 +4,7 @@ subtitle: "13 Players | Two Groups Round-Robin → Semifinals → Final"
 sport: chess
 status: upcoming
 live_stream_url: "https://www.youtube.com/live/CHESS_U10_STREAM_PLACEHOLDER"
-event_date: "2026-07-26"
+event_date: "2026-07-25"
 event_time: "Sat 2:00 PM (Group Stage) · Sun 11:00 AM (Knockout)"
 
 time_controls:

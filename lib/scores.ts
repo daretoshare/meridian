@@ -2,6 +2,30 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 
+export interface BadmintonMatch {
+  id: string
+  p1: string | null
+  p2: string | null
+  score1: number | null
+  score2: number | null
+  winner: string | null
+}
+
+export interface BadmintonRound {
+  stage: string
+  label: string
+  matches: BadmintonMatch[]
+}
+
+export interface BadmintonCategory {
+  id: string
+  name: string
+  age: string
+  scoring: string
+  format: string
+  rounds: BadmintonRound[]
+}
+
 export interface Game {
   white: string
   black: string
@@ -66,6 +90,8 @@ export interface Tournament {
     final: KnockoutMatch
     third_place: KnockoutMatch
   }
+  venue?: string
+  categories?: BadmintonCategory[]
   content: string
 }
 
