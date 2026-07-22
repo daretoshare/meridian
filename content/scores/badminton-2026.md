@@ -436,6 +436,12 @@ categories:
             score1: null
             score2: null
             winner: null
+          - id: "BS-QR1-4"
+            p1: "Vishaj Jha (58026)"
+            p2: "Closest Winner from last games"
+            score1: null
+            score2: null
+            winner: null
       - stage: "SF"
         label: "Semi-Finals"
         matches:
@@ -549,6 +555,12 @@ categories:
           - id: "KBS-QR1-4"
             p1: "Aryan Agarwal (65094)"
             p2: "Aaveen Tripathy (54255)"
+            score1: null
+            score2: null
+            winner: null
+          - id: "KBS-QR1-5"
+            p1: "Nachiket Mishra (57033)"
+            p2: "Atharv Singhal (56093)"
             score1: null
             score2: null
             winner: null
