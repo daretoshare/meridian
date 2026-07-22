@@ -112,6 +112,8 @@ export function listTournaments(): Array<{
   event_date: string
   event_time?: string
   live_stream_url: string
+  group?: string
+  group_label?: string
 }> {
   if (!fs.existsSync(SCORES_DIR)) return []
   const files = fs.readdirSync(SCORES_DIR).filter((f) => f.endsWith('.md'))
@@ -127,6 +129,8 @@ export function listTournaments(): Array<{
       event_date: data.event_date as string,
       event_time: (data.event_time as string | undefined) ?? undefined,
       live_stream_url: data.live_stream_url as string,
+      group: (data.group as string | undefined) ?? undefined,
+      group_label: (data.group_label as string | undefined) ?? undefined,
     }
   })
 }
