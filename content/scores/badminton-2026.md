@@ -21,9 +21,9 @@ categories:
           - id: "MS-QR1-1"
             p1: "Ketan Suthar (510201)"
             p2: "Nikhil Panicker (58045)"
-            score1: 21
-            score2: 15
-            winner: "Ketan Suthar (510201)"
+            score1: null
+            score2: null
+            winner: null
           - id: "MS-QR1-2"
             p1: "Gaurav Chakravorty (56154)"
             p2: "Gaurav Jain (59281)"
@@ -88,11 +88,11 @@ categories:
         label: "Round 2 — Qualifiers"
         matches:
           - id: "MS-QR2-1"
-            p1: "Ketan Suthar (510201)"
-            p2: "Test"
-            score1: 21
-            score2: 10
-            winner: "Ketan Suthar (510201)"
+            p1: null
+            p2: null
+            score1: null
+            score2: null
+            winner: null
           - id: "MS-QR2-2"
             p1: null
             p2: null
