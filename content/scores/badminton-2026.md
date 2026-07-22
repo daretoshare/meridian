@@ -88,8 +88,8 @@ categories:
         label: "Round 2 — Qualifiers"
         matches:
           - id: "MS-QR2-1"
-            p1: null
-            p2: null
+            p1: "Ketan Suthar (510201)"
+            p2: "Test"
             score1: null
             score2: null
             winner: null
