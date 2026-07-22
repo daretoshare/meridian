@@ -22,34 +22,7 @@ function formatDate(dateStr: string) {
 }
 
 export default function ScoresPage() {
-  const all = listTournaments()
-
-  // Separate grouped from standalone
-  const groupMap = new Map<string, typeof all>()
-  const standalone: typeof all = []
-
-  for (const t of all) {
-    if (t.group) {
-      if (!groupMap.has(t.group)) groupMap.set(t.group, [])
-      groupMap.get(t.group)!.push(t)
-    } else {
-      standalone.push(t)
-    }
-  }
-
-  // Build display items: grouped first (by insertion order), then standalone
-  type GroupedItem = { kind: 'group'; groupName: string; items: typeof all }
-  type StandaloneItem = { kind: 'single'; item: (typeof all)[0] }
-  type DisplayItem = GroupedItem | StandaloneItem
-
-  const display: DisplayItem[] = [
-    ...Array.from(groupMap.entries()).map(([groupName, items]) => ({
-      kind: 'group' as const,
-      groupName,
-      items,
-    })),
-    ...standalone.map((item) => ({ kind: 'single' as const, item })),
-  ]
+  const tournaments = listTournaments()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
@@ -73,58 +46,11 @@ export default function ScoresPage() {
           <p className="text-slate-500 text-sm">Scores are updated live during the event.</p>
         </div>
 
-        {display.length === 0 ? (
+        {tournaments.length === 0 ? (
           <p className="text-slate-400 text-center py-16">No tournaments yet.</p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
-            {display.map((entry) => {
-              if (entry.kind === 'group') {
-                const { groupName, items } = entry
-                const icon = SPORT_ICON[items[0].sport] ?? '🏆'
-                const date = formatDate(items[0].event_date)
-                const time = items[0].event_time
-                // Group status: ongoing > upcoming > completed
-                const statusPriority = (s: string) => s === 'ongoing' ? 0 : s === 'upcoming' ? 1 : 2
-                const topStatus = items.slice().sort((a, b) => statusPriority(a.status) - statusPriority(b.status))[0].status
-                const badge = STATUS_BADGE[topStatus] ?? STATUS_BADGE.upcoming
-
-                return (
-                  <div key={groupName} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col gap-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <span className="text-3xl leading-none">{icon}</span>
-                        <div>
-                          <h2 className="font-bold text-slate-800 text-base leading-tight">{groupName}</h2>
-                          <p className="text-xs text-slate-500 mt-0.5">{date}</p>
-                          {time && <p className="text-xs text-orange-600 font-medium mt-0.5">{time}</p>}
-                        </div>
-                      </div>
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${badge.className} ${topStatus === 'ongoing' ? 'animate-pulse' : ''}`}>
-                        {badge.label}
-                      </span>
-                    </div>
-
-                    {/* Sub-category buttons */}
-                    <div className="flex flex-col gap-2">
-                      {items.map((t) => (
-                        <Link
-                          key={t.slug}
-                          href={`/scores/${t.slug}`}
-                          className="flex items-center justify-between gap-3 bg-slate-50 hover:bg-orange-50 border border-slate-200 hover:border-orange-200 rounded-xl px-4 py-2.5 text-sm transition-colors group"
-                        >
-                          <span className="font-medium text-slate-700 group-hover:text-orange-700">
-                            {t.group_label ?? t.title}
-                          </span>
-                          <span className="text-slate-400 group-hover:text-orange-500 font-bold">→</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )
-              }
-
-              // Standalone tile
-              const t = entry.item
+            {tournaments.map((t) => {
               const badge = STATUS_BADGE[t.status] ?? STATUS_BADGE.upcoming
               const icon = SPORT_ICON[t.sport] ?? '🏆'
               const date = formatDate(t.event_date)

@@ -1,4 +1,4 @@
-import { getTournament, computeStandings, Round, BadmintonCategory, BadmintonMatch } from '@/lib/scores'
+import { getTournament, computeStandings, Round, BadmintonCategory, BadmintonMatch, ChessTournamentEntry } from '@/lib/scores'
 import Link from 'next/link'
 import { ArrowLeft, Play } from 'lucide-react'
 
@@ -126,6 +126,150 @@ function KnockoutCard({ label, player1, player2, result, timeControl }: {
       {!result && (
         <p className="text-xs text-slate-400">Result pending</p>
       )}
+    </div>
+  )
+}
+
+// ─── Chess age-group section ─────────────────────────────────────────────────
+
+function ChessAgeGroupSection({ entry }: { entry: ChessTournamentEntry }) {
+  return (
+    <div className="space-y-6">
+      {/* Section heading */}
+      <div className="flex items-center gap-3">
+        <span className="text-2xl leading-none">♟</span>
+        <div>
+          <h2 className="text-xl font-extrabold text-slate-900">{entry.age_group}</h2>
+          {entry.subtitle && <p className="text-sm text-slate-500 mt-0.5">{entry.subtitle}</p>}
+        </div>
+      </div>
+
+      {/* Two-column: participants + format | standings */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left */}
+        <div className="space-y-6">
+          {/* Participants */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h3 className="text-base font-bold text-slate-800 mb-4">Participants</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-200">
+                    <th className="text-left py-2 pr-3 text-xs font-semibold text-slate-500">#</th>
+                    <th className="text-left py-2 pr-3 text-xs font-semibold text-slate-500">Name</th>
+                    <th className="text-left py-2 text-xs font-semibold text-slate-500">Tower</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {entry.participants.map((p, i) => {
+                    const tower = p.location.split(' - ')[1] ?? p.location
+                    return (
+                      <tr key={p.name} className="border-b border-slate-100">
+                        <td className="py-2 pr-3 text-slate-400">{i + 1}</td>
+                        <td className="py-2 pr-3 font-medium text-slate-800">{p.name}</td>
+                        <td className="py-2 text-slate-500 text-xs">{tower}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Format */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h3 className="text-base font-bold text-slate-800 mb-4">Format</h3>
+            <div className="space-y-4 text-sm">
+              <div>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Time Controls</p>
+                <div className="space-y-1">
+                  {Object.entries(entry.time_controls).map(([k, v]) => (
+                    <div key={k} className="flex justify-between gap-4">
+                      <span className="text-slate-600 capitalize">{k.replace('_', ' ')}</span>
+                      <span className="font-medium text-slate-800">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Scoring</p>
+                <div className="flex gap-4 flex-wrap">
+                  <span className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs">Win = {entry.scoring.win} pt</span>
+                  <span className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs">Draw = {entry.scoring.draw} pt</span>
+                  <span className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs">Loss = {entry.scoring.loss} pt</span>
+                  <span className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs">Bye = {entry.scoring.bye} pt</span>
+                </div>
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Tiebreaks</p>
+                <ol className="list-decimal list-inside space-y-0.5 text-slate-600">
+                  {entry.tiebreaks.map((tb) => (
+                    <li key={tb}>{tb}</li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: standings */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+          <h3 className="text-base font-bold text-slate-800">Standings</h3>
+          <StandingsTable
+            label="Group A"
+            group={entry.groups.A}
+            rounds={entry.schedule.group_a}
+            byePts={entry.scoring.bye}
+          />
+          <StandingsTable
+            label="Group B"
+            group={entry.groups.B}
+            rounds={entry.schedule.group_b}
+            byePts={entry.scoring.bye}
+          />
+        </div>
+      </div>
+
+      {/* Schedule */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <h3 className="text-base font-bold text-slate-800 mb-6">Schedule</h3>
+        <div className="flex flex-col sm:flex-row gap-8">
+          <SchedulePanel label="Group A Schedule" rounds={entry.schedule.group_a} />
+          <div className="hidden sm:block w-px bg-slate-200 shrink-0" />
+          <SchedulePanel label="Group B Schedule" rounds={entry.schedule.group_b} />
+        </div>
+      </div>
+
+      {/* Knockout */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <h3 className="text-base font-bold text-slate-800 mb-6">Knockout Stage</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {entry.knockout.semifinals.map((sf) => (
+            <KnockoutCard
+              key={sf.id}
+              label={sf.label}
+              player1={sf.player1}
+              player2={sf.player2}
+              result={sf.result}
+              timeControl={entry.time_controls.semifinals}
+            />
+          ))}
+          <KnockoutCard
+            label={entry.knockout.final.label}
+            player1={entry.knockout.final.player1}
+            player2={entry.knockout.final.player2}
+            result={entry.knockout.final.result}
+            timeControl={entry.time_controls.final}
+          />
+          <KnockoutCard
+            label={entry.knockout.third_place.label}
+            player1={entry.knockout.third_place.player1}
+            player2={entry.knockout.third_place.player2}
+            result={entry.knockout.third_place.result}
+            timeControl={entry.time_controls.third_place}
+          />
+        </div>
+      </div>
     </div>
   )
 }
@@ -312,6 +456,66 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
     return <BadmintonTournamentPage t={t} badge={badge} date={date} />
   }
 
+  // Combined chess page (tournaments array present)
+  if (t.sport === 'chess' && t.tournaments && t.tournaments.length > 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
+        <header className="border-b border-white/80 bg-white/70 backdrop-blur-md sticky top-0 z-50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center">
+            <Link href="/scores" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors">
+              <ArrowLeft size={14} />
+              Back to Scores
+            </Link>
+          </div>
+        </header>
+
+        <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+          {/* Header card */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <span className="text-4xl leading-none">♟</span>
+                <div>
+                  <h1 className="text-2xl font-extrabold text-slate-900">{t.title}</h1>
+                  <p className="text-slate-500 text-sm mt-1">{t.subtitle}</p>
+                  <div className="flex items-center gap-3 mt-3">
+                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${badge.className}`}>
+                      {badge.label}
+                    </span>
+                    <span className="text-xs text-slate-500">{date}</span>
+                    {t.event_time && (
+                      <span className="text-xs font-medium text-orange-600">{t.event_time}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <a
+                href={t.live_stream_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors shrink-0 self-start"
+              >
+                <Play size={16} />
+                {t.status === 'upcoming' ? 'Stream starts on event day' : 'Watch Live'}
+              </a>
+            </div>
+          </div>
+
+          {/* Age group sections */}
+          {t.tournaments.map((entry, idx) => (
+            <div key={entry.age_group}>
+              <ChessAgeGroupSection entry={entry} />
+              {idx < t.tournaments!.length - 1 && (
+                <div className="mt-10 border-t border-slate-200" />
+              )}
+            </div>
+          ))}
+        </main>
+      </div>
+    )
+  }
+
+  // Individual chess page (fallback)
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
       {/* Nav */}

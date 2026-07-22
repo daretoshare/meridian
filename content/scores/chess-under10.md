@@ -1,4 +1,5 @@
 ---
+hidden: true
 title: "Chess Tournament — Age up to 10"
 subtitle: "13 Players | Two Groups Round-Robin → Semifinals → Final"
 sport: chess

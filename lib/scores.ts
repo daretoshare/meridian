@@ -53,6 +53,18 @@ export interface KnockoutMatch {
   result: string | null
 }
 
+export interface ChessTournamentEntry {
+  age_group: string
+  subtitle?: string
+  time_controls: { groups: string; semifinals: string; final: string; third_place: string }
+  scoring: { win: number; draw: number; loss: number; bye: number }
+  tiebreaks: string[]
+  participants: Array<{ name: string; location: string; apt: string }>
+  groups: Record<string, string[]>
+  schedule: { group_a: Round[]; group_b: Round[] }
+  knockout: { semifinals: KnockoutMatch[]; final: KnockoutMatch; third_place: KnockoutMatch }
+}
+
 export interface Tournament {
   slug: string
   title: string
@@ -92,6 +104,7 @@ export interface Tournament {
   }
   venue?: string
   categories?: BadmintonCategory[]
+  tournaments?: ChessTournamentEntry[]
   content: string
 }
 
@@ -112,27 +125,27 @@ export function listTournaments(): Array<{
   event_date: string
   event_time?: string
   live_stream_url: string
-  group?: string
-  group_label?: string
 }> {
   if (!fs.existsSync(SCORES_DIR)) return []
   const files = fs.readdirSync(SCORES_DIR).filter((f) => f.endsWith('.md'))
-  return files.map((file) => {
-    const slug = file.replace(/\.md$/, '')
-    const raw = fs.readFileSync(path.join(SCORES_DIR, file), 'utf-8')
-    const { data } = matter(raw)
-    return {
-      slug,
-      title: data.title as string,
-      sport: data.sport as string,
-      status: data.status as string,
-      event_date: data.event_date as string,
-      event_time: (data.event_time as string | undefined) ?? undefined,
-      live_stream_url: data.live_stream_url as string,
-      group: (data.group as string | undefined) ?? undefined,
-      group_label: (data.group_label as string | undefined) ?? undefined,
-    }
-  })
+  return files
+    .map((file) => {
+      const slug = file.replace(/\.md$/, '')
+      const raw = fs.readFileSync(path.join(SCORES_DIR, file), 'utf-8')
+      const { data } = matter(raw)
+      return {
+        slug,
+        title: data.title as string,
+        sport: data.sport as string,
+        status: data.status as string,
+        event_date: data.event_date as string,
+        event_time: (data.event_time as string | undefined) ?? undefined,
+        live_stream_url: data.live_stream_url as string,
+        hidden: (data.hidden as boolean | undefined) ?? false,
+      }
+    })
+    .filter((t) => !t.hidden)
+    .map(({ hidden: _hidden, ...rest }) => rest)
 }
 
 export function computeStandings(
