@@ -80,7 +80,7 @@ categories:
             winner: null
           - id: "MS-QR1-11"
             p1: "Biswajeet Das (66192)"
-            p2: null
+            p2: "Closest Winner from last games"
             score1: null
             score2: null
             winner: null
@@ -203,7 +203,7 @@ categories:
             score2: null
             winner: null
           - id: "MD-QR1-5"
-            p1: "Atharv Singhal (56093) / Darshit Dhairyawal (56193)"
+            p1: "Vijay Bala (57131) / Abhishek Rathore (57185)"
             p2: "Rithwij K (56186) / Pradish Raghavan (59033)"
             score1: null
             score2: null
@@ -211,12 +211,6 @@ categories:
           - id: "MD-QR1-6"
             p1: "Gopu K B (58202) / Debasish (59101)"
             p2: "Peeyush Mishra (56041) / Shobhit Gupta (57065)"
-            score1: null
-            score2: null
-            winner: null
-          - id: "MD-QR1-7"
-            p1: "Vijay Bala (57131) / Abhishek Rathore (57185)"
-            p2: null
             score1: null
             score2: null
             winner: null
@@ -301,7 +295,7 @@ categories:
             winner: null
           - id: "WS-QR1-4"
             p1: "Sanghamitra Barman (57016)"
-            p2: null
+            p2: "Closest Winner from last games"
             score1: null
             score2: null
             winner: null
@@ -358,13 +352,13 @@ categories:
             score2: null
             winner: null
           - id: "MID-QR1-4"
-            p1: "Priyansha Verma (56035) / Priyansha Verma (56035)"
+            p1: "Priyansha Verma (56035) / Prashant Shekhar (56035)"
             p2: "Aryan Agarwal (65094) / Samaira (65094)"
             score1: null
             score2: null
             winner: null
           - id: "MID-QR1-5"
-            p1: "Naveen (58242) / Naveen (58242)"
+            p1: "Naveen (58242) / Adithi (58242)"
             p2: "Shobhit Gupta (57065) / Shruti Gupta (57065)"
             score1: null
             score2: null
@@ -439,12 +433,6 @@ categories:
           - id: "BS-QR1-3"
             p1: "Atharv Singhal (56093)"
             p2: "Ridhaan Vijayshekar (59146)"
-            score1: null
-            score2: null
-            winner: null
-          - id: "BS-QR1-4"
-            p1: "Vishaj Jha (58026)"
-            p2: null
             score1: null
             score2: null
             winner: null
@@ -561,12 +549,6 @@ categories:
           - id: "KBS-QR1-4"
             p1: "Aryan Agarwal (65094)"
             p2: "Aaveen Tripathy (54255)"
-            score1: null
-            score2: null
-            winner: null
-          - id: "KBS-QR1-5"
-            p1: "Nachiket Mishra (57033)"
-            p2: null
             score1: null
             score2: null
             winner: null
