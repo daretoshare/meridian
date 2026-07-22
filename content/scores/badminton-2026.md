@@ -90,9 +90,9 @@ categories:
           - id: "MS-QR2-1"
             p1: "Ketan Suthar (510201)"
             p2: "Test"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 10
+            winner: "Ketan Suthar (510201)"
           - id: "MS-QR2-2"
             p1: null
             p2: null
