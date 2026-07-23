@@ -7,6 +7,7 @@ import CountdownBanner from '@/components/CountdownBanner'
 import { Flag, Shield, ClipboardList, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import MatchFlashCardLoader from '@/components/MatchFlashCardLoader'
 
 export const dynamic = 'force-dynamic'
 
@@ -135,6 +136,11 @@ export default async function HomePage() {
           </div>
           <span className="text-orange-200 group-hover:translate-x-1 transition-transform text-xl font-bold shrink-0">→</span>
         </Link>
+      </section>
+
+      {/* Match Flash Card */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
+        <MatchFlashCardLoader />
       </section>
 
       {/* Form Card */}

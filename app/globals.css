@@ -8,6 +8,33 @@
   }
 }
 
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes vsFlash {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(1.15); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251,146,60,0); }
+  50%       { box-shadow: 0 0 24px 6px rgba(251,146,60,0.3); }
+}
+
+.match-card-enter  { animation: fadeInUp 0.5s ease both; }
+.match-p1-enter    { animation: slideInLeft 0.55s 0.2s ease both; }
+.match-p2-enter    { animation: slideInRight 0.55s 0.2s ease both; }
+.match-vs-enter    { animation: vsFlash 1.4s 0.5s ease infinite; }
+.match-meta-enter  { animation: fadeInUp 0.5s 0.4s ease both; }
+
 @layer components {
   .input-field {
     width: 100%;
