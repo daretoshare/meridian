@@ -130,6 +130,99 @@ function KnockoutCard({ label, player1, player2, result, timeControl }: {
   )
 }
 
+// ─── Chess tournament story ──────────────────────────────────────────────────
+
+function ChessTournamentStory({ entry }: { entry: ChessTournamentEntry }) {
+  const isAbove10 = entry.age_group.toLowerCase().includes('10+') || entry.age_group.toLowerCase().includes('above') || entry.age_group.toLowerCase().includes('above 10') || (!entry.age_group.toLowerCase().includes('up to') && !entry.age_group.toLowerCase().includes('upto') && !entry.age_group.toLowerCase().includes('under'))
+
+  if (isAbove10) {
+    return (
+      <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white space-y-5">
+        <h3 className="text-base font-bold text-white flex items-center gap-2">
+          <span>♟</span> Group Stage Story
+        </h3>
+
+        {/* Stat callouts */}
+        <div className="flex flex-wrap gap-3">
+          <div className="bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
+            <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">Group A Dominant</p>
+            <p className="text-sm font-bold text-orange-300">Arjun Madiraju — 4/4 · Undefeated</p>
+          </div>
+          <div className="bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
+            <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">Group B Winner</p>
+            <p className="text-sm font-bold text-orange-300">Nisha Bansal — 2.5/3 · Group B Winner</p>
+          </div>
+        </div>
+
+        {/* Narrative */}
+        <p className="text-sm text-slate-300 leading-relaxed">
+          Group A was a masterclass in precision — Arjun Madiraju swept every board, allowing zero points to opponents. Aarush Pradish held firm for second, edging ahead of a competitive field. Group B brought drama: Nisha Bansal held Samaira to a draw while taking the title, with Samaira earning her semifinal berth on consistency.
+        </p>
+
+        {/* Semifinals preview */}
+        <div>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Semifinals</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3">
+              <span className="font-semibold text-sm text-white">Nisha Bansal</span>
+              <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
+              <span className="font-semibold text-sm text-white">Aarush Pradish</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3">
+              <span className="font-semibold text-sm text-white">Arjun Madiraju</span>
+              <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
+              <span className="font-semibold text-sm text-white">Samaira Agrawal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Age up to 10
+  return (
+    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white space-y-5">
+      <h3 className="text-base font-bold text-white flex items-center gap-2">
+        <span>♟</span> Group Stage Story
+      </h3>
+
+      {/* Stat callouts */}
+      <div className="flex flex-wrap gap-3">
+        <div className="bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
+          <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">Group A Dominant</p>
+          <p className="text-sm font-bold text-orange-300">Netik Chowdary — 5/5 · Unstoppable</p>
+        </div>
+        <div className="bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
+          <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">Perfect Group B</p>
+          <p className="text-sm font-bold text-orange-300">Evan Joe Jerin — 5/5 · Perfect Group B</p>
+        </div>
+      </div>
+
+      {/* Narrative */}
+      <p className="text-sm text-slate-300 leading-relaxed">
+        Two players emerged untouchable in the group stage: Netik Chowdary and Evan Joe Jerin both completed their groups without dropping a single point. Avyaan&apos;s four-point haul secured second in Group A, while Aviroon Das — the only player to challenge Evan&apos;s rhythm — earned a semifinal clash with Netik.
+      </p>
+
+      {/* Semifinals preview */}
+      <div>
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Semifinals</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3">
+            <span className="font-semibold text-sm text-white">Netik Chowdary</span>
+            <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
+            <span className="font-semibold text-sm text-white">Aviroon Das</span>
+          </div>
+          <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3">
+            <span className="font-semibold text-sm text-white">Evan Joe Jerin</span>
+            <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
+            <span className="font-semibold text-sm text-white">Avyaan</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Chess age-group section ─────────────────────────────────────────────────
 
 function ChessAgeGroupSection({ entry }: { entry: ChessTournamentEntry }) {
@@ -270,6 +363,9 @@ function ChessAgeGroupSection({ entry }: { entry: ChessTournamentEntry }) {
           />
         </div>
       </div>
+
+      {/* Tournament Story */}
+      <ChessTournamentStory entry={entry} />
     </div>
   )
 }

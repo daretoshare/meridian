@@ -143,6 +143,59 @@ export default async function HomePage() {
         <MatchFlashCardLoader />
       </section>
 
+      {/* Chess Semifinals Flash Card */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
+        <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-5 text-white">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-xs font-semibold text-orange-300 px-3 py-1 rounded-full">
+              ♟ Chess · Semifinals Set
+            </span>
+            <Link
+              href="/scores/chess-2026"
+              className="text-xs text-slate-400 hover:text-white font-medium transition-colors shrink-0"
+            >
+              View draw →
+            </Link>
+          </div>
+
+          <div className="space-y-3">
+            {/* Age 10+ */}
+            <div>
+              <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Age 10+</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
+                  <span className="text-sm font-semibold text-white">Nisha Bansal</span>
+                  <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
+                  <span className="text-sm font-semibold text-white">Aarush Pradish</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
+                  <span className="text-sm font-semibold text-white">Arjun Madiraju</span>
+                  <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
+                  <span className="text-sm font-semibold text-white">Samaira Agrawal</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Age up to 10 */}
+            <div>
+              <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Age up to 10</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
+                  <span className="text-sm font-semibold text-white">Netik Chowdary</span>
+                  <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
+                  <span className="text-sm font-semibold text-white">Aviroon Das</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
+                  <span className="text-sm font-semibold text-white">Evan Joe Jerin</span>
+                  <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
+                  <span className="text-sm font-semibold text-white">Avyaan</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Form Card */}
       <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-16">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-100 p-6 sm:p-8">
