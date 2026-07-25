@@ -218,9 +218,9 @@ tournaments:
         - round: 7
           bye: "Varenyam Rathore"
           games:
-            - { white: "Shaun Bex", black: "Divij Nupur Singhal", result: "1-0" }
+            - { white: "Shaun Bex", black: "Divij Nupur Singhal", result: "0.5-0.5" }
             - { white: "Nevaan Chamria", black: "Avyaan", result: null }
-            - { white: "Netik Chowdary", black: "Saroj Kumar", result: "1-0" }
+            - { white: "Netik Chowdary", black: "Saroj Kumar", result: "0-1" }
       group_b:
         - round: 1
           games:
