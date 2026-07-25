@@ -2,7 +2,7 @@
 title: "Chess Tournament 2026"
 subtitle: "Two Age Groups | Round-Robin → Semifinals → Final"
 sport: chess
-status: upcoming
+status: ongoing
 live_stream_url: "https://www.youtube.com/live/CHESS_STREAM_PLACEHOLDER"
 event_date: "2026-07-25"
 event_time: "Sat 2:00 PM (Group Stage) · Sun 11:00 AM (Knockout)"
@@ -80,21 +80,21 @@ tournaments:
         - round: 5
           bye: "Arjun Madiraju"
           games:
-            - { white: "Tanmay Gupta", black: "Aarush Pradish", result: null }
+            - { white: "Tanmay Gupta", black: "Aarush Pradish", result: "0-1" }
             - { white: "Yuvika Gupta", black: "Arshit", result: null }
       group_b:
         - round: 1
           games:
-            - { white: "Amit Kumar", black: "Samaira Agrawal", result: null }
-            - { white: "Aarav Jain", black: "Nisha Bansal", result: null }
+            - { white: "Amit Kumar", black: "Samaira Agrawal", result: "0-1" }
+            - { white: "Aarav Jain", black: "Nisha Bansal", result: "0-1" }
         - round: 2
           games:
-            - { white: "Samaira Agrawal", black: "Nisha Bansal", result: null }
-            - { white: "Amit Kumar", black: "Aarav Jain", result: null }
+            - { white: "Samaira Agrawal", black: "Nisha Bansal", result: "0.5-0.5" }
+            - { white: "Amit Kumar", black: "Aarav Jain", result: "0-1" }
         - round: 3
           games:
-            - { white: "Aarav Jain", black: "Samaira Agrawal", result: null }
-            - { white: "Nisha Bansal", black: "Amit Kumar", result: null }
+            - { white: "Aarav Jain", black: "Samaira Agrawal", result: "0.5-0.5" }
+            - { white: "Nisha Bansal", black: "Amit Kumar", result: "1-0" }
     knockout:
       semifinals:
         - id: sf1
@@ -182,71 +182,71 @@ tournaments:
         - round: 1
           bye: "Shaun Bex"
           games:
-            - { white: "Divij Nupur Singhal", black: "Avyaan", result: null }
-            - { white: "Varenyam Rathore", black: "Saroj Kumar", result: null }
+            - { white: "Divij Nupur Singhal", black: "Avyaan", result: "0-1" }
+            - { white: "Varenyam Rathore", black: "Saroj Kumar", result: "1-0" }
             - { white: "Nevaan Chamria", black: "Netik Chowdary", result: null }
         - round: 2
           bye: "Saroj Kumar"
           games:
-            - { white: "Shaun Bex", black: "Avyaan", result: null }
-            - { white: "Divij Nupur Singhal", black: "Netik Chowdary", result: null }
+            - { white: "Shaun Bex", black: "Avyaan", result: "0-1" }
+            - { white: "Divij Nupur Singhal", black: "Netik Chowdary", result: "0-1" }
             - { white: "Varenyam Rathore", black: "Nevaan Chamria", result: null }
         - round: 3
           bye: "Nevaan Chamria"
           games:
-            - { white: "Shaun Bex", black: "Saroj Kumar", result: null }
-            - { white: "Avyaan", black: "Netik Chowdary", result: null }
-            - { white: "Divij Nupur Singhal", black: "Varenyam Rathore", result: null }
+            - { white: "Shaun Bex", black: "Saroj Kumar", result: "1-0" }
+            - { white: "Avyaan", black: "Netik Chowdary", result: "0-1" }
+            - { white: "Divij Nupur Singhal", black: "Varenyam Rathore", result: "1-0" }
         - round: 4
           bye: "Divij Nupur Singhal"
           games:
-            - { white: "Shaun Bex", black: "Netik Chowdary", result: null }
+            - { white: "Shaun Bex", black: "Netik Chowdary", result: "0-1" }
             - { white: "Saroj Kumar", black: "Nevaan Chamria", result: null }
-            - { white: "Avyaan", black: "Varenyam Rathore", result: null }
+            - { white: "Avyaan", black: "Varenyam Rathore", result: "1-0" }
         - round: 5
           bye: "Avyaan"
           games:
             - { white: "Shaun Bex", black: "Nevaan Chamria", result: null }
-            - { white: "Netik Chowdary", black: "Varenyam Rathore", result: null }
-            - { white: "Saroj Kumar", black: "Divij Nupur Singhal", result: null }
+            - { white: "Netik Chowdary", black: "Varenyam Rathore", result: "1-0" }
+            - { white: "Saroj Kumar", black: "Divij Nupur Singhal", result: "0-1" }
         - round: 6
           bye: "Netik Chowdary"
           games:
-            - { white: "Shaun Bex", black: "Varenyam Rathore", result: null }
+            - { white: "Shaun Bex", black: "Varenyam Rathore", result: "1-0" }
             - { white: "Nevaan Chamria", black: "Divij Nupur Singhal", result: null }
-            - { white: "Saroj Kumar", black: "Avyaan", result: null }
+            - { white: "Saroj Kumar", black: "Avyaan", result: "0-1" }
         - round: 7
           bye: "Varenyam Rathore"
           games:
-            - { white: "Shaun Bex", black: "Divij Nupur Singhal", result: null }
+            - { white: "Shaun Bex", black: "Divij Nupur Singhal", result: "1-0" }
             - { white: "Nevaan Chamria", black: "Avyaan", result: null }
-            - { white: "Netik Chowdary", black: "Saroj Kumar", result: null }
+            - { white: "Netik Chowdary", black: "Saroj Kumar", result: "1-0" }
       group_b:
         - round: 1
           games:
-            - { white: "Evan Joe Jerin", black: "Aviroon Das", result: null }
-            - { white: "Atharv Singhal", black: "Aryan Agarwal", result: null }
-            - { white: "Vruksha", black: "Vivaan Mishra", result: null }
+            - { white: "Evan Joe Jerin", black: "Aviroon Das", result: "1-0" }
+            - { white: "Atharv Singhal", black: "Aryan Agarwal", result: "1-0" }
+            - { white: "Vruksha", black: "Vivaan Mishra", result: "0-1" }
         - round: 2
           games:
-            - { white: "Evan Joe Jerin", black: "Aryan Agarwal", result: null }
-            - { white: "Aviroon Das", black: "Vivaan Mishra", result: null }
-            - { white: "Atharv Singhal", black: "Vruksha", result: null }
+            - { white: "Evan Joe Jerin", black: "Aryan Agarwal", result: "1-0" }
+            - { white: "Aviroon Das", black: "Vivaan Mishra", result: "1-0" }
+            - { white: "Atharv Singhal", black: "Vruksha", result: "0-1" }
         - round: 3
           games:
-            - { white: "Evan Joe Jerin", black: "Vivaan Mishra", result: null }
-            - { white: "Aryan Agarwal", black: "Vruksha", result: null }
-            - { white: "Aviroon Das", black: "Atharv Singhal", result: null }
+            - { white: "Evan Joe Jerin", black: "Vivaan Mishra", result: "1-0" }
+            - { white: "Aryan Agarwal", black: "Vruksha", result: "0-1" }
+            - { white: "Aviroon Das", black: "Atharv Singhal", result: "1-0" }
         - round: 4
           games:
-            - { white: "Evan Joe Jerin", black: "Vruksha", result: null }
-            - { white: "Vivaan Mishra", black: "Atharv Singhal", result: null }
-            - { white: "Aryan Agarwal", black: "Aviroon Das", result: null }
+            - { white: "Evan Joe Jerin", black: "Vruksha", result: "1-0" }
+            - { white: "Vivaan Mishra", black: "Atharv Singhal", result: "1-0" }
+            - { white: "Aryan Agarwal", black: "Aviroon Das", result: "0-1" }
         - round: 5
           games:
-            - { white: "Evan Joe Jerin", black: "Atharv Singhal", result: null }
-            - { white: "Vruksha", black: "Aviroon Das", result: null }
-            - { white: "Vivaan Mishra", black: "Aryan Agarwal", result: null }
+            - { white: "Evan Joe Jerin", black: "Atharv Singhal", result: "1-0" }
+            - { white: "Vruksha", black: "Aviroon Das", result: "0-1" }
+            - { white: "Vivaan Mishra", black: "Aryan Agarwal", result: "1-0" }
     knockout:
       semifinals:
         - id: sf1
