@@ -2,7 +2,7 @@
 title: "Badminton Championship 2026"
 subtitle: "8 Categories | Knockout Format · Qualifiers → Semis → Final"
 sport: badminton
-status: Live
+status: ongoing
 live_stream_url: "https://www.youtube.com/live/BADMINTON_STREAM_PLACEHOLDER"
 event_date: "2026-07-25"
 event_time: "Sat 4:00 PM (Qualifiers) · Sun 11:00 AM (Semis & Finals)"
