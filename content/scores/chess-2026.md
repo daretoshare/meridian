@@ -60,28 +60,28 @@ tournaments:
         - round: 1
           bye: "Arshit"
           games:
-            - { white: "Aarush Pradish", black: "Yuvika Gupta", result: null }
-            - { white: "Arjun Madiraju", black: "Tanmay Gupta", result: null }
+            - { white: "Aarush Pradish", black: "Yuvika Gupta", result: "1-0" }
+            - { white: "Arjun Madiraju", black: "Tanmay Gupta", result: "1-0" }
         - round: 2
           bye: "Tanmay Gupta"
           games:
-            - { white: "Yuvika Gupta", black: "Arjun Madiraju", result: null }
-            - { white: "Arshit", black: "Aarush Pradish", result: null }
+            - { white: "Yuvika Gupta", black: "Arjun Madiraju", result: "0-1" }
+            - { white: "Arshit", black: "Aarush Pradish", result: "0-1" }
         - round: 3
           bye: "Aarush Pradish"
           games:
-            - { white: "Arjun Madiraju", black: "Arshit", result: null }
-            - { white: "Tanmay Gupta", black: "Yuvika Gupta", result: null }
+            - { white: "Arjun Madiraju", black: "Arshit", result: "1-0" }
+            - { white: "Tanmay Gupta", black: "Yuvika Gupta", result: "0.5-0.5" }
         - round: 4
           bye: "Yuvika Gupta"
           games:
-            - { white: "Arshit", black: "Tanmay Gupta", result: null }
-            - { white: "Aarush Pradish", black: "Arjun Madiraju", result: null }
+            - { white: "Arshit", black: "Tanmay Gupta", result: "1-0" }
+            - { white: "Aarush Pradish", black: "Arjun Madiraju", result: "0-1" }
         - round: 5
           bye: "Arjun Madiraju"
           games:
             - { white: "Tanmay Gupta", black: "Aarush Pradish", result: "0-1" }
-            - { white: "Yuvika Gupta", black: "Arshit", result: null }
+            - { white: "Yuvika Gupta", black: "Arshit", result: "0-1" }
       group_b:
         - round: 1
           games:
@@ -98,14 +98,14 @@ tournaments:
     knockout:
       semifinals:
         - id: sf1
-          label: "SF1: Winner A vs Runner-up B"
-          player1: null
-          player2: null
+          label: "SF1: Nisha B. vs Aarush P."
+          player1: "Nisha Bansal"
+          player2: "Aarush Pradish"
           result: null
         - id: sf2
-          label: "SF2: Winner B vs Runner-up A"
-          player1: null
-          player2: null
+          label: "SF2: Arjun M. vs Samaira A."
+          player1: "Arjun Madiraju"
+          player2: "Samaira Agrawal"
           result: null
       final:
         label: "Final — Rapid 15+10"
@@ -250,14 +250,14 @@ tournaments:
     knockout:
       semifinals:
         - id: sf1
-          label: "SF1: Winner A vs Runner-up B"
-          player1: null
-          player2: null
+          label: "SF1: Netik vs Aviroon"
+          player1: "Netik Chowdary"
+          player2: "Aviroon Das"
           result: null
         - id: sf2
-          label: "SF2: Winner B vs Runner-up A"
-          player1: null
-          player2: null
+          label: "SF2: Evan vs Avyaan"
+          player1: "Evan Joe Jerin"
+          player2: "Avyaan"
           result: null
       final:
         label: "Final — Rapid 15+10"
