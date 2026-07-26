@@ -32,7 +32,7 @@ const CHAMPIONS = [
   },
 ]
 
-const PHOTO_PLACEHOLDERS = [
+const PHOTO_PLACEHOLDERS: { id: number; label: string; aspect: 'wide' | 'tall' }[] = [
   { id: 1, label: 'Opening ceremony', aspect: 'tall' },
   { id: 2, label: 'Chess — Group A in action', aspect: 'wide' },
   { id: 3, label: 'Badminton — Kids finals', aspect: 'tall' },
