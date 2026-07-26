@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Trophy, Camera, Play, Quote, Heart, Star } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -32,7 +33,7 @@ const CHAMPIONS = [
   },
 ]
 
-const PHOTO_PLACEHOLDERS: { id: number; label: string; aspect: 'wide' | 'tall' }[] = [
+const PHOTO_PLACEHOLDERS: { id: number; label: string; aspect: 'wide' | 'tall'; src?: string }[] = [
   { id: 1, label: 'Opening ceremony', aspect: 'tall' },
   { id: 2, label: 'Chess — Group A in action', aspect: 'wide' },
   { id: 3, label: 'Badminton — Kids finals', aspect: 'tall' },
@@ -42,6 +43,8 @@ const PHOTO_PLACEHOLDERS: { id: number; label: string; aspect: 'wide' | 'tall' }
   { id: 7, label: 'Candids — participants', aspect: 'tall' },
   { id: 8, label: 'Closing ceremony', aspect: 'wide' },
   { id: 9, label: 'Winners podium', aspect: 'tall' },
+  // To add a photo: add src: 'https://lh3.googleusercontent.com/d/YOUR_FILE_ID'
+  // Get FILE_ID from the Drive share link: drive.google.com/file/d/FILE_ID/view
 ]
 
 const VIDEO_PLACEHOLDERS = [
@@ -145,14 +148,23 @@ function SectionAnchor({ id }: { id: string }) {
   return <div id={id} className="scroll-mt-20" />
 }
 
-function PhotoPlaceholder({ label, aspect }: { label: string; aspect: 'wide' | 'tall' }) {
+function PhotoPlaceholder({ label, aspect, src }: { label: string; aspect: 'wide' | 'tall'; src?: string }) {
   return (
-    <div className={`relative rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 ${aspect === 'tall' ? 'row-span-2' : ''}`}>
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center">
-        <Camera size={24} className="text-slate-300" />
-        <p className="text-xs text-slate-400 leading-snug">{label}</p>
-        <span className="text-[10px] text-slate-300 bg-slate-200 px-2 py-0.5 rounded-full">Photo coming soon</span>
-      </div>
+    <div className={`relative rounded-2xl overflow-hidden border ${aspect === 'tall' ? 'row-span-2' : ''} ${src ? 'border-slate-300 bg-black' : 'bg-slate-100 border-slate-200'}`}>
+      {src ? (
+        <>
+          <Image src={src} alt={label} fill className="object-cover" sizes="(max-width: 640px) 50vw, 33vw" />
+          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent px-3 py-2">
+            <p className="text-xs text-white/90 leading-snug">{label}</p>
+          </div>
+        </>
+      ) : (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center">
+          <Camera size={24} className="text-slate-300" />
+          <p className="text-xs text-slate-400 leading-snug">{label}</p>
+          <span className="text-[10px] text-slate-300 bg-slate-200 px-2 py-0.5 rounded-full">Photo coming soon</span>
+        </div>
+      )}
       <div className={`${aspect === 'tall' ? 'pb-[200%]' : 'pb-[56%]'}`} />
     </div>
   )
@@ -358,7 +370,7 @@ export default function CelebratePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 auto-rows-[140px]">
             {PHOTO_PLACEHOLDERS.map((p) => (
-              <PhotoPlaceholder key={p.id} label={p.label} aspect={p.aspect} />
+              <PhotoPlaceholder key={p.id} label={p.label} aspect={p.aspect} src={p.src} />
             ))}
           </div>
 
