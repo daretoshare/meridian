@@ -6,31 +6,45 @@ export const dynamic = 'force-dynamic'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
-const CHAMPIONS = [
+type PodiumEntry = { rank: 1 | 2 | 3; name: string; note?: string; photo?: string }
+type ChampionGroup = { label: string; podium: PodiumEntry[] }
+type ChampionSport = { sport: string; emoji: string; groups: ChampionGroup[] }
+
+const CHAMPIONS: ChampionSport[] = [
   {
     sport: 'Chess',
     emoji: '♟',
-    categories: [
-      { label: 'Age 10+ 🥇 Champion', winner: 'Aarush Pradish', finalist: '', note: 'Beat Samaira Agrawal via Armageddon' },
-      { label: 'Age 10+ 🥈 Runner-up', winner: 'Samaira Agrawal', finalist: '', note: '' },
-      { label: 'Age 10+ 🥉 3rd Place', winner: 'Arjun Madiraju', finalist: '', note: '' },
-      { label: 'Age up to 10 🥇 Champion', winner: 'Aviroon Das', finalist: '', note: 'Beat Evan Joe Jerin via Armageddon' },
-      { label: 'Age up to 10 🥈 Runner-up', winner: 'Evan Joe Jerin', finalist: '', note: '' },
-      { label: 'Age up to 10 🥉 3rd Place', winner: 'Avyaan', finalist: '', note: '' },
+    groups: [
+      {
+        label: 'Age 10+',
+        podium: [
+          { rank: 1, name: 'Aarush Pradish', note: 'Beat Samaira Agrawal via Armageddon', photo: undefined },
+          { rank: 2, name: 'Samaira Agrawal', photo: undefined },
+          { rank: 3, name: 'Arjun Madiraju', photo: undefined },
+        ],
+      },
+      {
+        label: 'Age up to 10',
+        podium: [
+          { rank: 1, name: 'Aviroon Das', note: 'Beat Evan Joe Jerin via Armageddon', photo: undefined },
+          { rank: 2, name: 'Evan Joe Jerin', photo: undefined },
+          { rank: 3, name: 'Avyaan', photo: undefined },
+        ],
+      },
     ],
   },
   {
     sport: 'Badminton',
     emoji: '🏸',
-    categories: [
-      { label: "Women's Singles", winner: 'TBD', finalist: 'SF today', note: 'Priyansha V. vs Ankita P.' },
-      { label: "Men's Singles", winner: 'TBD', finalist: 'QR3 + SF today', note: 'Ketan Suthar leads' },
-      { label: "Men's Doubles", winner: 'TBD', finalist: 'SF today', note: 'Biswajeet+Manoj vs Vijay+Abhishek' },
-      { label: 'Mixed Doubles', winner: 'TBD', finalist: 'SF today', note: 'Ketan+Komal vs Shobhit+Shruti' },
-      { label: 'Boys Singles 10–16', winner: 'TBD', finalist: 'SF today', note: 'Ishan D. vs Ridhaan V.' },
-      { label: 'Girls Singles 10–16', winner: 'TBD', finalist: 'SF today', note: 'Saanvi A. vs Ashwika G.' },
-      { label: 'Kids Boys Singles 5–10', winner: 'TBD', finalist: 'Final today', note: 'Sahil vs Atharv S.' },
-      { label: 'Kids Girls Singles 5–10', winner: 'TBD', finalist: 'Final today', note: 'Pratyusha vs Maedhini S.' },
+    groups: [
+      { label: "Women's Singles",      podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
+      { label: "Men's Singles",        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
+      { label: "Men's Doubles",        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
+      { label: 'Mixed Doubles',        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
+      { label: 'Boys Singles (10–16)', podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
+      { label: 'Girls Singles (10–16)',podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
+      { label: 'Kids Boys (5–10)',     podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
+      { label: 'Kids Girls (5–10)',    podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
     ],
   },
 ]
@@ -148,6 +162,107 @@ const STORIES = [
 
 function SectionAnchor({ id }: { id: string }) {
   return <div id={id} className="scroll-mt-20" />
+}
+
+// ─── Podium components ───────────────────────────────────────────────────────
+
+const RANK_CONFIG = {
+  1: {
+    medal: '🥇',
+    label: 'Champion',
+    bg: 'bg-gradient-to-br from-amber-400 to-orange-500',
+    border: 'border-amber-300',
+    avatarBg: 'bg-amber-200',
+    avatarIcon: 'text-amber-600',
+    nameCls: 'text-white text-xl font-extrabold',
+    labelCls: 'text-amber-100 text-xs font-bold uppercase tracking-widest',
+    noteCls: 'text-amber-100/80 text-xs',
+    avatarSize: 'w-20 h-20',
+    iconSize: 28,
+    cardCls: 'col-span-2',
+  },
+  2: {
+    medal: '🥈',
+    label: 'Runner-up',
+    bg: 'bg-gradient-to-br from-slate-600 to-slate-700',
+    border: 'border-slate-500',
+    avatarBg: 'bg-slate-500',
+    avatarIcon: 'text-slate-300',
+    nameCls: 'text-white text-base font-bold',
+    labelCls: 'text-slate-400 text-[10px] font-bold uppercase tracking-widest',
+    noteCls: 'text-slate-400 text-[10px]',
+    avatarSize: 'w-14 h-14',
+    iconSize: 20,
+    cardCls: 'col-span-1',
+  },
+  3: {
+    medal: '🥉',
+    label: '3rd Place',
+    bg: 'bg-gradient-to-br from-orange-800 to-amber-900',
+    border: 'border-orange-700',
+    avatarBg: 'bg-orange-700',
+    avatarIcon: 'text-orange-300',
+    nameCls: 'text-white text-base font-bold',
+    labelCls: 'text-orange-300/70 text-[10px] font-bold uppercase tracking-widest',
+    noteCls: 'text-orange-200/60 text-[10px]',
+    avatarSize: 'w-14 h-14',
+    iconSize: 20,
+    cardCls: 'col-span-1',
+  },
+} as const
+
+function PodiumCard({ entry }: { entry: PodiumEntry }) {
+  const cfg = RANK_CONFIG[entry.rank]
+  const isTBD = entry.name === 'TBD'
+  return (
+    <div className={`${cfg.cardCls} ${cfg.bg} border ${cfg.border} rounded-2xl p-5 flex flex-col gap-3`}>
+      {/* Medal + label row */}
+      <div className="flex items-center justify-between">
+        <span className="text-2xl leading-none">{cfg.medal}</span>
+        <span className={cfg.labelCls}>{cfg.label}</span>
+      </div>
+      {/* Avatar */}
+      <div className={`${cfg.avatarSize} rounded-full ${cfg.avatarBg} border-2 ${cfg.border} flex items-center justify-center overflow-hidden`}>
+        {entry.photo ? (
+          <Image src={entry.photo} alt={entry.name} width={80} height={80} className="object-cover w-full h-full" />
+        ) : (
+          <Trophy size={cfg.iconSize} className={cfg.avatarIcon} />
+        )}
+      </div>
+      {/* Name */}
+      {isTBD ? (
+        <p className={`${cfg.nameCls} opacity-40`}>TBD</p>
+      ) : (
+        <p className={cfg.nameCls}>{entry.name}</p>
+      )}
+      {/* Note */}
+      {entry.note && !isTBD && (
+        <p className={cfg.noteCls}>{entry.note}</p>
+      )}
+    </div>
+  )
+}
+
+function PodiumGroup({ group }: { group: ChampionGroup }) {
+  const gold   = group.podium.find(p => p.rank === 1)!
+  const silver = group.podium.find(p => p.rank === 2)!
+  const bronze = group.podium.find(p => p.rank === 3)!
+  return (
+    <div className="space-y-3">
+      {/* Group label */}
+      <div className="flex items-center gap-2">
+        <div className="h-px flex-1 bg-slate-200" />
+        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest px-2">{group.label}</span>
+        <div className="h-px flex-1 bg-slate-200" />
+      </div>
+      {/* Podium: champion spans full width (col-span-2), silver+bronze side by side */}
+      <div className="grid grid-cols-2 gap-3">
+        <PodiumCard entry={gold} />
+        <PodiumCard entry={silver} />
+        <PodiumCard entry={bronze} />
+      </div>
+    </div>
+  )
 }
 
 function PhotoPlaceholder({ label, aspect, src }: { label: string; aspect: 'wide' | 'tall'; src?: string }) {
@@ -292,47 +407,24 @@ export default function CelebratePage() {
         {/* ── Champions ────────────────────────────────────────────────── */}
         <section>
           <SectionAnchor id="champions" />
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-3 mb-8">
             <Trophy size={18} className="text-orange-500" />
             <h2 className="text-xl font-extrabold text-slate-900">Champions</h2>
-            <span className="text-xs bg-amber-100 text-amber-700 font-semibold px-2 py-0.5 rounded-full">Finals today</span>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-12">
             {CHAMPIONS.map((sport) => (
               <div key={sport.sport}>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xl">{sport.emoji}</span>
-                  <h3 className="font-bold text-slate-700 text-sm">{sport.sport}</h3>
+                {/* Sport header */}
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="text-2xl">{sport.emoji}</span>
+                  <h3 className="text-lg font-extrabold text-slate-800">{sport.sport}</h3>
+                  <div className="flex-1 h-px bg-slate-200" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                  {sport.categories.map((cat) => (
-                    <div key={cat.label} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-2">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">{cat.label}</p>
-                      {cat.winner === 'TBD' ? (
-                        <>
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
-                              <Trophy size={14} className="text-slate-300" />
-                            </div>
-                            <span className="text-sm font-bold text-slate-300">TBD</span>
-                          </div>
-                          {cat.finalist && (
-                            <p className="text-[10px] text-orange-500 font-medium">{cat.finalist}</p>
-                          )}
-                          {cat.note && (
-                            <p className="text-[10px] text-slate-400 leading-snug">{cat.note}</p>
-                          )}
-                        </>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                            <Trophy size={14} className="text-amber-600" />
-                          </div>
-                          <span className="text-sm font-bold text-slate-800">{cat.winner}</span>
-                        </div>
-                      )}
-                    </div>
+                {/* Groups */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  {sport.groups.map((group) => (
+                    <PodiumGroup key={group.label} group={group} />
                   ))}
                 </div>
               </div>
