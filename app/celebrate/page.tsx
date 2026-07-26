@@ -11,10 +11,10 @@ const CHAMPIONS = [
     sport: 'Chess',
     emoji: '♟',
     categories: [
-      { label: 'Age 10+ Champion', winner: 'TBD', finalist: 'Final today', note: 'Arjun M. vs Nisha B. / Aarush P.' },
-      { label: 'Age 10+ Runner-up', winner: 'TBD', finalist: '', note: '' },
-      { label: 'Age up to 10 Champion', winner: 'TBD', finalist: 'Final today', note: 'Netik C. vs Evan J. / Avyaan' },
-      { label: 'Age up to 10 Runner-up', winner: 'TBD', finalist: '', note: '' },
+      { label: 'Age 10+ Champion', winner: 'Aarush Pradish', finalist: '', note: 'Beat Samaira Agrawal via Armageddon' },
+      { label: 'Age 10+ Runner-up', winner: 'Samaira Agrawal', finalist: '', note: '' },
+      { label: 'Age up to 10 Champion', winner: 'Aviroon Das', finalist: '', note: 'Beat Evan Joe Jerin via Armageddon' },
+      { label: 'Age up to 10 Runner-up', winner: 'Evan Joe Jerin', finalist: '', note: '' },
     ],
   },
   {

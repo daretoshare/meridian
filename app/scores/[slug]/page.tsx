@@ -139,8 +139,18 @@ function ChessTournamentStory({ entry }: { entry: ChessTournamentEntry }) {
     return (
       <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white space-y-5">
         <h3 className="text-base font-bold text-white flex items-center gap-2">
-          <span>♟</span> Group Stage Story
+          <span>♟</span> Tournament Story · Age 10+
         </h3>
+
+        {/* Champion callout */}
+        <div className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/30 rounded-xl px-4 py-3 flex items-center gap-3">
+          <span className="text-2xl">🏆</span>
+          <div>
+            <p className="text-xs text-amber-300 font-semibold uppercase tracking-wide">Champion</p>
+            <p className="text-base font-bold text-white">Aarush Pradish</p>
+            <p className="text-xs text-slate-400">Beat Samaira Agrawal in Armageddon tiebreak</p>
+          </div>
+        </div>
 
         {/* Stat callouts */}
         <div className="flex flex-wrap gap-3">
@@ -149,31 +159,33 @@ function ChessTournamentStory({ entry }: { entry: ChessTournamentEntry }) {
             <p className="text-sm font-bold text-orange-300">Arjun Madiraju — 4/4 · Undefeated</p>
           </div>
           <div className="bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
-            <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">Group B Winner</p>
-            <p className="text-sm font-bold text-orange-300">Nisha Bansal — 2.5/3 · Group B Winner</p>
+            <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">Runner-up</p>
+            <p className="text-sm font-bold text-orange-300">Samaira Agrawal — Final via Armageddon</p>
           </div>
         </div>
 
         {/* Narrative */}
         <p className="text-sm text-slate-300 leading-relaxed">
-          Group A was a masterclass in precision — Arjun Madiraju swept every board, allowing zero points to opponents. Aarush Pradish held firm for second, edging ahead of a competitive field. Group B brought drama: Nisha Bansal held Samaira to a draw while taking the title, with Samaira earning her semifinal berth on consistency.
+          Group A was a masterclass in precision — Arjun Madiraju swept every board undefeated, with Aarush Pradish holding firm for second. Group B brought drama: Nisha Bansal took the title, while Samaira earned her spot on consistency. The knockouts delivered even more: Aarush dismantled Nisha 2–0, Samaira edged Arjun in Armageddon. The final went the distance — Samaira won Round 1, Aarush levelled, then claimed Armageddon to be crowned champion.
         </p>
 
-        {/* Semifinals preview */}
-        <div>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Semifinals</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3">
-              <span className="font-semibold text-sm text-white">Nisha Bansal</span>
-              <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
-              <span className="font-semibold text-sm text-white">Aarush Pradish</span>
+        {/* Results grid */}
+        <div className="space-y-2">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Knockout Results</p>
+          {[
+            { label: 'SF1', winner: 'Aarush Pradish', loser: 'Nisha Bansal', score: '2–0' },
+            { label: 'SF2', winner: 'Samaira Agrawal', loser: 'Arjun Madiraju', score: '2–1 (Arma)' },
+            { label: '3rd Place', winner: 'Arjun Madiraju', loser: 'Nisha Bansal', score: '2–0' },
+            { label: 'Final', winner: 'Aarush Pradish', loser: 'Samaira Agrawal', score: '2–1 (Arma)', isChampion: true },
+          ].map(r => (
+            <div key={r.label} className={`flex items-center gap-3 rounded-xl px-4 py-2.5 ${(r as { isChampion?: boolean }).isChampion ? 'bg-amber-500/15 border border-amber-400/30' : 'bg-white/8 border border-white/10'}`}>
+              <span className={`text-xs font-bold w-16 shrink-0 ${(r as { isChampion?: boolean }).isChampion ? 'text-amber-300' : 'text-slate-500'}`}>{r.label}</span>
+              <span className="text-sm font-semibold text-white">{r.winner}</span>
+              <span className="text-xs text-slate-500">def.</span>
+              <span className="text-sm text-slate-400">{r.loser}</span>
+              <span className="ml-auto text-xs font-bold text-orange-300 shrink-0">{r.score}</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3">
-              <span className="font-semibold text-sm text-white">Arjun Madiraju</span>
-              <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
-              <span className="font-semibold text-sm text-white">Samaira Agrawal</span>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     )
@@ -183,8 +195,18 @@ function ChessTournamentStory({ entry }: { entry: ChessTournamentEntry }) {
   return (
     <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white space-y-5">
       <h3 className="text-base font-bold text-white flex items-center gap-2">
-        <span>♟</span> Group Stage Story
+        <span>♟</span> Tournament Story · Age up to 10
       </h3>
+
+      {/* Champion callout */}
+      <div className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/30 rounded-xl px-4 py-3 flex items-center gap-3">
+        <span className="text-2xl">🏆</span>
+        <div>
+          <p className="text-xs text-amber-300 font-semibold uppercase tracking-wide">Champion</p>
+          <p className="text-base font-bold text-white">Aviroon Das</p>
+          <p className="text-xs text-slate-400">Beat Evan Joe Jerin in Armageddon tiebreak</p>
+        </div>
+      </div>
 
       {/* Stat callouts */}
       <div className="flex flex-wrap gap-3">
@@ -194,30 +216,32 @@ function ChessTournamentStory({ entry }: { entry: ChessTournamentEntry }) {
         </div>
         <div className="bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
           <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">Perfect Group B</p>
-          <p className="text-sm font-bold text-orange-300">Evan Joe Jerin — 5/5 · Perfect Group B</p>
+          <p className="text-sm font-bold text-orange-300">Evan Joe Jerin — 5/5 · Runner-up</p>
         </div>
       </div>
 
       {/* Narrative */}
       <p className="text-sm text-slate-300 leading-relaxed">
-        Two players emerged untouchable in the group stage: Netik Chowdary and Evan Joe Jerin both completed their groups without dropping a single point. Avyaan&apos;s four-point haul secured second in Group A, while Aviroon Das — the only player to challenge Evan&apos;s rhythm — earned a semifinal clash with Netik.
+        Two players dominated the group stage without dropping a point: Netik Chowdary in Group A and Evan Joe Jerin in Group B. But the knockouts rewrote the script — Aviroon Das, who had pushed Evan closest in groups, pulled off the tournament&apos;s biggest upset in the semis, beating Netik via Armageddon. Evan cruised past Avyaan 2–0 on the other side. The final was a thriller: Evan won Round 1, Aviroon levelled, then held his nerve in Armageddon to be crowned champion.
       </p>
 
-      {/* Semifinals preview */}
-      <div>
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Semifinals</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3">
-            <span className="font-semibold text-sm text-white">Netik Chowdary</span>
-            <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
-            <span className="font-semibold text-sm text-white">Aviroon Das</span>
+      {/* Results grid */}
+      <div className="space-y-2">
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Knockout Results</p>
+        {[
+          { label: 'SF1', winner: 'Aviroon Das', loser: 'Netik Chowdary', score: '2–1 (Arma)' },
+          { label: 'SF2', winner: 'Evan Joe Jerin', loser: 'Avyaan', score: '2–0' },
+          { label: '3rd Place', winner: 'Avyaan', loser: 'Netik Chowdary', score: '2–0' },
+          { label: 'Final', winner: 'Aviroon Das', loser: 'Evan Joe Jerin', score: '2–1 (Arma)', isChampion: true },
+        ].map(r => (
+          <div key={r.label} className={`flex items-center gap-3 rounded-xl px-4 py-2.5 ${(r as { isChampion?: boolean }).isChampion ? 'bg-amber-500/15 border border-amber-400/30' : 'bg-white/8 border border-white/10'}`}>
+            <span className={`text-xs font-bold w-16 shrink-0 ${(r as { isChampion?: boolean }).isChampion ? 'text-amber-300' : 'text-slate-500'}`}>{r.label}</span>
+            <span className="text-sm font-semibold text-white">{r.winner}</span>
+            <span className="text-xs text-slate-500">def.</span>
+            <span className="text-sm text-slate-400">{r.loser}</span>
+            <span className="ml-auto text-xs font-bold text-orange-300 shrink-0">{r.score}</span>
           </div>
-          <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-3">
-            <span className="font-semibold text-sm text-white">Evan Joe Jerin</span>
-            <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
-            <span className="font-semibold text-sm text-white">Avyaan</span>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   )

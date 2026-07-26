@@ -2,7 +2,7 @@
 title: "Chess Tournament 2026"
 subtitle: "Two Age Groups | Round-Robin → Semifinals → Final"
 sport: chess
-status: ongoing
+status: completed
 live_stream_url: "https://www.youtube.com/live"
 event_date: "2026-07-25"
 event_time: "Sat 2:00 PM (Group Stage) · Sun 11:00 AM (Knockout)"
@@ -101,22 +101,30 @@ tournaments:
           label: "SF1: Nisha B. vs Aarush P."
           player1: "Nisha Bansal"
           player2: "Aarush Pradish"
-          result: null
+          result: "0-2"
+          winner: "Aarush Pradish"
+          score_detail: "R1: 0–1, R2: 0–1"
         - id: sf2
           label: "SF2: Arjun M. vs Samaira A."
           player1: "Arjun Madiraju"
           player2: "Samaira Agrawal"
-          result: null
+          result: "1-2"
+          winner: "Samaira Agrawal"
+          score_detail: "R1: 1–0, R2: 0–1, Armageddon: 0–1"
       final:
         label: "Final — Rapid 15+10"
-        player1: null
-        player2: null
-        result: null
+        player1: "Samaira Agrawal"
+        player2: "Aarush Pradish"
+        result: "1-2"
+        winner: "Aarush Pradish"
+        score_detail: "R1: 1–0, R2: 0–1, Armageddon: 0–1"
       third_place:
         label: "3rd Place — Rapid 15+10"
-        player1: null
-        player2: null
-        result: null
+        player1: "Nisha Bansal"
+        player2: "Arjun Madiraju"
+        result: "0-2"
+        winner: "Arjun Madiraju"
+        score_detail: "R1: 0–1, R2: 0–1"
 
   - age_group: "Age up to 10"
     subtitle: "13 Players | Two Groups Round-Robin → Semifinals → Final"
@@ -253,22 +261,30 @@ tournaments:
           label: "SF1: Netik vs Aviroon"
           player1: "Netik Chowdary"
           player2: "Aviroon Das"
-          result: null
+          result: "1-2"
+          winner: "Aviroon Das"
+          score_detail: "R1: 1–0, R2: 0–1, Armageddon: 0–1"
         - id: sf2
           label: "SF2: Evan vs Avyaan"
           player1: "Evan Joe Jerin"
           player2: "Avyaan"
-          result: null
+          result: "2-0"
+          winner: "Evan Joe Jerin"
+          score_detail: "R1: 1–0, R2: 1–0"
       final:
         label: "Final — Rapid 15+10"
-        player1: null
-        player2: null
-        result: null
+        player1: "Evan Joe Jerin"
+        player2: "Aviroon Das"
+        result: "1-2"
+        winner: "Aviroon Das"
+        score_detail: "R1: 1–0, R2: 0–1, Armageddon: 0–1"
       third_place:
         label: "3rd Place — Rapid 15+10"
-        player1: null
-        player2: null
-        result: null
+        player1: "Netik Chowdary"
+        player2: "Avyaan"
+        result: "0-2"
+        winner: "Avyaan"
+        score_detail: "R1: 0–1, R2: 0–1"
 ---
 
 ## Rules & Format

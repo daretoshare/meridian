@@ -150,18 +150,18 @@ export default async function HomePage() {
         <MatchFlashCardLoader />
       </section>
 
-      {/* Chess Semifinals Flash Card */}
+      {/* Chess Results Flash Card */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
         <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-5 text-white">
           <div className="flex items-center justify-between gap-4 mb-4">
-            <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-xs font-semibold text-orange-300 px-3 py-1 rounded-full">
-              ♟ Chess · Semifinals Set
+            <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-xs font-semibold text-amber-300 px-3 py-1 rounded-full">
+              ♟ Chess · Champions Crowned
             </span>
             <Link
               href="/scores/chess-2026"
               className="text-xs text-slate-400 hover:text-white font-medium transition-colors shrink-0"
             >
-              View draw →
+              Full results →
             </Link>
           </div>
 
@@ -170,15 +170,14 @@ export default async function HomePage() {
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Age 10+</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
-                  <span className="text-sm font-semibold text-white">Nisha Bansal</span>
-                  <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
-                  <span className="text-sm font-semibold text-white">Aarush Pradish</span>
+                <div className="flex items-center gap-2 bg-amber-500/15 border border-amber-400/30 rounded-xl px-4 py-2.5">
+                  <span className="text-base leading-none">🏆</span>
+                  <span className="text-sm font-bold text-white">Aarush Pradish</span>
+                  <span className="text-xs text-amber-300 ml-auto shrink-0">Champion</span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
-                  <span className="text-sm font-semibold text-white">Arjun Madiraju</span>
-                  <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
-                  <span className="text-sm font-semibold text-white">Samaira Agrawal</span>
+                <div className="flex items-center gap-2 bg-white/8 border border-white/10 rounded-xl px-4 py-2.5">
+                  <span className="text-sm font-semibold text-slate-300">Samaira Agrawal</span>
+                  <span className="text-xs text-slate-500 ml-auto shrink-0">Runner-up</span>
                 </div>
               </div>
             </div>
@@ -187,15 +186,14 @@ export default async function HomePage() {
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Age up to 10</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
-                  <span className="text-sm font-semibold text-white">Netik Chowdary</span>
-                  <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
-                  <span className="text-sm font-semibold text-white">Aviroon Das</span>
+                <div className="flex items-center gap-2 bg-amber-500/15 border border-amber-400/30 rounded-xl px-4 py-2.5">
+                  <span className="text-base leading-none">🏆</span>
+                  <span className="text-sm font-bold text-white">Aviroon Das</span>
+                  <span className="text-xs text-amber-300 ml-auto shrink-0">Champion</span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
-                  <span className="text-sm font-semibold text-white">Evan Joe Jerin</span>
-                  <span className="text-xs font-bold text-orange-400 mx-1">VS</span>
-                  <span className="text-sm font-semibold text-white">Avyaan</span>
+                <div className="flex items-center gap-2 bg-white/8 border border-white/10 rounded-xl px-4 py-2.5">
+                  <span className="text-sm font-semibold text-slate-300">Evan Joe Jerin</span>
+                  <span className="text-xs text-slate-500 ml-auto shrink-0">Runner-up</span>
                 </div>
               </div>
             </div>
