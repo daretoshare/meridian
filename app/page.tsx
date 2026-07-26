@@ -169,15 +169,18 @@ export default async function HomePage() {
             {/* Age 10+ */}
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Age 10+</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="flex items-center gap-2 bg-amber-500/15 border border-amber-400/30 rounded-xl px-4 py-2.5">
-                  <span className="text-base leading-none">🏆</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div className="flex items-center gap-2 bg-amber-500/15 border border-amber-400/30 rounded-xl px-3 py-2.5">
+                  <span className="text-base leading-none">🥇</span>
                   <span className="text-sm font-bold text-white">Aarush Pradish</span>
-                  <span className="text-xs text-amber-300 ml-auto shrink-0">Champion</span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/8 border border-white/10 rounded-xl px-4 py-2.5">
+                <div className="flex items-center gap-2 bg-white/8 border border-white/10 rounded-xl px-3 py-2.5">
+                  <span className="text-base leading-none">🥈</span>
                   <span className="text-sm font-semibold text-slate-300">Samaira Agrawal</span>
-                  <span className="text-xs text-slate-500 ml-auto shrink-0">Runner-up</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/8 border border-white/10 rounded-xl px-3 py-2.5">
+                  <span className="text-base leading-none">🥉</span>
+                  <span className="text-sm font-semibold text-slate-400">Arjun Madiraju</span>
                 </div>
               </div>
             </div>
@@ -185,15 +188,18 @@ export default async function HomePage() {
             {/* Age up to 10 */}
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Age up to 10</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="flex items-center gap-2 bg-amber-500/15 border border-amber-400/30 rounded-xl px-4 py-2.5">
-                  <span className="text-base leading-none">🏆</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div className="flex items-center gap-2 bg-amber-500/15 border border-amber-400/30 rounded-xl px-3 py-2.5">
+                  <span className="text-base leading-none">🥇</span>
                   <span className="text-sm font-bold text-white">Aviroon Das</span>
-                  <span className="text-xs text-amber-300 ml-auto shrink-0">Champion</span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/8 border border-white/10 rounded-xl px-4 py-2.5">
+                <div className="flex items-center gap-2 bg-white/8 border border-white/10 rounded-xl px-3 py-2.5">
+                  <span className="text-base leading-none">🥈</span>
                   <span className="text-sm font-semibold text-slate-300">Evan Joe Jerin</span>
-                  <span className="text-xs text-slate-500 ml-auto shrink-0">Runner-up</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/8 border border-white/10 rounded-xl px-3 py-2.5">
+                  <span className="text-base leading-none">🥉</span>
+                  <span className="text-sm font-semibold text-slate-400">Avyaan</span>
                 </div>
               </div>
             </div>
