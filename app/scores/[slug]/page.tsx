@@ -400,88 +400,88 @@ const CATEGORY_STORIES: Record<string, {
   gradient: string
   stats: { title: string; value: string }[]
   narrative: string
-  sf: string[]
-  sfLabel: string
+  results: string[]
+  resultsLabel: string
 }> = {
   MS: {
     gradient: 'from-slate-900 to-slate-800',
     stats: [
-      { title: 'QR3 Leader', value: 'Ketan Suthar — 3 rounds, 0 dropped' },
-      { title: 'Day 1 Thriller', value: 'Gaurav C 23–21 Gaurav J — deuce drama' },
+      { title: 'Champion', value: 'Manoj Shenoy — won 21–15 in the final' },
+      { title: 'SF Upset', value: 'Ketan Suthar (top seed) knocked out 21–13' },
     ],
-    narrative: 'Ketan Suthar (510201) has been a wrecking ball — 21–5, 21–14, 21–4 across three qualifying rounds without dropping a game. Manoj Shenoy upset the seedings by ousting Gaurav Chakravorty 21–4 in QR2. Two QR3 deciders (Manoj vs Biswajeet, Shobhit vs Ankit) will set the semifinal field. Ketan awaits.',
-    sf: ['Ketan Suthar vs QR3 winner', 'TBD vs TBD'],
-    sfLabel: 'Semifinals (pending QR3)',
+    narrative: "Manoj Shenoy's run to the title was the story of the tournament. He first stunned Biswajeet Das 21–6 in the semis, then overcame Shobhit Gupta 21–15 in a closely fought final. Ketan Suthar — unbeaten through qualifying — fell 21–13 to Shobhit in the other semi, ending his undefeated run. Biswajeet Das took the bronze.",
+    results: ['🥇 Final: Manoj Shenoy 21–15 Shobhit Gupta', '🥈 Runner-up: Shobhit Gupta', '🥉 3rd: Biswajeet Das (bt Ketan 21–13)'],
+    resultsLabel: 'Final Results',
   },
   WS: {
     gradient: 'from-indigo-900 to-purple-900',
     stats: [
-      { title: 'Clinical Start', value: 'Priyansha Verma — 21–7 in QR1' },
-      { title: 'Deuce Drama', value: 'Ankita bt Aakansha 23–21' },
+      { title: 'Champion', value: 'Priyansha Verma — won 15–4 in the final' },
+      { title: 'SF Flyer', value: 'Priyansha bt Aakansha 15–1 · near walkover' },
     ],
-    narrative: "Priyansha Verma dispatched Nisha Bansal 21–7 to signal her intent, while Ankita Pattnaik survived a tense 23–21 deuce battle against Aakansha Baluni. Sanghamitra Barman advanced after Nisha (510242)'s match was left incomplete. Four strong players, two spots — the final is yet to be written.",
-    sf: ['Priyansha Verma vs Aakansha Baluni', 'Ankita Pattnaik vs Sanghamitra Barman'],
-    sfLabel: "Today's Semifinals",
+    narrative: "Priyansha Verma was simply in a different class. She dispatched Aakansha Baluni 15–1 in the semis, and then dominated Sanghamitra Barman 15–4 in the final to claim the Women's Singles crown without breaking a sweat. Sanghamitra had edged out Ankita Pattnaik 15–12 in the other semi. Ankita took the bronze over Aakansha.",
+    results: ['🥇 Final: Priyansha Verma 15–4 Sanghamitra Barman', '🥈 Runner-up: Sanghamitra Barman', '🥉 3rd: Ankita Pattnaik (bt Aakansha 21–16)'],
+    resultsLabel: 'Final Results',
   },
   MD: {
     gradient: 'from-blue-900 to-cyan-900',
     stats: [
-      { title: 'Most Dominant', value: 'Biswajeet + Manoj — 21–8, 21–4' },
-      { title: 'Closest Match', value: 'Nishant + Rajeev 23–21 vs Anshu + Ankit' },
+      { title: 'Champions', value: 'Biswajeet + Manoj — won 21–7 in the final' },
+      { title: 'SF Thriller', value: 'Biswajeet + Manoj edged 23–21 vs Peeyush + Shobhit' },
     ],
-    narrative: 'Biswajeet Das & Manoj Shenoy demolished every team in their path — 21–8 in QR1, then a commanding 21–4 to eliminate Venkatesh & Syam. Vijay Bala & Abhishek Rathore have been equally methodical. Peeyush & Shobhit return as a third power pair after their 21–8 QR2 run.',
-    sf: ['Peeyush + Shobhit vs Biswajeet + Manoj', 'Nishant + Rajeev vs Vijay + Abhishek'],
-    sfLabel: "Today's Semifinals",
+    narrative: "Biswajeet Das & Manoj Shenoy survived a deuce-point thriller in the semis — edging Peeyush & Shobhit 23–21 — before turning dominant in the final, dismantling Vijay Bala & Abhishek Rathore 21–7 to claim the Men's Doubles title. The other semi was a straight sets win for Vijay & Abhishek 21–8 over Nishant & Rajeev.",
+    results: ['🥇 Final: Biswajeet+Manoj 21–7 Vijay+Abhishek', '🥈 Runner-up: Vijay Bala + Abhishek Rathore', '🥉 3rd: Peeyush + Shobhit (bt Nishant+Rajeev 21–11)'],
+    resultsLabel: 'Final Results',
   },
   MID: {
     gradient: 'from-rose-900 to-pink-900',
     stats: [
-      { title: 'Nervy Qualify', value: 'Ketan + Komal 21–19 in QR2' },
-      { title: 'Surprise Exit', value: 'DEBADATTA + Lipsa 0–21 walkover loss' },
+      { title: 'Champions', value: 'Biswajeet + Ankita — won 15–7 in the final' },
+      { title: 'Tight Bronze', value: 'Ketan + Komal edged 22–20 in deuce' },
     ],
-    narrative: 'Ketan Suthar & Komal navigated a near-escape 21–19 against Priyansha & Prashant in QR2 to book their final four spot. Shobhit & Shruti Gupta powered through with two commanding wins. The SF clash between Ketan+Komal and Biswajeet+Ankita is a blockbuster — Priyansha & Prashant get another chance in the second semi.',
-    sf: ['Ketan + Komal vs Biswajeet + Ankita', 'Shobhit + Shruti vs Priyansha + Prashant'],
-    sfLabel: "Today's Semifinals",
+    narrative: "Biswajeet Das & Ankita Pattnaik swept through the draw — beating Ketan & Komal 21–12 in the semis and then Shobhit & Shruti 15–7 to claim Mixed Doubles gold. Shobhit & Shruti had cruised past Priyansha & Prashant 15–2 in their semi. The 3rd place match went to deuce, with Ketan & Komal holding on 22–20.",
+    results: ['🥇 Final: Biswajeet+Ankita 15–7 Shobhit+Shruti', '🥈 Runner-up: Shobhit + Shruti Gupta', '🥉 3rd: Ketan + Komal (22–20 in deuce)'],
+    resultsLabel: 'Final Results',
   },
   BS: {
     gradient: 'from-green-900 to-emerald-900',
     stats: [
-      { title: 'QR1 Dominant', value: 'Ishan Deb — 21–5 · no contest' },
-      { title: 'Twice Played', value: 'Tabish beat Vishaj 21–15 in repêchage' },
+      { title: 'Champion', value: 'Ishan Deb — won 15–5 in the final' },
+      { title: 'SF Form', value: 'Ishan bt Arshit 21–12 · composed display' },
     ],
-    narrative: 'Ishan Deb made a statement — 21–5 against Ridhaan in a one-sided opener. But Ridhaan is back for revenge in today\'s other semi after Tabish Ansari advanced via the closest-loser repêchage (beating Vishaj 21–15). Arshit pulls off the upset of Day 1, dumping Vishaj 21–10.',
-    sf: ['Ishan Deb vs Arshit', 'Ridhaan Vijayshekar vs Tabish Ansari'],
-    sfLabel: "Today's Semifinals",
+    narrative: "Ishan Deb was the class of the Boys Singles field from start to finish. He beat Arshit 21–12 in the semis — a controlled, confident display — and then dispatched Tabish Ansari 15–5 in the final (15-pt format) to take the title. Tabish had overcome Ridhaan Vijayshekar 21–14 in the other semi to earn his runner-up spot.",
+    results: ['🥇 Final: Ishan Deb 15–5 Tabish Ansari', '🥈 Runner-up: Tabish Ansari', '🥉 3rd: Ridhaan Vijayshekar'],
+    resultsLabel: 'Final Results',
   },
   GS: {
     gradient: 'from-fuchsia-900 to-violet-900',
     stats: [
-      { title: 'Dominant Display', value: 'Yuvika Gupta — 21–0 walkover' },
-      { title: 'Gritty Win', value: 'Saanvi Agrawal 15–11 in opener' },
+      { title: 'Champion', value: 'Shreya Shaanvi — won 15–7 in the final' },
+      { title: 'SF Sweep', value: 'Shreya bt Saanvi 15–4 · clinical win' },
     ],
-    narrative: 'Yuvika Gupta announced herself with a 21–0 win, while Saanvi Agrawal ground out a tighter 15–11 result. Ashwika Gopu (58202) was commanding at 21–11. The big moment: Shreya Shaanvi beat Samaira 15–8 — a notable scalp. Saanvi vs Shreya and Ashwika vs Yuvika set up a blockbuster semifinal day.',
-    sf: ['Saanvi Agrawal vs Shreya Shaanvi', 'Ashwika Gopu vs Yuvika Gupta'],
-    sfLabel: "Today's Semifinals",
+    narrative: "Shreya Shaanvi produced the tournament's big upset — beating Saanvi Agrawal 15–4 in the semis and then defeating Ashwika Gopu 15–7 in the final to claim Girls Singles gold. Ashwika had beaten Yuvika Gupta 21–12 in the other semi. The 3rd-place match between Saanvi and Yuvika was not played.",
+    results: ['🥇 Final: Shreya Shaanvi 15–7 Ashwika Gopu', '🥈 Runner-up: Ashwika Gopu', '🥉 3rd: TBD (match not played)'],
+    resultsLabel: 'Final Results',
   },
   KBS: {
     gradient: 'from-amber-900 to-orange-900',
     stats: [
-      { title: 'Comeback Kid', value: 'Vivaan Mishra — lost QR1, won QR2' },
-      { title: 'Sharp Shooter', value: 'Sahil — 15–8, 15–10 · two clean wins' },
+      { title: 'Champion', value: 'Sahil — won 15–11 in the final' },
+      { title: 'Comeback Blocked', value: 'Aryan Agarwal upset Atharv 17–15 in SF' },
     ],
-    narrative: 'The kids category delivered the tournament\'s best storyline: Vivaan Mishra lost 8–15 to Sahil in QR1, yet refused to go home — he returned to beat Darshit 15–9 and win his second-chance berth. Now he faces Sahil again in the semifinal. On the other side, Atharv Singhal earned a clash against Aryan Agarwal.',
-    sf: ['Sahil vs Vivaan Mishra', 'Atharv Singhal vs Aryan Agarwal'],
-    sfLabel: "Today's Semifinals",
+    narrative: "Sahil dominated from the start and held off a spirited Aryan Agarwal 15–11 in the final to claim Kids Boys gold. Aryan had sprung the semi-final upset of the tournament — beating Atharv Singhal 17–15 in a tense 15-pt match. Sahil beat Vivaan Mishra 15–7 in his semi. Atharv claimed the bronze.",
+    results: ['🥇 Final: Sahil 15–11 Aryan Agarwal', '🥈 Runner-up: Aryan Agarwal', '🥉 3rd: Atharv Singhal (bt Vivaan 15–3)'],
+    resultsLabel: 'Final Results',
   },
   KGS: {
     gradient: 'from-pink-900 to-rose-900',
     stats: [
-      { title: 'Clean Sweep', value: 'All QR1 winners advanced comfortably' },
-      { title: 'Top Seed', value: 'Pratyusha — 15–5 · composed debut' },
+      { title: 'Champion', value: 'Maedhini S — won 15–10 in the final' },
+      { title: 'SF Upset', value: 'Miraya bt top seed Pratyusha 21–8' },
     ],
-    narrative: 'The Kids Girls category saw four clean, confident qualifying victories — no walkovers, no upsets. Pratyusha won 15–5 with composure beyond her age. Maedhini S followed with a solid 15–3. Miraya edged Jahnvi 15–4 and Ishita Deb came through 15–11 in the tightest match. The final is wide open.',
-    sf: ['Pratyusha vs Miraya', 'Maedhini S vs Ishita Deb'],
-    sfLabel: "Today's Semifinals",
+    narrative: "Maedhini S made her mark with a dominant run — beating Ishita Deb 15–12 in the semis and then Miraya 15–10 in the final to claim the Kids Girls title. Miraya had sprung the biggest upset of the category, knocking out top-seeded Pratyusha 21–8 in the semis. Ishita Deb took the bronze, beating Pratyusha 21–17.",
+    results: ['🥇 Final: Maedhini S 15–10 Miraya', '🥈 Runner-up: Miraya', '🥉 3rd: Ishita Deb (bt Pratyusha 21–17)'],
+    resultsLabel: 'Final Results',
   },
 }
 
@@ -500,11 +500,11 @@ function CategoryStory({ cat }: { cat: BadmintonCategory }) {
       </div>
       <p className="text-xs text-white/75 leading-relaxed">{s.narrative}</p>
       <div>
-        <p className="text-[10px] font-bold text-white/50 uppercase tracking-wide mb-2">{s.sfLabel}</p>
+        <p className="text-[10px] font-bold text-white/50 uppercase tracking-wide mb-2">{s.resultsLabel}</p>
         <div className="space-y-1.5">
-          {s.sf.map((match, i) => (
+          {s.results.map((line, i) => (
             <div key={i} className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs font-medium text-white/90">
-              {match}
+              {line}
             </div>
           ))}
         </div>

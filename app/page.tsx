@@ -135,11 +135,6 @@ export default async function HomePage() {
         </Link>
       </section>
 
-      {/* Match Flash Card */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
-        <MatchFlashCardLoader />
-      </section>
-
       {/* Chess Results Flash Card */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
         <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-5 text-white">
