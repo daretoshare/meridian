@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Trophy, Camera, Play, Quote, Heart, Star } from 'lucide-react'
+import { ArrowLeft, Trophy, Camera, Play, Heart, Star } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 type PodiumEntry = { rank: 1 | 2 | 3; name: string; note?: string; photo?: string }
-type ChampionGroup = { label: string; podium: PodiumEntry[] }
+type GroupStory = { gradient: string; stats: { title: string; value: string }[]; narrative: string; highlights: string[]; scoresLink: string }
+type ChampionGroup = { label: string; podium: PodiumEntry[]; story?: GroupStory }
 type ChampionSport = { sport: string; emoji: string; groups: ChampionGroup[] }
 
 const CHAMPIONS: ChampionSport[] = [
@@ -22,6 +23,16 @@ const CHAMPIONS: ChampionSport[] = [
           { rank: 2, name: 'Samaira Agrawal', photo: undefined },
           { rank: 3, name: 'Arjun Madiraju', photo: undefined },
         ],
+        story: {
+          gradient: 'from-slate-900 to-slate-800',
+          stats: [
+            { title: 'Group A Undefeated', value: 'Arjun Madiraju — 4/4' },
+            { title: 'Final decider', value: 'Armageddon tiebreak' },
+          ],
+          narrative: 'Arjun Madiraju swept Group A without dropping a point, while Nisha Bansal edged Group B in a dramatic draw against Samaira. The knockouts brought the real drama — Aarush dismantled Nisha 2–0, Samaira edged Arjun in Armageddon. The final mirrored the semi: Samaira won Round 1, Aarush levelled, then held his nerve in Armageddon to be crowned champion.',
+          highlights: ['SF1: Aarush Pradish def. Nisha Bansal 2–0', 'SF2: Samaira Agrawal def. Arjun Madiraju 2–1 (Arma)', '3rd: Arjun Madiraju def. Nisha Bansal 2–0', 'Final: Aarush Pradish def. Samaira Agrawal 2–1 (Arma)'],
+          scoresLink: '/scores/chess-2026',
+        },
       },
       {
         label: 'Age up to 10',
@@ -30,6 +41,16 @@ const CHAMPIONS: ChampionSport[] = [
           { rank: 2, name: 'Evan Joe Jerin', photo: undefined },
           { rank: 3, name: 'Avyaan', photo: undefined },
         ],
+        story: {
+          gradient: 'from-slate-800 to-slate-700',
+          stats: [
+            { title: 'Two perfect groups', value: 'Netik & Evan — 5/5 each' },
+            { title: 'Upset of the day', value: 'Aviroon def. Netik in Armageddon' },
+          ],
+          narrative: 'Netik Chowdary and Evan Joe Jerin both went 5/5 in the group stage — the tournament seemed set for a blockbuster final between them. Aviroon Das had other ideas: he beat the group-stage leader Netik via Armageddon in the semis. Evan cruised past Avyaan 2–0. The final was a classic — Evan took Round 1, Aviroon levelled, then claimed Armageddon to become champion.',
+          highlights: ['SF1: Aviroon Das def. Netik Chowdary 2–1 (Arma)', 'SF2: Evan Joe Jerin def. Avyaan 2–0', '3rd: Avyaan def. Netik Chowdary 2–0', 'Final: Aviroon Das def. Evan Joe Jerin 2–1 (Arma)'],
+          scoresLink: '/scores/chess-2026',
+        },
       },
     ],
   },
@@ -37,14 +58,94 @@ const CHAMPIONS: ChampionSport[] = [
     sport: 'Badminton',
     emoji: '🏸',
     groups: [
-      { label: "Women's Singles",      podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
-      { label: "Men's Singles",        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
-      { label: "Men's Doubles",        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
-      { label: 'Mixed Doubles',        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
-      { label: 'Boys Singles (10–16)', podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
-      { label: 'Girls Singles (10–16)',podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
-      { label: 'Kids Boys (5–10)',     podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
-      { label: 'Kids Girls (5–10)',    podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }] },
+      {
+        label: "Women's Singles",
+        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }],
+        story: {
+          gradient: 'from-indigo-900 to-purple-900',
+          stats: [{ title: 'Clinical start', value: 'Priyansha Verma — 21–7 in QR1' }, { title: 'Deuce drama', value: 'Ankita bt Aakansha 23–21' }],
+          narrative: "Priyansha Verma dispatched Nisha Bansal 21–7 to signal her intent, while Ankita Pattnaik survived a 23–21 deuce battle. Sanghamitra Barman advances to complete a strong semifinal field.",
+          highlights: ['SF: Priyansha Verma vs Aakansha Baluni', 'SF: Ankita Pattnaik vs Sanghamitra Barman'],
+          scoresLink: '/scores/badminton-2026#cat-WS',
+        },
+      },
+      {
+        label: "Men's Singles",
+        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }],
+        story: {
+          gradient: 'from-slate-900 to-slate-800',
+          stats: [{ title: 'QR3 leader', value: 'Ketan Suthar — 3 rounds, 0 dropped' }, { title: 'Thriller', value: 'Gaurav C 23–21 Gaurav J' }],
+          narrative: 'Ketan Suthar has been a wrecking ball — 21–5, 21–14, 21–4 across three qualifying rounds. Manoj Shenoy upset Gaurav Chakravorty 21–4 in QR2. QR3 deciders will set the semifinal field.',
+          highlights: ['SF: Ketan Suthar vs QR3 winner', 'SF: TBD vs TBD'],
+          scoresLink: '/scores/badminton-2026#cat-MS',
+        },
+      },
+      {
+        label: "Men's Doubles",
+        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }],
+        story: {
+          gradient: 'from-blue-900 to-cyan-900',
+          stats: [{ title: 'Closest match', value: 'Nishant+Rajeev 23–21 vs Anshu+Ankit' }, { title: 'Strong pair', value: 'Peeyush+Shobhit — No.1 seed' }],
+          narrative: 'The doubles draw threw up drama from the start — Nishant and Rajeev survived a 23–21 thriller. Peeyush and Shobhit look the pair to beat heading into the semis.',
+          highlights: ['SF: Peeyush+Shobhit vs Biswajeet+Manoj', 'SF: Nishant+Rajeev vs Vijay+Abhishek'],
+          scoresLink: '/scores/badminton-2026#cat-MD',
+        },
+      },
+      {
+        label: 'Mixed Doubles',
+        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }],
+        story: {
+          gradient: 'from-rose-900 to-pink-900',
+          stats: [{ title: 'Top seed', value: 'Ketan+Komal — commanding run' }, { title: 'Rivals', value: 'Shobhit+Shruti — strong challengers' }],
+          narrative: 'Mixed doubles produced tight battles through qualifying. The two headline pairs — Ketan+Komal and Shobhit+Shruti — set up a mouth-watering semifinal showdown.',
+          highlights: ['SF: Ketan+Komal vs Biswajeet+Ankita', 'SF: Shobhit+Shruti vs Priyansha+Prashant'],
+          scoresLink: '/scores/badminton-2026#cat-MID',
+        },
+      },
+      {
+        label: 'Boys Singles (10–16)',
+        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }],
+        story: {
+          gradient: 'from-green-900 to-emerald-900',
+          stats: [{ title: 'Top seed', value: 'Ishan Deb — strong qualifying run' }, { title: 'Repêchage hero', value: 'Tabish Ansari — comeback win' }],
+          narrative: 'Ishan Deb and Ridhaan looked commanding through qualifying. Tabish Ansari produced the best comeback — losing early before returning through the repêchage to claim a semifinal spot.',
+          highlights: ['SF: Ishan Deb vs Arshit', 'SF: Ridhaan vs Tabish Ansari'],
+          scoresLink: '/scores/badminton-2026#cat-BS',
+        },
+      },
+      {
+        label: 'Girls Singles (10–16)',
+        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }],
+        story: {
+          gradient: 'from-fuchsia-900 to-violet-900',
+          stats: [{ title: 'Dominant display', value: 'Yuvika Gupta — 21–0 walkover' }, { title: 'Upset of Day 1', value: 'Shreya Shaanvi bt Samaira 15–8' }],
+          narrative: "Yuvika Gupta announced herself with a 21–0 win. Shreya Shaanvi pulled off the day's big upset, beating Samaira Agrawal 15–8. Ashwika vs Yuvika shapes up as the blockbuster semifinal clash.",
+          highlights: ['SF: Saanvi Agrawal vs Shreya Shaanvi', 'SF: Ashwika Gopu vs Yuvika Gupta'],
+          scoresLink: '/scores/badminton-2026#cat-GS',
+        },
+      },
+      {
+        label: 'Kids Boys (5–10)',
+        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }],
+        story: {
+          gradient: 'from-amber-900 to-orange-900',
+          stats: [{ title: 'Comeback kid', value: 'Vivaan Mishra — lost QR1, won QR2' }, { title: 'Sharp shooter', value: 'Sahil — 15–8, 15–10 clean wins' }],
+          narrative: 'Vivaan Mishra lost to Sahil in QR1, returned through the second chance to win his berth — and now faces Sahil again in the semis. A rematch the kids\' court can\'t wait for.',
+          highlights: ['SF: Sahil vs Vivaan Mishra', 'SF: Atharv Singhal vs Aryan Agarwal'],
+          scoresLink: '/scores/badminton-2026#cat-KBS',
+        },
+      },
+      {
+        label: 'Kids Girls (5–10)',
+        podium: [{ rank: 1, name: 'TBD' }, { rank: 2, name: 'TBD' }, { rank: 3, name: 'TBD' }],
+        story: {
+          gradient: 'from-pink-900 to-rose-900',
+          stats: [{ title: 'Top seeds', value: 'Pratyusha vs Miraya — final matchup' }, { title: 'Exciting final', value: 'Maedhini S vs Ishita Deb' }],
+          narrative: 'The youngest category delivered some of the most exciting play of the day. Pratyusha and Miraya headline one semi, with Maedhini and Ishita on the other side.',
+          highlights: ['SF: Pratyusha vs Miraya', 'SF: Maedhini S vs Ishita Deb'],
+          scoresLink: '/scores/badminton-2026#cat-KGS',
+        },
+      },
     ],
   },
 ]
@@ -81,81 +182,6 @@ const SPONSORS: {
   { tier: 'community', name: 'Community Supporter' },
   { tier: 'community', name: 'Community Supporter' },
   { tier: 'community', name: 'Community Supporter' },
-]
-
-const STORIES = [
-  {
-    id: 'chess-10plus',
-    sport: 'Chess · Age 10+',
-    gradient: 'from-slate-900 to-slate-800',
-    stats: [
-      { title: 'Group A Dominant', value: 'Arjun Madiraju — 4/4 · Undefeated' },
-      { title: 'Group B Winner', value: 'Nisha Bansal — 2.5/3' },
-    ],
-    narrative: 'Group A was a masterclass in precision — Arjun Madiraju swept every board, allowing zero points to opponents. Aarush Pradish held firm for second. Group B brought drama: Nisha Bansal held Samaira to a draw while taking the title, with Samaira earning her semifinal berth on consistency.',
-    sf: ['Nisha Bansal vs Aarush Pradish', 'Arjun Madiraju vs Samaira Agrawal'],
-    link: '/scores/chess-2026',
-  },
-  {
-    id: 'chess-u10',
-    sport: 'Chess · Age up to 10',
-    gradient: 'from-slate-800 to-slate-700',
-    stats: [
-      { title: 'Group A Unstoppable', value: 'Netik Chowdary — 5/5 · Perfect' },
-      { title: 'Group B Unstoppable', value: 'Evan Joe Jerin — 5/5 · Perfect' },
-    ],
-    narrative: 'Two perfect group stage campaigns — Netik Chowdary and Evan Joe Jerin both went 5/5 in their respective groups without dropping a point. Aviroon Das (4 pts) and Avyaan (4 pts) claimed the second semifinal spots. The knockout stage sets up the clash the community has been waiting for.',
-    sf: ['Netik Chowdary vs Aviroon Das', 'Evan Joe Jerin vs Avyaan'],
-    link: '/scores/chess-2026',
-  },
-  {
-    id: 'badminton-ms',
-    sport: 'Badminton · Men\'s Singles',
-    gradient: 'from-slate-900 to-slate-800',
-    stats: [
-      { title: 'QR3 Leader', value: 'Ketan Suthar — 3 rounds, 0 dropped' },
-      { title: 'Day 1 Thriller', value: 'Gaurav C 23–21 Gaurav J — deuce drama' },
-    ],
-    narrative: 'Ketan Suthar (510201) has been a wrecking ball — 21–5, 21–14, 21–4 across three qualifying rounds. Manoj Shenoy upset Gaurav Chakravorty 21–4 in QR2. Two QR3 deciders will set the semifinal field. Ketan awaits.',
-    sf: ['Ketan Suthar vs QR3 winner', 'TBD vs TBD'],
-    link: '/scores/badminton-2026#cat-MS',
-  },
-  {
-    id: 'badminton-kbs',
-    sport: 'Badminton · Kids Boys Singles',
-    gradient: 'from-amber-900 to-orange-900',
-    stats: [
-      { title: 'Comeback Kid', value: 'Vivaan Mishra — lost QR1, won QR2' },
-      { title: 'Sharp Shooter', value: 'Sahil — 15–8, 15–10 · two clean wins' },
-    ],
-    narrative: "Vivaan Mishra lost 8–15 to Sahil in QR1, yet returned to beat Darshit 15–9 and win his second-chance berth. Now he faces Sahil again in the semifinal — a rematch the kids' court can't wait for.",
-    sf: ['Sahil vs Vivaan Mishra', 'Atharv Singhal vs Aryan Agarwal'],
-    link: '/scores/badminton-2026#cat-KBS',
-  },
-  {
-    id: 'badminton-ws',
-    sport: 'Badminton · Women\'s Singles',
-    gradient: 'from-indigo-900 to-purple-900',
-    stats: [
-      { title: 'Clinical Start', value: 'Priyansha Verma — 21–7 in QR1' },
-      { title: 'Deuce Drama', value: 'Ankita bt Aakansha 23–21' },
-    ],
-    narrative: "Priyansha Verma dispatched Nisha Bansal 21–7 to signal her intent, while Ankita Pattnaik survived a 23–21 deuce battle. Sanghamitra Barman advances to complete a strong semifinal field.",
-    sf: ['Priyansha Verma vs Aakansha Baluni', 'Ankita Pattnaik vs Sanghamitra Barman'],
-    link: '/scores/badminton-2026#cat-WS',
-  },
-  {
-    id: 'badminton-gs',
-    sport: 'Badminton · Girls Singles 10–16',
-    gradient: 'from-fuchsia-900 to-violet-900',
-    stats: [
-      { title: 'Dominant Display', value: 'Yuvika Gupta — 21–0 walkover' },
-      { title: 'Upset of the Day', value: 'Shreya Shaanvi bt Samaira 15–8' },
-    ],
-    narrative: "Yuvika Gupta announced herself with a 21–0 win. Shreya Shaanvi pulled off the day's big upset, beating Samaira Agrawal 15–8. Ashwika Gopu vs Yuvika shapes up as the blockbuster semifinal clash.",
-    sf: ['Saanvi Agrawal vs Shreya Shaanvi', 'Ashwika Gopu vs Yuvika Gupta'],
-    link: '/scores/badminton-2026#cat-GS',
-  },
 ]
 
 // ─── Components ───────────────────────────────────────────────────────────────
@@ -247,6 +273,7 @@ function PodiumGroup({ group }: { group: ChampionGroup }) {
   const gold   = group.podium.find(p => p.rank === 1)!
   const silver = group.podium.find(p => p.rank === 2)!
   const bronze = group.podium.find(p => p.rank === 3)!
+  const s = group.story
   return (
     <div className="space-y-3">
       {/* Group label */}
@@ -261,6 +288,33 @@ function PodiumGroup({ group }: { group: ChampionGroup }) {
         <PodiumCard entry={silver} />
         <PodiumCard entry={bronze} />
       </div>
+      {/* Inline story */}
+      {s && (
+        <div className={`bg-gradient-to-br ${s.gradient} rounded-2xl p-5 text-white space-y-3`}>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs font-bold text-white/50 uppercase tracking-widest">Tournament story</p>
+            <Link href={s.scoresLink} className="text-[10px] text-orange-300 hover:text-white transition-colors font-medium shrink-0">
+              Full draw →
+            </Link>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {s.stats.map((st) => (
+              <div key={st.title} className="bg-white/10 border border-white/15 rounded-xl px-3 py-2">
+                <p className="text-[10px] text-white/40 font-semibold uppercase tracking-wide mb-0.5">{st.title}</p>
+                <p className="text-xs font-bold text-orange-300">{st.value}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-white/70 leading-relaxed">{s.narrative}</p>
+          <div className="space-y-1.5">
+            {s.highlights.map((h, i) => (
+              <div key={i} className="bg-white/8 border border-white/10 rounded-lg px-3 py-1.5 text-xs font-medium text-white/80">
+                {h}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -315,38 +369,6 @@ function VideoCard({ video, featured }: { video: typeof VIDEO_PLACEHOLDERS[0]; f
   )
 }
 
-function StoryCard({ story }: { story: typeof STORIES[0] }) {
-  return (
-    <div className={`bg-gradient-to-br ${story.gradient} rounded-2xl p-5 text-white space-y-4`}>
-      <div className="flex items-center justify-between gap-2">
-        <p className="text-xs font-bold text-white/60 uppercase tracking-wide">{story.sport}</p>
-        <Link href={story.link} className="text-[10px] text-orange-300 hover:text-white transition-colors font-medium">
-          Full draw →
-        </Link>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {story.stats.map((st) => (
-          <div key={st.title} className="bg-white/10 border border-white/20 rounded-xl px-3 py-2">
-            <p className="text-[10px] text-white/50 font-semibold uppercase tracking-wide mb-0.5">{st.title}</p>
-            <p className="text-xs font-bold text-orange-300">{st.value}</p>
-          </div>
-        ))}
-      </div>
-      <p className="text-xs text-white/75 leading-relaxed">{story.narrative}</p>
-      <div>
-        <p className="text-[10px] font-bold text-white/40 uppercase tracking-wide mb-2">Semifinals</p>
-        <div className="space-y-1.5">
-          {story.sf.map((match, i) => (
-            <div key={i} className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs font-medium text-white/90">
-              {match}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function CelebratePage() {
@@ -364,7 +386,6 @@ export default function CelebratePage() {
             <a href="#champions" className="hover:text-slate-800 transition-colors shrink-0">Champions</a>
             <a href="#gallery" className="hover:text-slate-800 transition-colors shrink-0">Gallery</a>
             <a href="#highlights" className="hover:text-slate-800 transition-colors shrink-0">Highlights</a>
-            <a href="#stories" className="hover:text-slate-800 transition-colors shrink-0">Stories</a>
             <a href="#sponsors" className="hover:text-slate-800 transition-colors shrink-0">Sponsors</a>
           </div>
         </div>
@@ -495,39 +516,6 @@ export default function CelebratePage() {
           </div>
         </section>
 
-        {/* ── Stories ──────────────────────────────────────────────────── */}
-        <section>
-          <SectionAnchor id="stories" />
-          <div className="flex items-center gap-3 mb-6">
-            <Quote size={18} className="text-orange-500" />
-            <h2 className="text-xl font-extrabold text-slate-900">Tournament stories</h2>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-            {STORIES.map((s) => (
-              <StoryCard key={s.id} story={s} />
-            ))}
-          </div>
-
-          {/* Community voice placeholder */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 text-center space-y-3">
-            <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mx-auto">
-              <Quote size={18} className="text-orange-500" />
-            </div>
-            <h3 className="font-bold text-slate-800 text-sm">Share your moment</h3>
-            <p className="text-xs text-slate-500 max-w-xs mx-auto">
-              Did you play, cheer, or organise? We&apos;d love to hear your story from Independence Day 2026.
-            </p>
-            <a
-              href="https://drive.google.com/drive/folders/1Du4ZaNj38WJgJkzDXlvcaZccKZ0C6MS2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors"
-            >
-              Submit your story
-            </a>
-          </div>
-        </section>
 
         {/* ── Sponsors ─────────────────────────────────────────────────── */}
         <section>
