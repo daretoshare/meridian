@@ -4,7 +4,7 @@ import { getSiteContent, getCulturalRegistrationStatus, getCompetitiveRegistrati
 import RegistrationForm from '@/components/RegistrationForm'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import CountdownBanner from '@/components/CountdownBanner'
-import { Flag, Shield, ClipboardList, Trophy } from 'lucide-react'
+import { Flag, Shield, ClipboardList, Trophy, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import MatchFlashCardLoader from '@/components/MatchFlashCardLoader'
@@ -40,6 +40,13 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <Link
+              href="/celebrate"
+              className="flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-3 py-1.5 rounded-full transition-colors shadow-sm"
+            >
+              <Sparkles size={13} />
+              Celebrate
+            </Link>
             <Link
               href="/scores"
               className="flex items-center gap-1.5 text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-full transition-colors shadow-sm"
