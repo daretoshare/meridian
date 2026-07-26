@@ -3,7 +3,7 @@ title: "Chess Tournament 2026"
 subtitle: "Two Age Groups | Round-Robin → Semifinals → Final"
 sport: chess
 status: ongoing
-live_stream_url: "https://www.youtube.com/live/CHESS_STREAM_PLACEHOLDER"
+live_stream_url: "https://www.youtube.com/live/jCwyOIF9oR0?si=KkmWHGg-i0lCiB1I"
 event_date: "2026-07-25"
 event_time: "Sat 2:00 PM (Group Stage) · Sun 11:00 AM (Knockout)"
 
