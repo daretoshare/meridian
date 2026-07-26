@@ -370,6 +370,191 @@ function ChessAgeGroupSection({ entry }: { entry: ChessTournamentEntry }) {
   )
 }
 
+// ─── Badminton tournament story ──────────────────────────────────────────────
+
+function BadmintonTournamentStory() {
+  const stories = [
+    {
+      id: 'MS',
+      label: 'MS',
+      name: "Men's Singles",
+      emoji: '🏸',
+      gradient: 'from-slate-900 to-slate-800',
+      stats: [
+        { title: 'QR3 Leader', value: 'Ketan Suthar — 3 rounds, 0 dropped' },
+        { title: 'Day 1 Thriller', value: 'Gaurav C 23–21 Gaurav J — deuce drama' },
+      ],
+      narrative: 'Ketan Suthar (510201) has been a wrecking ball — 21–5, 21–14, 21–4 across three qualifying rounds without dropping a game. Manoj Shenoy upset the seedings by ousting Gaurav Chakravorty 21–4 in QR2. Two QR3 deciders (Manoj vs Biswajeet, Shobhit vs Ankit) will set the semifinal field. Ketan awaits.',
+      sf: [
+        'Ketan Suthar vs QR3 winner',
+        'TBD vs TBD',
+      ],
+      sfLabel: 'Semifinals (pending QR3)',
+    },
+    {
+      id: 'WS',
+      label: 'WS',
+      name: "Women's Singles",
+      emoji: '🏸',
+      gradient: 'from-indigo-900 to-purple-900',
+      stats: [
+        { title: 'Clinical Start', value: 'Priyansha Verma — 21–7 in QR1' },
+        { title: 'Upset Alert', value: 'Ankita bt Aakansha 23–21 · deuce drama' },
+      ],
+      narrative: "Priyansha Verma dispatched Nisha Bansal 21–7 to signal her intent, while Ankita Pattnaik survived a tense 23–21 deuce battle against Aakansha Baluni. On the other side of the draw, Sanghamitra Barman advanced via walkover after Nisha (510242)'s match was left incomplete. Four strong players, two semifinal spots decided — the final is yet to be written.",
+      sf: [
+        'Priyansha Verma vs Aakansha Baluni',
+        'Ankita Pattnaik vs Sanghamitra Barman',
+      ],
+      sfLabel: 'Today\'s Semifinals',
+    },
+    {
+      id: 'MD',
+      label: 'MD',
+      name: "Men's Doubles",
+      emoji: '🏸',
+      gradient: 'from-blue-900 to-cyan-900',
+      stats: [
+        { title: 'Most Dominant', value: 'Biswajeet + Manoj — 21–8, 21–4' },
+        { title: 'Closest Match', value: 'Nishant + Rajeev 23–21 vs Anshu + Ankit' },
+      ],
+      narrative: 'Biswajeet Das & Manoj Shenoy demolished every team in their path — 21–8 in QR1, then a commanding 21–4 to eliminate the crowd-favourites Venkatesh & Syam. Vijay Bala & Abhishek Rathore have been equally methodical. Peeyush & Shobhit return as the third power pair after their 21–8 QR2 run. Today\'s semifinals will separate the contenders.',
+      sf: [
+        'Peeyush + Shobhit vs Biswajeet + Manoj',
+        'Nishant + Rajeev vs Vijay + Abhishek',
+      ],
+      sfLabel: 'Today\'s Semifinals',
+    },
+    {
+      id: 'MID',
+      label: 'MID',
+      name: 'Mixed Doubles',
+      emoji: '🏸',
+      gradient: 'from-rose-900 to-pink-900',
+      stats: [
+        { title: 'Nervy Qualify', value: 'Ketan + Komal 21–19 in QR2' },
+        { title: 'Surprise Exit', value: 'DEBADATTA + Lipsa 0–21 walkover loss' },
+      ],
+      narrative: 'Ketan Suthar & Komal navigated a near-escape 21–19 against Priyansha & Prashant in QR2 to book their final four spot. Shobhit & Shruti Gupta powered through with two commanding wins. The semifinal clash between Ketan+Komal and Biswajeet+Ankita is a blockbuster — two pairs with completely different styles. Priyansha & Prashant are back for another chance in the second semi.',
+      sf: [
+        'Ketan + Komal vs Biswajeet + Ankita',
+        'Shobhit + Shruti vs Priyansha + Prashant',
+      ],
+      sfLabel: 'Today\'s Semifinals',
+    },
+    {
+      id: 'BS',
+      label: 'BS',
+      name: 'Boys Singles 10–16',
+      emoji: '🏸',
+      gradient: 'from-green-900 to-emerald-900',
+      stats: [
+        { title: 'QR1 Dominant', value: 'Ishan Deb — 21–5 · no contest' },
+        { title: 'Twice Played', value: 'Tabish beat Vishaj 21–15 in repêchage' },
+      ],
+      narrative: 'Ishan Deb made a statement — 21–5 against Ridhaan Vijayshekar in a one-sided opener. But Ridhaan is back for revenge in today\'s other semifinal after Tabish Ansari advanced via the closest-loser repêchage (beating Vishaj Jha 21–15). Arshit (54183) pulls off the upset of Day 1, dumping Vishaj 21–10. The final four is an explosive mix of form and grit.',
+      sf: [
+        'Ishan Deb vs Arshit',
+        'Ridhaan Vijayshekar vs Tabish Ansari',
+      ],
+      sfLabel: 'Today\'s Semifinals',
+    },
+    {
+      id: 'GS',
+      label: 'GS',
+      name: 'Girls Singles 10–16',
+      emoji: '🏸',
+      gradient: 'from-fuchsia-900 to-violet-900',
+      stats: [
+        { title: 'Dominant Display', value: 'Yuvika Gupta — 21–0 walkover' },
+        { title: 'Gritty Win', value: 'Saanvi Agrawal 15–11 in opener' },
+      ],
+      narrative: 'Yuvika Gupta announced herself with a 21–0 win, while Saanvi Agrawal ground out a tighter 15–11 result. Ashwika Gopu (58202) was commanding at 21–11. The big moment of QR1: Shreya Shaanvi beat Samaira Agrawal 15–8 — a notable scalp. The semifinal draw has Saanvi vs Shreya in a rematch potential and Ashwika vs Yuvika as the blockbuster clash.',
+      sf: [
+        'Saanvi Agrawal vs Shreya Shaanvi',
+        'Ashwika Gopu vs Yuvika Gupta',
+      ],
+      sfLabel: 'Today\'s Semifinals',
+    },
+    {
+      id: 'KBS',
+      label: 'KBS',
+      name: 'Kids Boys Singles 5–10',
+      emoji: '🏸',
+      gradient: 'from-amber-900 to-orange-900',
+      stats: [
+        { title: 'Comeback Kid', value: 'Vivaan Mishra — lost QR1, won QR2' },
+        { title: 'Sharp Shooter', value: 'Sahil — 15–8, 15–10 · two clean wins' },
+      ],
+      narrative: 'The kids category delivered the tournament\'s best storyline: Vivaan Mishra lost 8–15 to Sahil in QR1, yet refused to go home — he returned to beat Darshit 15–9 and win his second-chance berth. Now he faces Sahil again in the semifinal. On the other side, Atharv Singhal brushed aside Nachiket 15–2 and Varenyam 15–7 to earn a clash against Aryan Agarwal.',
+      sf: [
+        'Sahil vs Vivaan Mishra',
+        'Atharv Singhal vs Aryan Agarwal',
+      ],
+      sfLabel: 'Today\'s Semifinals',
+    },
+    {
+      id: 'KGS',
+      label: 'KGS',
+      name: 'Kids Girls Singles 5–10',
+      emoji: '🏸',
+      gradient: 'from-pink-900 to-rose-900',
+      stats: [
+        { title: 'Clean Sweep', value: 'All QR1 winners advanced comfortably' },
+        { title: 'Top Seed', value: 'Pratyusha — 15–5 · composed debut' },
+      ],
+      narrative: 'The Kids Girls category saw four clean, confident victories in qualifying — no walkovers, no upsets. Pratyusha won 15–5 with composure beyond her age. Maedhini S followed with a solid 15–3. Miraya (510224) edged Jahnvi 15–4 and Ishita Deb came through 15–11 in the tightest match. All four semifinalists earned their spots. The final is wide open.',
+      sf: [
+        'Pratyusha vs Miraya',
+        'Maedhini S vs Ishita Deb',
+      ],
+      sfLabel: 'Today\'s Semifinals',
+    },
+  ]
+
+  return (
+    <div className="space-y-5">
+      <h2 className="text-lg font-extrabold text-slate-900">Tournament Stories</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {stories.map((s) => (
+          <div key={s.id} className={`bg-gradient-to-br ${s.gradient} rounded-2xl p-6 text-white space-y-4`}>
+            {/* Header */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold bg-white/20 border border-white/20 rounded-full px-2.5 py-0.5">{s.label}</span>
+              <h3 className="text-sm font-bold text-white">{s.name}</h3>
+            </div>
+
+            {/* Stat chips */}
+            <div className="flex flex-wrap gap-2">
+              {s.stats.map((st) => (
+                <div key={st.title} className="bg-white/10 border border-white/20 rounded-xl px-3 py-2">
+                  <p className="text-[10px] text-white/50 font-semibold uppercase tracking-wide mb-0.5">{st.title}</p>
+                  <p className="text-xs font-bold text-orange-300">{st.value}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Narrative */}
+            <p className="text-xs text-white/75 leading-relaxed">{s.narrative}</p>
+
+            {/* Semifinals */}
+            <div>
+              <p className="text-[10px] font-bold text-white/50 uppercase tracking-wide mb-2">{s.sfLabel}</p>
+              <div className="space-y-1.5">
+                {s.sf.map((match, i) => (
+                  <div key={i} className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs font-medium text-white/90">
+                    {match}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ─── Badminton components ────────────────────────────────────────────────────
 
 const STAGE_COLORS: Record<string, string> = {
@@ -530,6 +715,9 @@ function BadmintonTournamentPage({ t, badge, date }: { t: ReturnType<typeof getT
             </div>
           ))}
         </div>
+
+        {/* Tournament stories */}
+        <BadmintonTournamentStory />
       </main>
     </div>
   )

@@ -21,126 +21,126 @@ categories:
           - id: "MS-QR1-1"
             p1: "Ketan Suthar (510201)"
             p2: "Nikhil Panicker (58045)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 5
+            winner: "Ketan Suthar (510201)"
           - id: "MS-QR1-2"
             p1: "Gaurav Chakravorty (56154)"
             p2: "Gaurav Jain (59281)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 23
+            score2: 21
+            winner: "Gaurav Chakravorty (56154)"
           - id: "MS-QR1-3"
             p1: "Anshu Goel (58165)"
             p2: "Shobhit Gupta (57065)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 8
+            score2: 21
+            winner: "Shobhit Gupta (57065)"
           - id: "MS-QR1-4"
             p1: "Amit Kumar (57081)"
             p2: "Kabir Anand (57133)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 0
+            winner: "Amit Kumar (57081)"
           - id: "MS-QR1-5"
             p1: "Avinash Mishra (59155)"
             p2: "DEBADATTA TRIPATHY (54255)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 0
+            winner: "Avinash Mishra (59155)"
           - id: "MS-QR1-6"
             p1: "Ankit Parichha (59255)"
             p2: "Amit Agarwal (510185)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 4
+            winner: "Ankit Parichha (59255)"
           - id: "MS-QR1-7"
             p1: "Debasish Khan (59101)"
             p2: "Kamlesh Nayak (58186)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 3
+            score2: 21
+            winner: "Kamlesh Nayak (58186)"
           - id: "MS-QR1-8"
             p1: "Nishant Niranjan (56182)"
             p2: "Manoj Shenoy (62136)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 1
+            score2: 21
+            winner: "Manoj Shenoy (62136)"
           - id: "MS-QR1-9"
             p1: "Dalbir Singh (56074)"
             p2: "Naveen (58242)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 1
+            winner: "Dalbir Singh (56074)"
           - id: "MS-QR1-10"
             p1: "Samir Sahu (59211)"
             p2: "Pradish Raghavan (59033)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 18
+            winner: "Samir Sahu (59211)"
           - id: "MS-QR1-11"
             p1: "Biswajeet Das (66192)"
-            p2: "Closest Winner from last games"
-            score1: null
-            score2: null
-            winner: null
+            p2: "Avinash Mishra (59155)"
+            score1: 21
+            score2: 13
+            winner: "Biswajeet Das (66192)"
       - stage: "QR2"
         label: "Round 2 — Qualifiers"
         matches:
           - id: "MS-QR2-1"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Ketan Suthar (510201)"
+            p2: "Kamlesh Nayak (58186)"
+            score1: 21
+            score2: 14
+            winner: "Ketan Suthar (510201)"
           - id: "MS-QR2-2"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Gaurav Chakravorty (56154)"
+            p2: "Manoj Shenoy (62136)"
+            score1: 4
+            score2: 21
+            winner: "Manoj Shenoy (62136)"
           - id: "MS-QR2-3"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Shobhit Gupta (57065)"
+            p2: "Dalbir Singh (56074)"
+            score1: 21
+            score2: 7
+            winner: "Shobhit Gupta (57065)"
           - id: "MS-QR2-4"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Amit Kumar (57081)"
+            p2: "Samir Sahu (59211)"
+            score1: 8
+            score2: 21
+            winner: "Samir Sahu (59211)"
           - id: "MS-QR2-5"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Avinash Mishra (59155)"
+            p2: "Biswajeet Das (66192)"
+            score1: 13
+            score2: 21
+            winner: "Biswajeet Das (66192)"
           - id: "MS-QR2-6"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Ankit Parichha (59255)"
+            p2: "Gaurav Jain (59281)"
+            score1: 21
+            score2: 14
+            winner: "Ankit Parichha (59255)"
       - stage: "QR3"
         label: "Round 3 — Qualifiers"
         matches:
           - id: "MS-QR3-1"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Ketan Suthar (510201)"
+            p2: "Samir Sahu (59211)"
+            score1: 21
+            score2: 4
+            winner: "Ketan Suthar (510201)"
           - id: "MS-QR3-2"
-            p1: null
-            p2: null
+            p1: "Manoj Shenoy (62136)"
+            p2: "Biswajeet Das (66192)"
             score1: null
             score2: null
             winner: null
           - id: "MS-QR3-3"
-            p1: null
-            p2: null
+            p1: "Shobhit Gupta (57065)"
+            p2: "Ankit Parichha (59255)"
             score1: null
             score2: null
             winner: null
@@ -181,60 +181,60 @@ categories:
           - id: "MD-QR1-1"
             p1: "Venkatesh S (62236) / Syam (61295)"
             p2: "Ketan Suthar (510201) / Amit Kumar (57081)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 18
+            winner: "Venkatesh S (62236) / Syam (61295)"
           - id: "MD-QR1-2"
             p1: "DEBADATTA TRIPATHY (54255) / Sumeet Champatiroy (54255)"
-            p2: "Anshu Goel (58165) / Ankit (59255)"
+            p2: "Avinash Mishra (59155) / Ayushman Mishra (59155)"
             score1: null
             score2: null
             winner: null
           - id: "MD-QR1-3"
             p1: "Nishant Niranjan (56182) / Rajeev R (56112)"
-            p2: "Avinash Mishra (59155) / Ayushman Mishra (59155)"
-            score1: null
-            score2: null
-            winner: null
+            p2: "Anshu Goel (58165) / Ankit (59255)"
+            score1: 23
+            score2: 21
+            winner: "Nishant Niranjan (56182) / Rajeev R (56112)"
           - id: "MD-QR1-4"
             p1: "Biswajeet Das (66192) / Manoj Shenoy (62136)"
             p2: "Gaurav Chakravorty (56154) / Gaurav Jain (59281)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 8
+            winner: "Biswajeet Das (66192) / Manoj Shenoy (62136)"
           - id: "MD-QR1-5"
             p1: "Vijay Bala (57131) / Abhishek Rathore (57185)"
             p2: "Rithwij K (56186) / Pradish Raghavan (59033)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 14
+            winner: "Vijay Bala (57131) / Abhishek Rathore (57185)"
           - id: "MD-QR1-6"
             p1: "Gopu K B (58202) / Debasish (59101)"
             p2: "Peeyush Mishra (56041) / Shobhit Gupta (57065)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 3
+            score2: 21
+            winner: "Peeyush Mishra (56041) / Shobhit Gupta (57065)"
       - stage: "QR2"
         label: "Round 2 — Qualifiers"
         matches:
           - id: "MD-QR2-1"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Biswajeet Das (66192) / Manoj Shenoy (62136)"
+            p2: "Venkatesh S (62236) / Syam (61295)"
+            score1: 21
+            score2: 4
+            winner: "Biswajeet Das (66192) / Manoj Shenoy (62136)"
           - id: "MD-QR2-2"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Vijay Bala (57131) / Abhishek Rathore (57185)"
+            p2: "Anshu Goel (58165) / Ankit (59255)"
+            score1: 21
+            score2: 11
+            winner: "Vijay Bala (57131) / Abhishek Rathore (57185)"
           - id: "MD-QR2-3"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Peeyush Mishra (56041) / Shobhit Gupta (57065)"
+            p2: "Nishant Niranjan (56182) / Rajeev R (56112)"
+            score1: 21
+            score2: 8
+            winner: "Peeyush Mishra (56041) / Shobhit Gupta (57065)"
           - id: "MD-QR2-4"
             p1: null
             p2: null
@@ -245,14 +245,14 @@ categories:
         label: "Semi-Finals"
         matches:
           - id: "MD-SF-1"
-            p1: null
-            p2: null
+            p1: "Peeyush Mishra (56041) / Shobhit Gupta (57065)"
+            p2: "Biswajeet Das (66192) / Manoj Shenoy (62136)"
             score1: null
             score2: null
             winner: null
           - id: "MD-SF-2"
-            p1: null
-            p2: null
+            p1: "Nishant Niranjan (56182) / Rajeev R (56112)"
+            p2: "Vijay Bala (57131) / Abhishek Rathore (57185)"
             score1: null
             score2: null
             winner: null
@@ -277,40 +277,40 @@ categories:
         matches:
           - id: "WS-QR1-1"
             p1: "Priyansha Verma (56035)"
-            p2: "Nisha (510242)"
-            score1: null
-            score2: null
-            winner: null
+            p2: "Nisha Bansal (65094)"
+            score1: 21
+            score2: 7
+            winner: "Priyansha Verma (56035)"
           - id: "WS-QR1-2"
             p1: "Aakansha Baluni (58006)"
             p2: "Ankita Pattnaik (66192)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 23
+            winner: "Ankita Pattnaik (66192)"
           - id: "WS-QR1-3"
-            p1: "Nisha Bansal (65094)"
+            p1: "Nisha (510242)"
             p2: "Aditi Panigrahy (58242)"
             score1: null
             score2: null
             winner: null
           - id: "WS-QR1-4"
             p1: "Sanghamitra Barman (57016)"
-            p2: "Closest Winner from last games"
-            score1: null
-            score2: null
-            winner: null
+            p2: "Aditi Panigrahy (58242)"
+            score1: 21
+            score2: 1
+            winner: "Sanghamitra Barman (57016)"
       - stage: "SF"
         label: "Semi-Finals"
         matches:
           - id: "WS-SF-1"
-            p1: null
-            p2: null
+            p1: "Priyansha Verma (56035)"
+            p2: "Aakansha Baluni (58006)"
             score1: null
             score2: null
             winner: null
           - id: "WS-SF-2"
-            p1: null
-            p2: null
+            p1: "Ankita Pattnaik (66192)"
+            p2: "Sanghamitra Barman (57016)"
             score1: null
             score2: null
             winner: null
@@ -336,66 +336,66 @@ categories:
           - id: "MID-QR1-1"
             p1: "Sanghamitra Barman (57016) / Ankan Nazir (57016)"
             p2: "Ketan Suthar (510201) / Komal (510201)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 14
+            score2: 21
+            winner: "Ketan Suthar (510201) / Komal (510201)"
           - id: "MID-QR1-2"
             p1: "Biswajeet Das (66192) / Ankita Pattnaik (66192)"
             p2: "Kamlesh Nayak (58186) / Ankita Pujari (58186)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 17
+            score2: 21
+            winner: "Kamlesh Nayak (58186) / Ankita Pujari (58186)"
           - id: "MID-QR1-3"
             p1: "DEBADATTA TRIPATHY (54255) / Lipsa Champatiroy (54255)"
             p2: "Gaurav Chakravorty (56154) / Priyanka Chakraborty (56154)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 0
+            score2: 21
+            winner: "Gaurav Chakravorty (56154) / Priyanka Chakraborty (56154)"
           - id: "MID-QR1-4"
             p1: "Priyansha Verma (56035) / Prashant Shekhar (56035)"
-            p2: "Aryan Agarwal (65094) / Samaira (65094)"
-            score1: null
-            score2: null
-            winner: null
+            p2: "Nisha Agarwal / Anil"
+            score1: 21
+            score2: 19
+            winner: "Priyansha Verma (56035) / Prashant Shekhar (56035)"
           - id: "MID-QR1-5"
             p1: "Naveen (58242) / Adithi (58242)"
             p2: "Shobhit Gupta (57065) / Shruti Gupta (57065)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 0
+            score2: 21
+            winner: "Shobhit Gupta (57065) / Shruti Gupta (57065)"
       - stage: "QR2"
         label: "Round 2 — Qualifiers"
         matches:
           - id: "MID-QR2-1"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Ketan Suthar (510201) / Komal (510201)"
+            p2: "Priyansha Verma (56035) / Prashant Shekhar (56035)"
+            score1: 21
+            score2: 19
+            winner: "Ketan Suthar (510201) / Komal (510201)"
           - id: "MID-QR2-2"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Kamlesh Nayak (58186) / Ankita Pujari (58186)"
+            p2: "Shobhit Gupta (57065) / Shruti Gupta (57065)"
+            score1: 17
+            score2: 21
+            winner: "Shobhit Gupta (57065) / Shruti Gupta (57065)"
           - id: "MID-QR2-3"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Gaurav Chakravorty (56154) / Priyanka Chakraborty (56154)"
+            p2: "Biswajeet Das (66192) / Ankita Pattnaik (66192)"
+            score1: 15
+            score2: 21
+            winner: "Biswajeet Das (66192) / Ankita Pattnaik (66192)"
       - stage: "SF"
         label: "Semi-Finals"
         matches:
           - id: "MID-SF-1"
-            p1: null
-            p2: null
+            p1: "Ketan Suthar (510201) / Komal (510201)"
+            p2: "Biswajeet Das (66192) / Ankita Pattnaik (66192)"
             score1: null
             score2: null
             winner: null
           - id: "MID-SF-2"
-            p1: null
-            p2: null
+            p1: "Shobhit Gupta (57065) / Shruti Gupta (57065)"
+            p2: "Priyansha Verma (56035) / Prashant Shekhar (56035)"
             score1: null
             score2: null
             winner: null
@@ -420,40 +420,40 @@ categories:
         matches:
           - id: "BS-QR1-1"
             p1: "Ishan Deb (59212)"
-            p2: "Tabish Ansari (64203)"
-            score1: null
-            score2: null
-            winner: null
+            p2: "Ridhaan Vijayshekar (59146)"
+            score1: 21
+            score2: 5
+            winner: "Ishan Deb (59212)"
           - id: "BS-QR1-2"
             p1: "Tanmay Gupta (510114)"
-            p2: "Arshit (54183)"
-            score1: null
-            score2: null
-            winner: null
+            p2: null
+            score1: 21
+            score2: 0
+            winner: "Tanmay Gupta (510114)"
           - id: "BS-QR1-3"
-            p1: "Atharv Singhal (56093)"
-            p2: "Ridhaan Vijayshekar (59146)"
-            score1: null
-            score2: null
-            winner: null
-          - id: "BS-QR1-4"
             p1: "Vishaj Jha (58026)"
-            p2: "Closest Winner from last games"
-            score1: null
-            score2: null
-            winner: null
+            p2: "Arshit (54183)"
+            score1: 10
+            score2: 21
+            winner: "Arshit (54183)"
+          - id: "BS-QR1-4"
+            p1: "Tabish Ansari (64203)"
+            p2: "Vishaj Jha (58026)"
+            score1: 21
+            score2: 15
+            winner: "Tabish Ansari (64203)"
       - stage: "SF"
         label: "Semi-Finals"
         matches:
           - id: "BS-SF-1"
-            p1: null
-            p2: null
+            p1: "Ishan Deb (59212)"
+            p2: "Arshit (54183)"
             score1: null
             score2: null
             winner: null
           - id: "BS-SF-2"
-            p1: null
-            p2: null
+            p1: "Ridhaan Vijayshekar (59146)"
+            p2: "Tabish Ansari (64203)"
             score1: null
             score2: null
             winner: null
@@ -479,39 +479,39 @@ categories:
           - id: "GS-QR1-1"
             p1: "Anushree Mathur (57062)"
             p2: "Saanvi Agrawal (58123)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 11
+            score2: 15
+            winner: "Saanvi Agrawal (58123)"
           - id: "GS-QR1-2"
             p1: "Ashwika Gopu (58202)"
             p2: "Siya Mathur (510024)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 11
+            winner: "Ashwika Gopu (58202)"
           - id: "GS-QR1-3"
-            p1: "Ziya Usmani (56245)"
+            p1: "Samaira Agrawal (65094)"
             p2: "Shreya Shaanvi (57081)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 8
+            score2: 15
+            winner: "Shreya Shaanvi (57081)"
           - id: "GS-QR1-4"
             p1: "Yuvika Gupta (510114)"
-            p2: "Samaira Agrawal (65094)"
-            score1: null
-            score2: null
-            winner: null
+            p2: "Ziya Usmani (56245)"
+            score1: 21
+            score2: 0
+            winner: "Yuvika Gupta (510114)"
       - stage: "SF"
         label: "Semi-Finals"
         matches:
           - id: "GS-SF-1"
-            p1: null
-            p2: null
+            p1: "Saanvi Agrawal (58123)"
+            p2: "Shreya Shaanvi (57081)"
             score1: null
             score2: null
             winner: null
           - id: "GS-SF-2"
-            p1: null
-            p2: null
+            p1: "Ashwika Gopu (58202)"
+            p2: "Yuvika Gupta (510114)"
             score1: null
             score2: null
             winner: null
@@ -537,66 +537,66 @@ categories:
           - id: "KBS-QR1-1"
             p1: "Sahil (55231)"
             p2: "Vivaan Mishra (58154)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 8
+            winner: "Sahil (55231)"
           - id: "KBS-QR1-2"
             p1: "Varenyam Rathore (57185)"
             p2: "Abhiram K (56022)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 12
+            winner: "Varenyam Rathore (57185)"
           - id: "KBS-QR1-3"
             p1: "Netik Chowdary (58242)"
             p2: "Darshit Dhairyawal (56193)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 9
+            score2: 20
+            winner: "Darshit Dhairyawal (56193)"
           - id: "KBS-QR1-4"
             p1: "Aryan Agarwal (65094)"
             p2: "Aaveen Tripathy (54255)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 0
+            winner: "Aryan Agarwal (65094)"
           - id: "KBS-QR1-5"
             p1: "Nachiket Mishra (57033)"
             p2: "Atharv Singhal (56093)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 2
+            score2: 15
+            winner: "Atharv Singhal (56093)"
       - stage: "QR2"
         label: "Round 2 — Qualifiers"
         matches:
           - id: "KBS-QR2-1"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Sahil (55231)"
+            p2: "Aryan Agarwal (65094)"
+            score1: 15
+            score2: 10
+            winner: "Sahil (55231)"
           - id: "KBS-QR2-2"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Varenyam Rathore (57185)"
+            p2: "Atharv Singhal (56093)"
+            score1: 7
+            score2: 15
+            winner: "Atharv Singhal (56093)"
           - id: "KBS-QR2-3"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Darshit Dhairyawal (56193)"
+            p2: "Vivaan Mishra (58154)"
+            score1: 9
+            score2: 15
+            winner: "Vivaan Mishra (58154)"
       - stage: "SF"
         label: "Semi-Finals"
         matches:
           - id: "KBS-SF-1"
-            p1: null
-            p2: null
+            p1: "Sahil (55231)"
+            p2: "Vivaan Mishra (58154)"
             score1: null
             score2: null
             winner: null
           - id: "KBS-SF-2"
-            p1: null
-            p2: null
+            p1: "Atharv Singhal (56093)"
+            p2: "Aryan Agarwal (65094)"
             score1: null
             score2: null
             winner: null
@@ -622,39 +622,39 @@ categories:
           - id: "KGS-QR1-1"
             p1: "Pihu Mathur (57062)"
             p2: "Pratyusha (56255)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 5
+            score2: 15
+            winner: "Pratyusha (56255)"
           - id: "KGS-QR1-2"
             p1: "Maedhini S (58134)"
             p2: "Tarnija (59101)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 3
+            winner: "Maedhini S (58134)"
           - id: "KGS-QR1-3"
             p1: "Miraya (510224)"
             p2: "Jahnvi Verma (57171)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 4
+            winner: "Miraya (510224)"
           - id: "KGS-QR1-4"
             p1: "Ishita Deb (59212)"
             p2: "Kayra Singh (56074)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 11
+            winner: "Ishita Deb (59212)"
       - stage: "SF"
         label: "Semi-Finals"
         matches:
           - id: "KGS-SF-1"
-            p1: null
-            p2: null
+            p1: "Pratyusha (56255)"
+            p2: "Miraya (510224)"
             score1: null
             score2: null
             winner: null
           - id: "KGS-SF-2"
-            p1: null
-            p2: null
+            p1: "Maedhini S (58134)"
+            p2: "Ishita Deb (59212)"
             score1: null
             score2: null
             winner: null
