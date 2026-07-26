@@ -2,7 +2,7 @@
 title: "Badminton Championship 2026"
 subtitle: "8 Categories | Knockout Format · Qualifiers → Semis → Final"
 sport: badminton
-status: ongoing
+status: completed
 live_stream_url: "https://www.youtube.com/live/BADMINTON_STREAM_PLACEHOLDER"
 event_date: "2026-07-25"
 event_time: "Sat 4:00 PM (Qualifiers) · Sun 11:00 AM (Semis & Finals)"
@@ -148,26 +148,35 @@ categories:
         label: "Semi-Finals"
         matches:
           - id: "MS-SF-1"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Ketan Suthar (510201)"
+            p2: "Shobhit Gupta (57065)"
+            score1: 13
+            score2: 21
+            winner: "Shobhit Gupta (57065)"
           - id: "MS-SF-2"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Manoj Shenoy (62136)"
+            p2: "Biswajeet Das (66192)"
+            score1: 21
+            score2: 6
+            winner: "Manoj Shenoy (62136)"
       - stage: "Final"
         label: "Final"
         matches:
           - id: "MS-Final"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Shobhit Gupta (57065)"
+            p2: "Manoj Shenoy (62136)"
+            score1: 15
+            score2: 21
+            winner: "Manoj Shenoy (62136)"
+      - stage: "3rd Place"
+        label: "3rd Place Match"
+        matches:
+          - id: "MS-3rd"
+            p1: "Ketan Suthar (510201)"
+            p2: "Biswajeet Das (66192)"
+            score1: 13
+            score2: 21
+            winner: "Biswajeet Das (66192)"
 
   - id: MD
     name: "Men's Doubles"
@@ -247,24 +256,33 @@ categories:
           - id: "MD-SF-1"
             p1: "Peeyush Mishra (56041) / Shobhit Gupta (57065)"
             p2: "Biswajeet Das (66192) / Manoj Shenoy (62136)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 23
+            winner: "Biswajeet Das (66192) / Manoj Shenoy (62136)"
           - id: "MD-SF-2"
             p1: "Nishant Niranjan (56182) / Rajeev R (56112)"
             p2: "Vijay Bala (57131) / Abhishek Rathore (57185)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 8
+            score2: 21
+            winner: "Vijay Bala (57131) / Abhishek Rathore (57185)"
       - stage: "Final"
         label: "Final"
         matches:
           - id: "MD-Final"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Biswajeet Das (66192) / Manoj Shenoy (62136)"
+            p2: "Vijay Bala (57131) / Abhishek Rathore (57185)"
+            score1: 21
+            score2: 7
+            winner: "Biswajeet Das (66192) / Manoj Shenoy (62136)"
+      - stage: "3rd Place"
+        label: "3rd Place Match"
+        matches:
+          - id: "MD-3rd"
+            p1: "Peeyush Mishra (56041) / Shobhit Gupta (57065)"
+            p2: "Nishant Niranjan (56182) / Rajeev R (56112)"
+            score1: 21
+            score2: 11
+            winner: "Peeyush Mishra (56041) / Shobhit Gupta (57065)"
 
   - id: WS
     name: "Women's Singles"
@@ -305,24 +323,33 @@ categories:
           - id: "WS-SF-1"
             p1: "Priyansha Verma (56035)"
             p2: "Aakansha Baluni (58006)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 1
+            winner: "Priyansha Verma (56035)"
           - id: "WS-SF-2"
             p1: "Ankita Pattnaik (66192)"
             p2: "Sanghamitra Barman (57016)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 12
+            score2: 15
+            winner: "Sanghamitra Barman (57016)"
       - stage: "Final"
         label: "Final"
         matches:
           - id: "WS-Final"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Priyansha Verma (56035)"
+            p2: "Sanghamitra Barman (57016)"
+            score1: 15
+            score2: 4
+            winner: "Priyansha Verma (56035)"
+      - stage: "3rd Place"
+        label: "3rd Place Match"
+        matches:
+          - id: "WS-3rd"
+            p1: "Aakansha Baluni (58006)"
+            p2: "Ankita Pattnaik (66192)"
+            score1: 16
+            score2: 21
+            winner: "Ankita Pattnaik (66192)"
 
   - id: MID
     name: "Mixed Doubles"
@@ -390,24 +417,33 @@ categories:
           - id: "MID-SF-1"
             p1: "Ketan Suthar (510201) / Komal (510201)"
             p2: "Biswajeet Das (66192) / Ankita Pattnaik (66192)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 12
+            score2: 21
+            winner: "Biswajeet Das (66192) / Ankita Pattnaik (66192)"
           - id: "MID-SF-2"
             p1: "Shobhit Gupta (57065) / Shruti Gupta (57065)"
             p2: "Priyansha Verma (56035) / Prashant Shekhar (56035)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 2
+            winner: "Shobhit Gupta (57065) / Shruti Gupta (57065)"
       - stage: "Final"
         label: "Final"
         matches:
           - id: "MID-Final"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Biswajeet Das (66192) / Ankita Pattnaik (66192)"
+            p2: "Shobhit Gupta (57065) / Shruti Gupta (57065)"
+            score1: 15
+            score2: 7
+            winner: "Biswajeet Das (66192) / Ankita Pattnaik (66192)"
+      - stage: "3rd Place"
+        label: "3rd Place Match"
+        matches:
+          - id: "MID-3rd"
+            p1: "Ketan Suthar (510201) / Komal (510201)"
+            p2: "Priyansha Verma (56035) / Prashant Shekhar (56035)"
+            score1: 22
+            score2: 20
+            winner: "Ketan Suthar (510201) / Komal (510201)"
 
   - id: BS
     name: "Boys Singles"
@@ -448,24 +484,33 @@ categories:
           - id: "BS-SF-1"
             p1: "Ishan Deb (59212)"
             p2: "Arshit (54183)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 12
+            winner: "Ishan Deb (59212)"
           - id: "BS-SF-2"
             p1: "Ridhaan Vijayshekar (59146)"
             p2: "Tabish Ansari (64203)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 14
+            score2: 21
+            winner: "Tabish Ansari (64203)"
       - stage: "Final"
         label: "Final"
         matches:
           - id: "BS-Final"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Ishan Deb (59212)"
+            p2: "Tabish Ansari (64203)"
+            score1: 15
+            score2: 5
+            winner: "Ishan Deb (59212)"
+      - stage: "3rd Place"
+        label: "3rd Place Match"
+        matches:
+          - id: "BS-3rd"
+            p1: "Ridhaan Vijayshekar (59146)"
+            p2: "Arshit (54183)"
+            score1: 7
+            score2: 21
+            winner: "Arshit (54183)"
 
   - id: GS
     name: "Girls Singles"
@@ -506,21 +551,30 @@ categories:
           - id: "GS-SF-1"
             p1: "Saanvi Agrawal (58123)"
             p2: "Shreya Shaanvi (57081)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 4
+            score2: 15
+            winner: "Shreya Shaanvi (57081)"
           - id: "GS-SF-2"
             p1: "Ashwika Gopu (58202)"
             p2: "Yuvika Gupta (510114)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 21
+            score2: 12
+            winner: "Ashwika Gopu (58202)"
       - stage: "Final"
         label: "Final"
         matches:
           - id: "GS-Final"
-            p1: null
-            p2: null
+            p1: "Shreya Shaanvi (57081)"
+            p2: "Ashwika Gopu (58202)"
+            score1: 15
+            score2: 7
+            winner: "Shreya Shaanvi (57081)"
+      - stage: "3rd Place"
+        label: "3rd Place Match"
+        matches:
+          - id: "GS-3rd"
+            p1: "Saanvi Agrawal (58123)"
+            p2: "Yuvika Gupta (510114)"
             score1: null
             score2: null
             winner: null
@@ -591,24 +645,33 @@ categories:
           - id: "KBS-SF-1"
             p1: "Sahil (55231)"
             p2: "Vivaan Mishra (58154)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 7
+            winner: "Sahil (55231)"
           - id: "KBS-SF-2"
             p1: "Atharv Singhal (56093)"
             p2: "Aryan Agarwal (65094)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 17
+            winner: "Aryan Agarwal (65094)"
       - stage: "Final"
         label: "Final"
         matches:
           - id: "KBS-Final"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Sahil (55231)"
+            p2: "Aryan Agarwal (65094)"
+            score1: 15
+            score2: 11
+            winner: "Sahil (55231)"
+      - stage: "3rd Place"
+        label: "3rd Place Match"
+        matches:
+          - id: "KBS-3rd"
+            p1: "Vivaan Mishra (58154)"
+            p2: "Atharv Singhal (56093)"
+            score1: 3
+            score2: 15
+            winner: "Atharv Singhal (56093)"
 
   - id: KGS
     name: "Kids Girls Singles"
@@ -649,24 +712,33 @@ categories:
           - id: "KGS-SF-1"
             p1: "Pratyusha (56255)"
             p2: "Miraya (510224)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 8
+            score2: 21
+            winner: "Miraya (510224)"
           - id: "KGS-SF-2"
             p1: "Maedhini S (58134)"
             p2: "Ishita Deb (59212)"
-            score1: null
-            score2: null
-            winner: null
+            score1: 15
+            score2: 12
+            winner: "Maedhini S (58134)"
       - stage: "Final"
         label: "Final"
         matches:
           - id: "KGS-Final"
-            p1: null
-            p2: null
-            score1: null
-            score2: null
-            winner: null
+            p1: "Maedhini S (58134)"
+            p2: "Miraya (510224)"
+            score1: 15
+            score2: 10
+            winner: "Maedhini S (58134)"
+      - stage: "3rd Place"
+        label: "3rd Place Match"
+        matches:
+          - id: "KGS-3rd"
+            p1: "Pratyusha (56255)"
+            p2: "Ishita Deb (59212)"
+            score1: 17
+            score2: 21
+            winner: "Ishita Deb (59212)"
 ---
 
 ## General Rules

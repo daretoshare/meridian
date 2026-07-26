@@ -4,7 +4,7 @@ import { getSiteContent, getCulturalRegistrationStatus, getCompetitiveRegistrati
 import RegistrationForm from '@/components/RegistrationForm'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import CountdownBanner from '@/components/CountdownBanner'
-import { Flag, Shield, ClipboardList, Trophy, Sparkles } from 'lucide-react'
+import { Flag, Shield, ClipboardList, Trophy, Sparkles, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import MatchFlashCardLoader from '@/components/MatchFlashCardLoader'
@@ -24,49 +24,39 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
       {/* Nav */}
-      <header className="border-b border-white/80 bg-white/70 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <header className="border-b border-slate-100 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 shrink-0">
             <Image
               src="/mplogo.png"
               alt="Meridian Park Logo"
-              width={36}
-              height={36}
-              className="rounded-lg shadow-sm object-contain"
+              width={30}
+              height={30}
+              className="rounded-md shadow-sm object-contain"
             />
-            <div>
-              <p className="font-bold text-slate-800 leading-tight">{site.society_name}</p>
-              <p className="text-xs text-slate-500">{site.society_subtitle}</p>
-            </div>
+            <p className="font-bold text-slate-800 text-sm leading-tight hidden sm:block">{site.society_name}</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <Link
               href="/celebrate"
-              className="flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-3 py-1.5 rounded-full transition-colors shadow-sm"
+              className="flex items-center gap-1 text-xs font-semibold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-2.5 py-1.5 rounded-full transition-colors"
             >
-              <Sparkles size={13} />
+              <Sparkles size={11} />
               Celebrate
             </Link>
             <Link
               href="/scores"
-              className="flex items-center gap-1.5 text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-full transition-colors shadow-sm"
+              className="flex items-center gap-1 text-xs font-semibold bg-slate-800 hover:bg-slate-900 text-white px-2.5 py-1.5 rounded-full transition-colors"
             >
-              <Trophy size={13} />
-              Scores &amp; Rules
+              <Trophy size={11} />
+              Scores
             </Link>
             <Link
               href="/status"
-              className="flex items-center gap-1.5 text-sm text-orange-600 hover:text-orange-800 font-medium transition-colors"
+              className="hidden sm:flex items-center gap-1 text-xs text-slate-500 hover:text-slate-800 font-medium transition-colors px-2 py-1.5"
             >
-              <ClipboardList size={14} />
-              Check Registration Status
-            </Link>
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
-            >
-              <Shield size={14} />
-              {site.admin_label}
+              <ClipboardList size={12} />
+              Status
             </Link>
           </div>
         </div>
@@ -207,57 +197,91 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Badminton Semifinals Flash Card */}
+      {/* Badminton Champions Flash Card */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
         <div className="bg-gradient-to-r from-orange-900 to-amber-800 rounded-2xl p-5 text-white">
           <div className="flex items-center justify-between gap-4 mb-4">
-            <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-xs font-semibold text-orange-200 px-3 py-1 rounded-full">
-              🏸 Badminton · Semifinals Today
+            <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-xs font-semibold text-amber-200 px-3 py-1 rounded-full">
+              🏸 Badminton · Champions Crowned
             </span>
             <Link
               href="/scores/badminton-2026"
               className="text-xs text-orange-300 hover:text-white font-medium transition-colors shrink-0"
             >
-              View draw →
+              Full results →
             </Link>
           </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              { cat: "Men's Singles",    gold: 'Manoj Shenoy',             silver: 'Shobhit Gupta' },
+              { cat: "Women's Singles",  gold: 'Priyansha Verma',          silver: 'Sanghamitra Barman' },
+              { cat: "Men's Doubles",    gold: 'Biswajeet + Manoj',        silver: 'Vijay + Abhishek' },
+              { cat: 'Mixed Doubles',    gold: 'Biswajeet + Ankita',       silver: 'Shobhit + Shruti' },
+              { cat: 'Boys Singles',     gold: 'Ishan Deb',                silver: 'Tabish Ansari' },
+              { cat: 'Girls Singles',    gold: 'Shreya Shaanvi',           silver: 'Ashwika Gopu' },
+              { cat: 'Kids Boys',        gold: 'Sahil',                    silver: 'Aryan Agarwal' },
+              { cat: 'Kids Girls',       gold: 'Maedhini S',               silver: 'Miraya' },
+            ].map(r => (
+              <div key={r.cat} className="bg-white/8 border border-white/10 rounded-xl px-3 py-2.5">
+                <p className="text-[10px] text-orange-300/70 font-bold uppercase tracking-wide mb-1.5">{r.cat}</p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="flex items-center gap-1 text-xs font-bold text-white"><span>🥇</span>{r.gold}</span>
+                  <span className="text-orange-400/50 text-xs">·</span>
+                  <span className="flex items-center gap-1 text-xs text-white/60"><span>🥈</span>{r.silver}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <div className="space-y-3">
-            <div>
-              <p className="text-xs text-orange-300/70 uppercase tracking-wide font-semibold mb-2">Women's Singles · Men's Doubles · Mixed Doubles</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Priyansha Verma vs Aakansha Baluni</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ankita Pattnaik vs Sanghamitra Barman</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Peeyush+Shobhit vs Biswajeet+Manoj</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Nishant+Rajeev vs Vijay+Abhishek</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ketan+Komal vs Biswajeet+Ankita</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Shobhit+Shruti vs Priyansha+Prashant</div>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs text-orange-300/70 uppercase tracking-wide font-semibold mb-2">Boys · Girls · Kids Boys · Kids Girls Singles</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ishan Deb vs Arshit</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ridhaan vs Tabish Ansari</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Saanvi Agrawal vs Shreya Shaanvi</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ashwika Gopu vs Yuvika Gupta</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Sahil vs Vivaan Mishra</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Atharv Singhal vs Aryan Agarwal</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Pratyusha vs Miraya</div>
-                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Maedhini S vs Ishita Deb</div>
-              </div>
-            </div>
+      {/* Next Events — Aug 8–9 */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
+        <div className="bg-gradient-to-r from-green-700 to-emerald-600 rounded-2xl p-5 text-white">
+          <div className="flex items-center gap-2 mb-3">
+            <Calendar size={15} className="text-green-200" />
+            <span className="text-xs font-bold text-green-200 uppercase tracking-widest">Coming up</span>
+          </div>
+          <p className="text-lg font-extrabold mb-1">Independence Day Celebrations</p>
+          <p className="text-sm text-green-100 mb-4">Cultural events, community programmes &amp; more — 8 &amp; 9 August 2026</p>
+          <div className="flex items-center gap-3 flex-wrap">
+            <Link
+              href="/scores"
+              className="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 border border-white/20 text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors"
+            >
+              <Trophy size={12} />
+              All events &amp; rules
+            </Link>
+            <Link
+              href="/celebrate"
+              className="inline-flex items-center gap-1.5 bg-white text-green-700 hover:bg-green-50 text-xs font-semibold px-4 py-2 rounded-full transition-colors"
+            >
+              <Sparkles size={12} />
+              Celebrate Jul 25–26
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Form Card */}
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-16">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-8">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-100 p-6 sm:p-8">
           <RegistrationForm events={events} site={site} culturalStatus={culturalStatus} competitiveStatus={competitiveStatus} registrationCounts={registrationCounts} culturalPasswordRequired={culturalPasswordRequired} />
         </div>
         <p className="text-center text-xs text-slate-400 mt-6">{site.form_footer_note}</p>
       </main>
+
+      {/* Footer */}
+      <footer className="max-w-3xl mx-auto px-4 sm:px-6 pb-10 flex items-center justify-between gap-4">
+        <p className="text-xs text-slate-400">TPC Meridian Park · Independence Day 2026</p>
+        <Link
+          href="/admin"
+          className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 transition-colors"
+        >
+          <Shield size={12} />
+          {site.admin_label}
+        </Link>
+      </footer>
     </div>
   )
 }
