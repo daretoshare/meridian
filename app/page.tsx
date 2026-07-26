@@ -196,6 +196,50 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Badminton Semifinals Flash Card */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
+        <div className="bg-gradient-to-r from-orange-900 to-amber-800 rounded-2xl p-5 text-white">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-xs font-semibold text-orange-200 px-3 py-1 rounded-full">
+              🏸 Badminton · Semifinals Today
+            </span>
+            <Link
+              href="/scores/badminton-2026"
+              className="text-xs text-orange-300 hover:text-white font-medium transition-colors shrink-0"
+            >
+              View draw →
+            </Link>
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <p className="text-xs text-orange-300/70 uppercase tracking-wide font-semibold mb-2">Women's Singles · Men's Doubles · Mixed Doubles</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Priyansha Verma vs Aakansha Baluni</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ankita Pattnaik vs Sanghamitra Barman</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Peeyush+Shobhit vs Biswajeet+Manoj</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Nishant+Rajeev vs Vijay+Abhishek</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ketan+Komal vs Biswajeet+Ankita</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Shobhit+Shruti vs Priyansha+Prashant</div>
+              </div>
+            </div>
+            <div>
+              <p className="text-xs text-orange-300/70 uppercase tracking-wide font-semibold mb-2">Boys · Girls · Kids Boys · Kids Girls Singles</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ishan Deb vs Arshit</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ridhaan vs Tabish Ansari</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Saanvi Agrawal vs Shreya Shaanvi</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Ashwika Gopu vs Yuvika Gupta</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Sahil vs Vivaan Mishra</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Atharv Singhal vs Aryan Agarwal</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Pratyusha vs Miraya</div>
+                <div className="bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white/90 font-medium">Maedhini S vs Ishita Deb</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Form Card */}
       <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-16">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-100 p-6 sm:p-8">
