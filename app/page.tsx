@@ -208,21 +208,21 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { cat: "Men's Singles",    gold: 'Manoj Shenoy',        silver: 'Shobhit Gupta',        bronze: 'Biswajeet Das' },
-              { cat: "Women's Singles",  gold: 'Priyansha Verma',     silver: 'Sanghamitra Barman',   bronze: 'Ankita Pattnaik' },
-              { cat: "Men's Doubles",    gold: 'Biswajeet + Manoj',   silver: 'Vijay + Abhishek',     bronze: 'Peeyush + Shobhit' },
-              { cat: 'Mixed Doubles',    gold: 'Biswajeet + Ankita',  silver: 'Shobhit + Shruti',     bronze: 'Ketan + Komal' },
-              { cat: 'Boys Singles',     gold: 'Ishan Deb',           silver: 'Tabish Ansari',        bronze: 'Ridhaan Vijayshekar' },
-              { cat: 'Girls Singles',    gold: 'Shreya Shaanvi',      silver: 'Ashwika Gopu',         bronze: 'TBD' },
-              { cat: 'Kids Boys',        gold: 'Sahil',               silver: 'Aryan Agarwal',        bronze: 'Atharv Singhal' },
-              { cat: 'Kids Girls',       gold: 'Maedhini S',          silver: 'Miraya',               bronze: 'Ishita Deb' },
+              { cat: "Men's Singles",    gold: 'Manoj Shenoy',             silver: 'Shobhit Gupta' },
+              { cat: "Women's Singles",  gold: 'Priyansha Verma',          silver: 'Sanghamitra Barman' },
+              { cat: "Men's Doubles",    gold: 'Biswajeet + Manoj',        silver: 'Vijay + Abhishek' },
+              { cat: 'Mixed Doubles',    gold: 'Biswajeet + Ankita',       silver: 'Shobhit + Shruti' },
+              { cat: 'Boys Singles',     gold: 'Ishan Deb',                silver: 'Tabish Ansari' },
+              { cat: 'Girls Singles',    gold: 'Shreya Shaanvi',           silver: 'Ashwika Gopu' },
+              { cat: 'Kids Boys',        gold: 'Sahil',                    silver: 'Aryan Agarwal' },
+              { cat: 'Kids Girls',       gold: 'Maedhini S',               silver: 'Miraya' },
             ].map(r => (
               <div key={r.cat} className="bg-white/8 border border-white/10 rounded-xl px-3 py-2.5">
                 <p className="text-[10px] text-orange-300/70 font-bold uppercase tracking-wide mb-1.5">{r.cat}</p>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-xs font-bold text-white">🥇 {r.gold}</span>
-                  <span className="text-xs text-white/60">🥈 {r.silver}</span>
-                  <span className="text-xs text-white/40">🥉 {r.bronze}</span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="flex items-center gap-1 text-xs font-bold text-white"><span>🥇</span>{r.gold}</span>
+                  <span className="text-orange-400/50 text-xs">·</span>
+                  <span className="flex items-center gap-1 text-xs text-white/60"><span>🥈</span>{r.silver}</span>
                 </div>
               </div>
             ))}
