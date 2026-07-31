@@ -235,24 +235,48 @@ export default async function HomePage() {
         <div className="bg-gradient-to-r from-green-700 to-emerald-600 rounded-2xl p-5 text-white">
           <div className="flex items-center gap-2 mb-3">
             <Calendar size={15} className="text-green-200" />
-            <span className="text-xs font-bold text-green-200 uppercase tracking-widest">Coming up</span>
+            <span className="text-xs font-bold text-green-200 uppercase tracking-widest">Coming up · 8–9 August</span>
           </div>
-          <p className="text-lg font-extrabold mb-1">Independence Day Celebrations</p>
-          <p className="text-sm text-green-100 mb-4">Cultural events, community programmes &amp; more — 8 &amp; 9 August 2026</p>
+          <p className="text-lg font-extrabold mb-3">Independence Day Celebrations</p>
+
+          {/* Upcoming events list */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+            <div className="bg-white/10 border border-white/15 rounded-xl px-3 py-2.5">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-base leading-none">🏓</span>
+                <p className="text-xs font-bold text-white">Table Tennis Championship</p>
+              </div>
+              <p className="text-[11px] text-green-100 pl-6">8 Aug · 3:00 PM – 9:30 PM · 4 categories</p>
+            </div>
+            <div className="bg-white/10 border border-white/15 rounded-xl px-3 py-2.5">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-base leading-none">🎭</span>
+                <p className="text-xs font-bold text-white">Cultural &amp; Community Events</p>
+              </div>
+              <p className="text-[11px] text-green-100 pl-6">8 &amp; 9 Aug · Timings TBD</p>
+            </div>
+          </div>
+
           <div className="flex items-center gap-3 flex-wrap">
+            <Link
+              href="/scores/table-tennis-2026"
+              className="inline-flex items-center gap-1.5 bg-white text-green-700 hover:bg-green-50 text-xs font-semibold px-4 py-2 rounded-full transition-colors"
+            >
+              🏓 TT Fixtures
+            </Link>
             <Link
               href="/scores"
               className="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 border border-white/20 text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors"
             >
               <Trophy size={12} />
-              All events &amp; rules
+              All events
             </Link>
             <Link
               href="/celebrate"
-              className="inline-flex items-center gap-1.5 bg-white text-green-700 hover:bg-green-50 text-xs font-semibold px-4 py-2 rounded-full transition-colors"
+              className="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 border border-white/20 text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors"
             >
               <Sparkles size={12} />
-              Celebrate Jul 25–26
+              Jul 25–26 champions
             </Link>
           </div>
         </div>

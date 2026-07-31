@@ -615,7 +615,7 @@ function CategoryCard({ cat }: { cat: BadmintonCategory }) {
   )
 }
 
-function BadmintonTournamentPage({ t, badge, date, sportIcon = '🏸' }: { t: ReturnType<typeof getTournament>; badge: { label: string; className: string }; date: string; sportIcon?: string }) {
+function BadmintonTournamentPage({ t, badge, date, sportIcon = '🏸', showStories = true }: { t: ReturnType<typeof getTournament>; badge: { label: string; className: string }; date: string; sportIcon?: string; showStories?: boolean }) {
   const categories = (t.categories ?? []) as BadmintonCategory[]
 
   return (
@@ -677,7 +677,7 @@ function BadmintonTournamentPage({ t, badge, date, sportIcon = '🏸' }: { t: Re
           {categories.map((cat) => (
             <div key={cat.id} id={`cat-${cat.id}`}>
               <CategoryCard cat={cat} />
-              <CategoryStory cat={cat} />
+              {showStories && <CategoryStory cat={cat} />}
             </div>
           ))}
         </div>
@@ -704,7 +704,7 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
   }
 
   if (t.sport === 'table-tennis') {
-    return <BadmintonTournamentPage t={t} badge={badge} date={date} sportIcon="🏓" />
+    return <BadmintonTournamentPage t={t} badge={badge} date={date} sportIcon="🏓" showStories={false} />
   }
 
   // Combined chess page (tournaments array present)
