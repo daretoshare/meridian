@@ -519,7 +519,14 @@ const STAGE_COLORS: Record<string, string> = {
   QR1: 'bg-slate-100 text-slate-600',
   QR2: 'bg-blue-50 text-blue-700',
   QR3: 'bg-indigo-50 text-indigo-700',
+  GA: 'bg-slate-100 text-slate-600',
+  GB: 'bg-blue-50 text-blue-700',
+  GC: 'bg-indigo-50 text-indigo-700',
+  GD: 'bg-violet-50 text-violet-700',
+  League: 'bg-teal-50 text-teal-700',
+  QF:  'bg-amber-50 text-amber-700',
   SF:  'bg-orange-50 text-orange-700',
+  '3P': 'bg-rose-50 text-rose-700',
   Final: 'bg-green-50 text-green-700',
 }
 
@@ -608,7 +615,7 @@ function CategoryCard({ cat }: { cat: BadmintonCategory }) {
   )
 }
 
-function BadmintonTournamentPage({ t, badge, date }: { t: ReturnType<typeof getTournament>; badge: { label: string; className: string }; date: string }) {
+function BadmintonTournamentPage({ t, badge, date, sportIcon = '🏸' }: { t: ReturnType<typeof getTournament>; badge: { label: string; className: string }; date: string; sportIcon?: string }) {
   const categories = (t.categories ?? []) as BadmintonCategory[]
 
   return (
@@ -627,7 +634,7 @@ function BadmintonTournamentPage({ t, badge, date }: { t: ReturnType<typeof getT
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="flex items-start gap-4">
-              <span className="text-4xl leading-none">🏸</span>
+              <span className="text-4xl leading-none">{sportIcon}</span>
               <div>
                 <h1 className="text-2xl font-extrabold text-slate-900">{t.title}</h1>
                 <p className="text-slate-500 text-sm mt-1">{t.subtitle}</p>
@@ -694,6 +701,10 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
 
   if (t.sport === 'badminton') {
     return <BadmintonTournamentPage t={t} badge={badge} date={date} />
+  }
+
+  if (t.sport === 'table-tennis') {
+    return <BadmintonTournamentPage t={t} badge={badge} date={date} sportIcon="🏓" />
   }
 
   // Combined chess page (tournaments array present)

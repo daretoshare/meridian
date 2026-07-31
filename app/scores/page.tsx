@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic'
 const SPORT_ICON: Record<string, string> = {
   chess: '♟',
   badminton: '🏸',
+  'table-tennis': '🏓',
 }
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
