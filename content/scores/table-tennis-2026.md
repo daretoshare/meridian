@@ -250,61 +250,61 @@ categories:
         matches:
           - id: "TT-JS-L1"
             p1: "Atishay Shingal (57273)"
-            p2: "Ridhaan Vijayshekar (59146)"
+            p2: "Swastik Samiran (57102)"
             score1: null
             score2: null
             winner: null
           - id: "TT-JS-L2"
-            p1: "Swastik Samiran (57102)"
-            p2: "Atharv Singhal (56093)"
+            p1: "Atharv Singhal (56093)"
+            p2: "Ridhaan Vijayshekar (59146)"
             score1: null
             score2: null
             winner: null
           - id: "TT-JS-L3"
-            p1: "Vyakhya Gupta (59085)"
+            p1: "Atishay Shingal (57273)"
             p2: "Atharv Singhal (56093)"
             score1: null
             score2: null
             winner: null
           - id: "TT-JS-L4"
-            p1: "Atishay Shingal (57273)"
-            p2: "Swastik Samiran (57102)"
+            p1: "Swastik Samiran (57102)"
+            p2: "Ridhaan Vijayshekar (59146)"
             score1: null
             score2: null
             winner: null
           - id: "TT-JS-L5"
-            p1: "Ridhaan Vijayshekar (59146)"
-            p2: "Swastik Samiran (57102)"
+            p1: "Atishay Shingal (57273)"
+            p2: "Ridhaan Vijayshekar (59146)"
             score1: null
             score2: null
             winner: null
           - id: "TT-JS-L6"
-            p1: "Vyakhya Gupta (59085)"
-            p2: "Atishay Shingal (57273)"
+            p1: "Swastik Samiran (57102)"
+            p2: "Atharv Singhal (56093)"
             score1: null
             score2: null
             winner: null
           - id: "TT-JS-L7"
-            p1: "Atharv Singhal (56093)"
-            p2: "Atishay Shingal (57273)"
-            score1: null
-            score2: null
-            winner: null
-          - id: "TT-JS-L8"
-            p1: "Ridhaan Vijayshekar (59146)"
+            p1: "Atishay Shingal (57273)"
             p2: "Vyakhya Gupta (59085)"
             score1: null
             score2: null
             winner: null
-          - id: "TT-JS-L9"
+          - id: "TT-JS-L8"
             p1: "Swastik Samiran (57102)"
             p2: "Vyakhya Gupta (59085)"
             score1: null
             score2: null
             winner: null
-          - id: "TT-JS-L10"
+          - id: "TT-JS-L9"
             p1: "Atharv Singhal (56093)"
-            p2: "Ridhaan Vijayshekar (59146)"
+            p2: "Vyakhya Gupta (59085)"
+            score1: null
+            score2: null
+            winner: null
+          - id: "TT-JS-L10"
+            p1: "Ridhaan Vijayshekar (59146)"
+            p2: "Vyakhya Gupta (59085)"
             score1: null
             score2: null
             winner: null
