@@ -25,32 +25,32 @@ categories:
             score2: null
             winner: null
           - id: "TT-MS-GA-2"
-            p1: "RAJARSHI CHATTERJEE (510271)"
-            p2: "Avinash Mishra (59155)"
+            p1: "Avinash Mishra (59155)"
+            p2: "Sumit Mishra (57304)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GA-3"
             p1: "RAJARSHI CHATTERJEE (510271)"
-            p2: "Sumit Mishra (57304)"
+            p2: "Avinash Mishra (59155)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GA-4"
             p1: "Shobhit Gupta (57065)"
-            p2: "Avinash Mishra (59155)"
+            p2: "Sumit Mishra (57304)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GA-5"
-            p1: "Shobhit Gupta (57065)"
+            p1: "RAJARSHI CHATTERJEE (510271)"
             p2: "Sumit Mishra (57304)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GA-6"
-            p1: "Avinash Mishra (59155)"
-            p2: "Sumit Mishra (57304)"
+            p1: "Shobhit Gupta (57065)"
+            p2: "Avinash Mishra (59155)"
             score1: null
             score2: null
             winner: null
@@ -65,32 +65,32 @@ categories:
             score2: null
             winner: null
           - id: "TT-MS-GB-2"
-            p1: "Kundan Kumar (56282)"
-            p2: "Nishant Niranjan (56182)"
+            p1: "Nishant Niranjan (56182)"
+            p2: "Aditya Kumar (61044)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GB-3"
             p1: "Kundan Kumar (56282)"
-            p2: "Aditya Kumar (61044)"
+            p2: "Nishant Niranjan (56182)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GB-4"
             p1: "Vijay Bala (57131)"
-            p2: "Nishant Niranjan (56182)"
+            p2: "Aditya Kumar (61044)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GB-5"
-            p1: "Vijay Bala (57131)"
+            p1: "Kundan Kumar (56282)"
             p2: "Aditya Kumar (61044)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GB-6"
-            p1: "Nishant Niranjan (56182)"
-            p2: "Aditya Kumar (61044)"
+            p1: "Vijay Bala (57131)"
+            p2: "Nishant Niranjan (56182)"
             score1: null
             score2: null
             winner: null
@@ -105,32 +105,32 @@ categories:
             score2: null
             winner: null
           - id: "TT-MS-GC-2"
-            p1: "Rohit Kumar (61266)"
-            p2: "Balaji (64162)"
+            p1: "Balaji (64162)"
+            p2: "DEBADATTA TRIPATHY (54255)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GC-3"
             p1: "Rohit Kumar (61266)"
-            p2: "DEBADATTA TRIPATHY (54255)"
+            p2: "Balaji (64162)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GC-4"
             p1: "Anshu Goel (58165)"
-            p2: "Balaji (64162)"
+            p2: "DEBADATTA TRIPATHY (54255)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GC-5"
-            p1: "Anshu Goel (58165)"
+            p1: "Rohit Kumar (61266)"
             p2: "DEBADATTA TRIPATHY (54255)"
             score1: null
             score2: null
             winner: null
           - id: "TT-MS-GC-6"
-            p1: "Balaji (64162)"
-            p2: "DEBADATTA TRIPATHY (54255)"
+            p1: "Anshu Goel (58165)"
+            p2: "Balaji (64162)"
             score1: null
             score2: null
             winner: null
@@ -145,7 +145,7 @@ categories:
             score2: null
             winner: null
           - id: "TT-MS-GD-2"
-            p1: "Ankit Parichha (59255)"
+            p1: "Gaurav Jain (59281)"
             p2: null
             score1: null
             score2: null
@@ -163,7 +163,7 @@ categories:
             score2: null
             winner: null
           - id: "TT-MS-GD-5"
-            p1: "Gaurav Jain (59281)"
+            p1: "Ankit Parichha (59255)"
             p2: null
             score1: null
             score2: null
