@@ -104,6 +104,16 @@ function SlotBadge({ count, max }: { count: number; max: number }) {
 }
 
 export default function RegistrationForm({ events, site, culturalStatus, competitiveStatus, registrationCounts, culturalPasswordRequired }: Props) {
+  if (culturalStatus === 'closed' && competitiveStatus === 'closed') {
+    return (
+      <div className="text-center py-12 space-y-3">
+        <Lock size={32} className="mx-auto text-slate-300" />
+        <p className="text-lg font-bold text-slate-700">Registrations are now closed</p>
+        <p className="text-sm text-slate-500">Thank you to everyone who registered. See you at the events!</p>
+      </div>
+    )
+  }
+
   const [isPending, startTransition] = useTransition()
   const [result, setResult]         = useState<{
     success: boolean; message: string; detail?: string; registrations?: RegistrationSummary[]
