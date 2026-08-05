@@ -4,6 +4,53 @@ import { ArrowLeft, Play } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
+function simpleMarkdownToHtml(md: string): string {
+  const lines = md.split('\n')
+  const out: string[] = []
+  let inUl = false
+
+  const closeUl = () => { if (inUl) { out.push('</ul>'); inUl = false } }
+
+  const inline = (s: string) =>
+    s
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/`(.+?)`/g, '<code class="bg-slate-100 px-1 rounded text-xs font-mono">$1</code>')
+
+  for (const raw of lines) {
+    const line = raw.trimEnd()
+    if (!line) { closeUl(); out.push(''); continue }
+
+    if (line.startsWith('### ')) {
+      closeUl()
+      out.push(`<h3 class="text-sm font-bold text-slate-700 mt-5 mb-2">${inline(line.slice(4))}</h3>`)
+    } else if (line.startsWith('## ')) {
+      closeUl()
+      out.push(`<h2 class="text-base font-bold text-slate-800 mt-6 mb-3 border-b border-slate-100 pb-1">${inline(line.slice(3))}</h2>`)
+    } else if (/^  - /.test(line)) {
+      // sub-bullet — wrapped as a plain item with indent
+      if (!inUl) { out.push('<ul class="list-none space-y-1 ml-0">'); inUl = true }
+      out.push(`<li class="pl-6 text-sm text-slate-600 before:content-['–'] before:mr-2 before:text-slate-400">${inline(line.replace(/^  - /, ''))}</li>`)
+    } else if (line.startsWith('- ')) {
+      if (!inUl) { out.push('<ul class="list-none space-y-1.5">'); inUl = true }
+      out.push(`<li class="flex gap-2 text-sm text-slate-600"><span class="text-orange-400 mt-0.5 shrink-0">•</span><span>${inline(line.slice(2))}</span></li>`)
+    } else {
+      closeUl()
+      out.push(`<p class="text-sm text-slate-600">${inline(line)}</p>`)
+    }
+  }
+  closeUl()
+  return out.join('\n')
+}
+
+function RulesSection({ content }: { content: string }) {
+  if (!content?.trim()) return null
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <div dangerouslySetInnerHTML={{ __html: simpleMarkdownToHtml(content) }} />
+    </div>
+  )
+}
+
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   upcoming: { label: 'Upcoming', className: 'bg-blue-100 text-blue-700' },
   ongoing: { label: 'Live', className: 'bg-green-100 text-green-700 animate-pulse' },
@@ -681,6 +728,9 @@ function BadmintonTournamentPage({ t, badge, date, sportIcon = '🏸', showStori
             </div>
           ))}
         </div>
+
+        {/* Rules */}
+        <RulesSection content={t.content} />
       </main>
     </div>
   )

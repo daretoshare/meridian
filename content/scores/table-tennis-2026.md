@@ -374,12 +374,35 @@ categories:
 
 ## Rules & Format
 
-- **Format:** Best of 3 sets · each set to **11 points** · first to win 2 sets wins the match
-- **Deuce:** At 10–10, play continues until one player leads by 2 points
-- **Men's Singles:** 4 groups of 4 (round-robin) → Quarter Finals → Semis → Final
-- **Junior Singles (10–16):** Single round-robin league — boys & girls combined
-- **Women's Singles:** Direct Final (2 participants)
-- **Men's Doubles:** Single round-robin league (4 teams)
-- Players must report **15 minutes before** match time
-- Bring your own **bats and footwear** (non-marking shoes required)
-- **Match referee's decision is final**
+### General Rules
+
+- **TTFI Standards:** All matches follow the official laws of the Table Tennis Federation of India (TTFI).
+- **Scoring:** Each game is played to **11 points**. A player/pair must win by a clear margin of **2 points**.
+  - Normal end: 11–9, 11–7, 11–4, etc.
+  - Deuce: If the score reaches 10–10, play continues until one side leads by 2 (e.g. 12–10, 13–11).
+- **Service Rotation:** Service changes after every **2 points**, except at deuce (10–10) where it changes after every **1 point**.
+- **Match Format:** All matches are **Best of 3 games**. First to win 2 games wins the match.
+- **Equipment:** Players must bring their own **TT bats**. No practice balls provided. Match balls are supplied by the organising committee.
+- **Footwear:** Non-marking sports shoes are **mandatory** for all players.
+- **Reporting Time:** Check in at the TT room **15 minutes before** your scheduled match.
+- **Late Arrival:** A maximum wait of **10 minutes** after the match is called. If absent beyond 10 minutes, the opponent advances with a bye.
+- **Age Verification:** Valid proof of age must be produced on demand. Failure to produce proof results in disqualification.
+- **Final Authority:** Decisions of the Tournament Committee and Chief Referee are final and binding.
+
+### Category Formats
+
+**Men's Singles (16+)**
+- **Group Stage:** 4 groups of 4 — single round-robin (6 matches per group). Top 2 from each group advance (8 qualifiers).
+- **Knockouts:** QF → SF → Final + 3rd/4th Place Play-off.
+- **Seeding:** QF1 = A1 v D2 · QF2 = A2 v D1 · QF3 = B1 v C2 · QF4 = B2 v C1; SF1 = winner QF1 v winner QF3 · SF2 = winner QF2 v winner QF4.
+
+**Junior Singles (10–16) — Boys & Girls**
+- **Format:** Combined event open to boys and girls aged 10–16. Single round-robin league (5 players = 10 matches). No knockout stage.
+- **Rankings:** Ranked by matches won. Ties broken by head-to-head, then game difference.
+
+**Women's Singles (16+)**
+- **Format:** Direct Final (2 participants).
+
+**Men's Doubles (16+)**
+- **Format:** 4 teams — single round-robin league (6 matches). Champion decided by final standings.
+- **Rankings:** Ranked by matches won. Ties broken by head-to-head, then game difference.
