@@ -1,11 +1,12 @@
 import { getTournament, computeStandings, Round, BadmintonCategory, BadmintonMatch, ChessTournamentEntry } from '@/lib/scores'
 import Link from 'next/link'
 import { ArrowLeft, Play } from 'lucide-react'
+import CollapsibleRules from '@/components/CollapsibleRules'
 
 export const dynamic = 'force-dynamic'
 
 function simpleMarkdownToHtml(md: string): string {
-  const lines = md.split('\n')
+  const lines = md.split('\n').filter(l => !l.startsWith('## '))
   const out: string[] = []
   let inUl = false
 
@@ -42,14 +43,6 @@ function simpleMarkdownToHtml(md: string): string {
   return out.join('\n')
 }
 
-function RulesSection({ content }: { content: string }) {
-  if (!content?.trim()) return null
-  return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-      <div dangerouslySetInnerHTML={{ __html: simpleMarkdownToHtml(content) }} />
-    </div>
-  )
-}
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   upcoming: { label: 'Upcoming', className: 'bg-blue-100 text-blue-700' },
@@ -705,6 +698,11 @@ function BadmintonTournamentPage({ t, badge, date, sportIcon = '🏸', showStori
           </div>
         </div>
 
+        {/* Rules — collapsible */}
+        {t.content?.trim() && (
+          <CollapsibleRules html={simpleMarkdownToHtml(t.content)} />
+        )}
+
         {/* Categories summary */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
           <h2 className="text-base font-bold text-slate-800 mb-4">Categories ({categories.length})</h2>
@@ -729,8 +727,6 @@ function BadmintonTournamentPage({ t, badge, date, sportIcon = '🏸', showStori
           ))}
         </div>
 
-        {/* Rules */}
-        <RulesSection content={t.content} />
       </main>
     </div>
   )
