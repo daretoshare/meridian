@@ -251,9 +251,9 @@ export default async function HomePage() {
             <div className="bg-white/10 border border-white/15 rounded-xl px-3 py-2.5">
               <div className="flex items-center gap-2 mb-0.5">
                 <span className="text-base leading-none">🎭</span>
-                <p className="text-xs font-bold text-white">Cultural &amp; Community Events</p>
+                <p className="text-xs font-bold text-white">Cultural &amp; Sports Day</p>
               </div>
-              <p className="text-[11px] text-green-100 pl-6">8 &amp; 9 Aug · Timings TBD</p>
+              <p className="text-[11px] text-green-100 pl-6">9 Aug · Races, Treasure Hunt, Creative Freedom</p>
             </div>
           </div>
 
@@ -265,11 +265,10 @@ export default async function HomePage() {
               🏓 TT Fixtures
             </Link>
             <Link
-              href="/scores"
-              className="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 border border-white/20 text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors"
+              href="/scores/aug09-schedule"
+              className="inline-flex items-center gap-1.5 bg-white text-green-700 hover:bg-green-50 text-xs font-semibold px-4 py-2 rounded-full transition-colors"
             >
-              <Trophy size={12} />
-              All events
+              📅 9 Aug Schedule
             </Link>
             <Link
               href="/celebrate"

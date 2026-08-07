@@ -745,6 +745,76 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
     year: 'numeric',
   })
 
+  if (t.sport === 'schedule') {
+    type ScheduleEvent = { name: string; age: string; start: string; end: string; report: string; note?: string }
+    type ScheduleVenue = { name: string; icon: string; events: ScheduleEvent[] }
+    const venues = (t as unknown as { venues: ScheduleVenue[] }).venues ?? []
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
+        <header className="border-b border-white/80 bg-white/70 backdrop-blur-md sticky top-0 z-50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center">
+            <Link href="/scores" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors">
+              <ArrowLeft size={14} />
+              Back to Scores
+            </Link>
+          </div>
+        </header>
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-6">
+          {/* Header */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+            <div className="flex items-start gap-4">
+              <span className="text-4xl leading-none">📅</span>
+              <div>
+                <h1 className="text-2xl font-extrabold text-slate-900">{t.title}</h1>
+                <p className="text-slate-500 text-sm mt-1">{t.subtitle}</p>
+                {t.venue && <p className="text-xs text-slate-400 mt-0.5">{t.venue}</p>}
+                <div className="flex flex-wrap items-center gap-3 mt-3">
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${badge.className}`}>{badge.label}</span>
+                  <span className="text-xs text-slate-500">{date}</span>
+                  {t.event_time && <span className="text-xs font-medium text-orange-600">{t.event_time}</span>}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Venues */}
+          {venues.map((venue) => (
+            <div key={venue.name} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="flex items-center gap-2.5 px-6 py-4 border-b border-slate-100 bg-slate-50">
+                <span className="text-xl leading-none">{venue.icon}</span>
+                <h2 className="font-bold text-slate-800">{venue.name}</h2>
+              </div>
+              <div className="divide-y divide-slate-100">
+                {venue.events.map((ev, i) => (
+                  <div key={i} className="px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-slate-800 text-sm">{ev.name}</p>
+                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                        <span className="text-xs bg-orange-50 border border-orange-100 text-orange-700 font-medium px-2 py-0.5 rounded-full">{ev.age}</span>
+                        {ev.note && <span className="text-xs text-slate-400">{ev.note}</span>}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 text-xs shrink-0">
+                      <div className="text-center">
+                        <p className="text-slate-400 uppercase tracking-wide font-semibold mb-0.5">Time</p>
+                        <p className="font-bold text-slate-700">{ev.start} – {ev.end}</p>
+                      </div>
+                      <div className="w-px h-8 bg-slate-100" />
+                      <div className="text-center">
+                        <p className="text-slate-400 uppercase tracking-wide font-semibold mb-0.5">Report by</p>
+                        <p className="font-bold text-orange-600">{ev.report}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </main>
+      </div>
+    )
+  }
+
   if (t.sport === 'badminton') {
     return <BadmintonTournamentPage t={t} badge={badge} date={date} />
   }

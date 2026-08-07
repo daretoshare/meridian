@@ -8,6 +8,7 @@ const SPORT_ICON: Record<string, string> = {
   chess: '♟',
   badminton: '🏸',
   'table-tennis': '🏓',
+  schedule: '📅',
 }
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
