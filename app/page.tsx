@@ -230,12 +230,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Next Events — Aug 8–9 */}
+      {/* Next Events — Aug 15 */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
         <div className="bg-gradient-to-r from-green-700 to-emerald-600 rounded-2xl p-5 text-white">
           <div className="flex items-center gap-2 mb-3">
             <Calendar size={15} className="text-green-200" />
-            <span className="text-xs font-bold text-green-200 uppercase tracking-widest">Coming up · 8–9 August</span>
+            <span className="text-xs font-bold text-green-200 uppercase tracking-widest">Coming up · 15 August</span>
           </div>
           <p className="text-lg font-extrabold mb-3">Independence Day Celebrations</p>
 
@@ -243,46 +243,54 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
             <div className="bg-white/10 border border-white/15 rounded-xl px-3 py-2.5">
               <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-base leading-none">🏓</span>
-                <p className="text-xs font-bold text-white">Table Tennis Championship</p>
+                <span className="text-base leading-none">🎌</span>
+                <p className="text-xs font-bold text-white">Flag Hoisting Ceremony</p>
               </div>
-              <p className="text-[11px] text-green-100 pl-6">8 Aug · 3:00 PM – 9:30 PM · 4 categories</p>
+              <p className="text-[11px] text-green-100 pl-6">Morning · Patriotic songs &amp; speech</p>
+            </div>
+            <div className="bg-white/10 border border-white/15 rounded-xl px-3 py-2.5">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-base leading-none">🎤</span>
+                <p className="text-xs font-bold text-white">Singing, Dance &amp; Instrumental</p>
+              </div>
+              <p className="text-[11px] text-green-100 pl-6">Solo &amp; group performances · all ages</p>
+            </div>
+            <div className="bg-white/10 border border-white/15 rounded-xl px-3 py-2.5">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-base leading-none">👗</span>
+                <p className="text-xs font-bold text-white">Fancy Dress &amp; Fashion Show</p>
+              </div>
+              <p className="text-[11px] text-green-100 pl-6">Independence Day theme · Ages 0–10 &amp; 50+</p>
             </div>
             <div className="bg-white/10 border border-white/15 rounded-xl px-3 py-2.5">
               <div className="flex items-center gap-2 mb-0.5">
                 <span className="text-base leading-none">🎭</span>
-                <p className="text-xs font-bold text-white">Cultural &amp; Sports Day</p>
+                <p className="text-xs font-bold text-white">Regional Dance &amp; Group Events</p>
               </div>
-              <p className="text-[11px] text-green-100 pl-6">9 Aug · Races, Treasure Hunt, Creative Freedom</p>
+              <p className="text-[11px] text-green-100 pl-6">Folk dance · group singing · cultural showcase</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
-            <Link
-              href="/scores/table-tennis-2026"
+            <a
+              href="#register"
               className="inline-flex items-center gap-1.5 bg-white text-green-700 hover:bg-green-50 text-xs font-semibold px-4 py-2 rounded-full transition-colors"
             >
-              🏓 TT Fixtures
-            </Link>
-            <Link
-              href="/scores/aug09-schedule"
-              className="inline-flex items-center gap-1.5 bg-white text-green-700 hover:bg-green-50 text-xs font-semibold px-4 py-2 rounded-full transition-colors"
-            >
-              📅 9 Aug Schedule
-            </Link>
+              🎭 Cultural Events
+            </a>
             <Link
               href="/celebrate"
               className="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 border border-white/20 text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors"
             >
               <Sparkles size={12} />
-              Jul 25–26 champions
+              Past champions
             </Link>
           </div>
         </div>
       </section>
 
       {/* Form Card */}
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-8">
+      <main id="register" className="max-w-3xl mx-auto px-4 sm:px-6 pb-8">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-100 p-6 sm:p-8">
           <RegistrationForm events={events} site={site} culturalStatus={culturalStatus} competitiveStatus={competitiveStatus} registrationCounts={registrationCounts} culturalPasswordRequired={culturalPasswordRequired} />
         </div>
