@@ -655,6 +655,18 @@ function CategoryCard({ cat }: { cat: BadmintonCategory }) {
   )
 }
 
+function PodiumLine({ medal, label, name }: { medal: string; label: string; name: string }) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-xl bg-slate-50 border border-slate-200 px-3 py-2">
+      <span className="text-base leading-none shrink-0">{medal}</span>
+      <div className="min-w-0">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">{label}</p>
+        <p className="text-sm font-semibold text-slate-800 truncate">{name}</p>
+      </div>
+    </div>
+  )
+}
+
 function BadmintonTournamentPage({ t, badge, date, sportIcon = '🏸', showStories = true }: { t: ReturnType<typeof getTournament>; badge: { label: string; className: string }; date: string; sportIcon?: string; showStories?: boolean }) {
   const categories = (t.categories ?? []) as BadmintonCategory[]
 
@@ -697,6 +709,45 @@ function BadmintonTournamentPage({ t, badge, date, sportIcon = '🏸', showStori
             </a>
           </div>
         </div>
+
+        {/* Winners summary — shown when results_summary is present (e.g. Table Tennis) */}
+        {(() => {
+          type ResultsCategory = { id: string; name: string; podium: { first: string | null; second: string | null; third: string | null } }
+          type ResultsBlock = { title?: string; categories?: ResultsCategory[] }
+          const results = (t as unknown as { results_summary?: ResultsBlock }).results_summary
+          if (!results?.categories?.length) return null
+          return (
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wide">
+                  <span className="text-base leading-none">🎖️</span>
+                  {results.title ?? 'Winners'}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {results.categories.map((cat) => (
+                  <div key={cat.id} className="border border-slate-200 rounded-2xl p-4 space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-bold bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full">{cat.id}</span>
+                      <h3 className="text-sm font-bold text-slate-800">{cat.name}</h3>
+                    </div>
+                    <div className="space-y-1.5 text-sm">
+                      {cat.podium.first && (
+                        <PodiumLine medal="🥇" label="Champion" name={cat.podium.first} />
+                      )}
+                      {cat.podium.second && (
+                        <PodiumLine medal="🥈" label="Runner-up" name={cat.podium.second} />
+                      )}
+                      {cat.podium.third && (
+                        <PodiumLine medal="🥉" label="3rd" name={cat.podium.third} />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        })()}
 
         {/* Rules — collapsible */}
         {t.content?.trim() && (
@@ -746,9 +797,13 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
   })
 
   if (t.sport === 'schedule') {
-    type ScheduleEvent = { name: string; age: string; start: string; end: string; report: string; note?: string }
+    type ScheduleWinner = { rank: string; entries: { name: string; apt?: string }[] }
+    type ScheduleEvent = { name: string; age: string; start: string; end: string; report: string; note?: string; winners?: ScheduleWinner[] }
     type ScheduleVenue = { name: string; icon: string; events: ScheduleEvent[] }
-    const venues = (t as unknown as { venues: ScheduleVenue[] }).venues ?? []
+    type ResultsSummary = { title?: string; gold_medals?: number; trophies?: { first: number; second: number; third: number } }
+    const schedule = t as unknown as { venues: ScheduleVenue[]; results_summary?: ResultsSummary }
+    const venues = schedule.venues ?? []
+    const summary = schedule.results_summary
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
         <header className="border-b border-white/80 bg-white/70 backdrop-blur-md sticky top-0 z-50">
@@ -775,6 +830,44 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
                 </div>
               </div>
             </div>
+
+            {/* Results summary */}
+            {summary && (
+              <div className="mt-5 border-t border-slate-100 pt-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wide">
+                    <span className="text-base leading-none">🎖️</span>
+                    {summary.title ?? 'Results'}
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {(summary.gold_medals ?? 0) > 0 && (
+                      <span className="inline-flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                        <span className="text-base leading-none">🥇</span>
+                        {summary.gold_medals} Gold Medals
+                      </span>
+                    )}
+                    {summary.trophies?.first != null && (
+                      <span className="inline-flex items-center gap-1 bg-orange-50 border border-orange-200 text-orange-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                        <span className="text-base leading-none">🏆</span>
+                        {summary.trophies.first} · 1st
+                      </span>
+                    )}
+                    {summary.trophies?.second != null && (
+                      <span className="inline-flex items-center gap-1 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                        <span className="text-base leading-none">🥈</span>
+                        {summary.trophies.second} · 2nd
+                      </span>
+                    )}
+                    {summary.trophies?.third != null && (
+                      <span className="inline-flex items-center gap-1 bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                        <span className="text-base leading-none">🥉</span>
+                        {summary.trophies.third} · 3rd
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Venues */}
@@ -786,25 +879,55 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
               </div>
               <div className="divide-y divide-slate-100">
                 {venue.events.map((ev, i) => (
-                  <div key={i} className="px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-slate-800 text-sm">{ev.name}</p>
-                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                        <span className="text-xs bg-orange-50 border border-orange-100 text-orange-700 font-medium px-2 py-0.5 rounded-full">{ev.age}</span>
-                        {ev.note && <span className="text-xs text-slate-400">{ev.note}</span>}
+                  <div key={i} className="px-6 py-4 flex flex-col gap-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-slate-800 text-sm">{ev.name}</p>
+                        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                          <span className="text-xs bg-orange-50 border border-orange-100 text-orange-700 font-medium px-2 py-0.5 rounded-full">{ev.age}</span>
+                          {ev.note && <span className="text-xs text-slate-400">{ev.note}</span>}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 text-xs shrink-0">
+                        <div className="text-center">
+                          <p className="text-slate-400 uppercase tracking-wide font-semibold mb-0.5">Time</p>
+                          <p className="font-bold text-slate-700">{ev.start} – {ev.end}</p>
+                        </div>
+                        <div className="w-px h-8 bg-slate-100" />
+                        <div className="text-center">
+                          <p className="text-slate-400 uppercase tracking-wide font-semibold mb-0.5">Report by</p>
+                          <p className="font-bold text-orange-600">{ev.report}</p>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 text-xs shrink-0">
-                      <div className="text-center">
-                        <p className="text-slate-400 uppercase tracking-wide font-semibold mb-0.5">Time</p>
-                        <p className="font-bold text-slate-700">{ev.start} – {ev.end}</p>
+
+                    {/* Winners */}
+                    {ev.winners && ev.winners.length > 0 && (
+                      <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 space-y-2.5">
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Winners</p>
+                        {ev.winners.map((w) => (
+                          <div key={w.rank} className="flex items-start gap-3">
+                            <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 mt-0.5 ${
+                              w.rank === 'Gold Medal' ? 'bg-amber-100 text-amber-800'
+                              : w.rank === '1st' ? 'bg-orange-100 text-orange-700'
+                              : w.rank === '2nd' ? 'bg-slate-200 text-slate-600'
+                              : 'bg-rose-100 text-rose-700'
+                            }`}>
+                              {w.rank === 'Gold Medal' ? '🥇' : w.rank === '1st' ? '🥇' : w.rank === '2nd' ? '🥈' : '🥉'}
+                              {w.rank}
+                            </span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {w.entries.map((e) => (
+                                <span key={e.name} className="text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg px-2 py-1">
+                                  {e.name}
+                                  {e.apt && <span className="text-slate-400 font-normal"> · {e.apt}</span>}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      <div className="w-px h-8 bg-slate-100" />
-                      <div className="text-center">
-                        <p className="text-slate-400 uppercase tracking-wide font-semibold mb-0.5">Report by</p>
-                        <p className="font-bold text-orange-600">{ev.report}</p>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>

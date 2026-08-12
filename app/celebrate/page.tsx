@@ -148,6 +148,36 @@ const CHAMPIONS: ChampionSport[] = [
       },
     ],
   },
+  {
+    sport: 'Table Tennis',
+    emoji: '🏓',
+    groups: [
+      {
+        label: "Men's Singles (16+)",
+        podium: [
+          { rank: 1, name: 'Anshu Goel' },
+          { rank: 2, name: 'Shobhit Gupta' },
+          { rank: 3, name: 'Nishant Niranjan' },
+        ],
+      },
+      {
+        label: 'Junior Singles (10–16)',
+        podium: [
+          { rank: 1, name: 'Atishay Shingal' },
+          { rank: 2, name: 'Swastik Samiran' },
+          { rank: 3, name: 'Atharv Singhal' },
+        ],
+      },
+      {
+        label: "Men's Doubles (16+)",
+        podium: [
+          { rank: 1, name: 'Anshu Goel + Nishant Niranjan' },
+          { rank: 2, name: 'Ankit Parichha + Kundan Kumar' },
+          { rank: 3, name: 'Aditya Kumar + Himanshu' },
+        ],
+      },
+    ],
+  },
 ]
 
 const PHOTO_PLACEHOLDERS: { id: number; label: string; aspect: 'wide' | 'tall'; src?: string }[] = [

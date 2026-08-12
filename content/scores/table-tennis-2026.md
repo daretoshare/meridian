@@ -2,11 +2,39 @@
 title: "Table Tennis Championship 2026"
 subtitle: "4 Categories | Best of 3 Sets · 11 pts/set | 8 Aug 2026"
 sport: table-tennis
-status: upcoming
+status: completed
 live_stream_url: "https://www.youtube.com/live/TT_STREAM_PLACEHOLDER"
 event_date: "2026-08-08"
 event_time: "Sat 3:00 PM – 9:30 PM"
 venue: "The Meridian Club, @TPC"
+
+results_summary:
+  title: "Winners"
+  categories:
+    - id: MS
+      name: "Men's Singles"
+      podium:
+        first: "Anshu Goel"
+        second: "Shobhit Gupta"
+        third: "Nishant Niranjan"
+    - id: JS
+      name: "Junior Singles (10–16)"
+      podium:
+        first: "Atishay Shingal"
+        second: "Swastik Samiran"
+        third: "Atharv Singhal"
+    - id: WS
+      name: "Women's Singles"
+      podium:
+        first: "Sanghamitra Barman"
+        second: null
+        third: null
+    - id: MD
+      name: "Men's Doubles"
+      podium:
+        first: "Anshu Goel + Nishant Niranjan"
+        second: "Ankit Parichha + Kundan Kumar"
+        third: "Aditya Kumar + Himanshu"
 
 categories:
   - id: MS

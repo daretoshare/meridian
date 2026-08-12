@@ -230,6 +230,50 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Sports Day Winners Flash Card — 9 Aug */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
+        <div className="bg-gradient-to-br from-amber-700 to-orange-800 rounded-2xl p-5 text-white">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-xs font-semibold text-amber-100 px-3 py-1 rounded-full">
+              🎽 Sports Day · Winners Announced
+            </span>
+            <Link
+              href="/scores/aug09-schedule"
+              className="text-xs text-amber-200 hover:text-white font-medium transition-colors shrink-0"
+            >
+              Full results →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              { ev: 'Toddlers 50m Run (1–3)', result: 'All 16 runners · Gold Medal', medal: '🥇' },
+              { ev: '50m Run (3–5)', result: 'Aaryash · Oscar · Naaysha', medal: '🥇' },
+              { ev: 'Lemon Race (3–5)', result: 'Nia · Oscar · Naaysha', medal: '🥇' },
+              { ev: '100m Run (5–8)', result: 'Sahil · Adhrit · Eden', medal: '🏆' },
+              { ev: '100m Run (8–12)', result: 'Maedhini · Rudr · Ayaan', medal: '🏆' },
+              { ev: 'Lemon Race (5–8)', result: 'Tanshi · Netik · Eden & Skanda', medal: '🏆' },
+              { ev: 'Lemon Race (8–15)', result: 'Ishita · Anika · Atharv', medal: '🏆' },
+              { ev: 'Lemon Race (15+)', result: 'Balaji · Gopu · Aakansha', medal: '🏆' },
+              { ev: 'Treasure Hunt', result: 'Kids · 4 Gold · Adults · 5 Gold', medal: '🧭' },
+            ].map(r => (
+              <div key={r.ev} className="bg-white/8 border border-white/10 rounded-xl px-3 py-2.5">
+                <p className="text-[10px] text-amber-200/70 font-bold uppercase tracking-wide mb-1.5">{r.ev}</p>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-sm leading-none shrink-0">{r.medal}</span>
+                  <span className="font-semibold text-white/90">{r.result}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2 mt-4 border-t border-white/10 pt-3 text-[11px] text-amber-100/70">
+            <span>🎁</span>
+            <span>38 Gold Medals · 64 Trophies awarded across the day</span>
+          </div>
+        </div>
+      </section>
+
       {/* Next Events — Aug 15 */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-6">
         <div className="bg-gradient-to-r from-green-700 to-emerald-600 rounded-2xl p-5 text-white">
