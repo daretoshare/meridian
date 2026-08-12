@@ -800,10 +800,8 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
     type ScheduleWinner = { rank: string; entries: { name: string; apt?: string }[] }
     type ScheduleEvent = { name: string; age: string; start: string; end: string; report: string; note?: string; winners?: ScheduleWinner[] }
     type ScheduleVenue = { name: string; icon: string; events: ScheduleEvent[] }
-    type ResultsSummary = { title?: string; gold_medals?: number; trophies?: { first: number; second: number; third: number } }
-    const schedule = t as unknown as { venues: ScheduleVenue[]; results_summary?: ResultsSummary }
+    const schedule = t as unknown as { venues: ScheduleVenue[] }
     const venues = schedule.venues ?? []
-    const summary = schedule.results_summary
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
         <header className="border-b border-white/80 bg-white/70 backdrop-blur-md sticky top-0 z-50">
@@ -830,44 +828,6 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
                 </div>
               </div>
             </div>
-
-            {/* Results summary */}
-            {summary && (
-              <div className="mt-5 border-t border-slate-100 pt-4">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wide">
-                    <span className="text-base leading-none">🎖️</span>
-                    {summary.title ?? 'Results'}
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {(summary.gold_medals ?? 0) > 0 && (
-                      <span className="inline-flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full">
-                        <span className="text-base leading-none">🥇</span>
-                        {summary.gold_medals} Gold Medals
-                      </span>
-                    )}
-                    {summary.trophies?.first != null && (
-                      <span className="inline-flex items-center gap-1 bg-orange-50 border border-orange-200 text-orange-800 text-xs font-semibold px-2.5 py-1 rounded-full">
-                        <span className="text-base leading-none">🏆</span>
-                        {summary.trophies.first} · 1st
-                      </span>
-                    )}
-                    {summary.trophies?.second != null && (
-                      <span className="inline-flex items-center gap-1 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-full">
-                        <span className="text-base leading-none">🥈</span>
-                        {summary.trophies.second} · 2nd
-                      </span>
-                    )}
-                    {summary.trophies?.third != null && (
-                      <span className="inline-flex items-center gap-1 bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold px-2.5 py-1 rounded-full">
-                        <span className="text-base leading-none">🥉</span>
-                        {summary.trophies.third} · 3rd
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Venues */}

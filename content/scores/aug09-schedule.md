@@ -7,14 +7,6 @@ event_date: "2026-08-09"
 event_time: "Sun 10:30 AM – 6:00 PM"
 venue: "TPC Meridian Park"
 
-results_summary:
-  title: "Winners Announced"
-  gold_medals: 38
-  trophies:
-    first: 21
-    second: 21
-    third: 22
-
 venues:
   - name: "Futsal Court"
     icon: "🏃"
