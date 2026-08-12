@@ -177,12 +177,12 @@ export default async function HomePage() {
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
-            <a
-              href="#register"
+            <Link
+              href="/scores"
               className="inline-flex items-center gap-1.5 bg-white text-green-700 hover:bg-green-50 text-xs font-semibold px-4 py-2 rounded-full transition-colors"
             >
-              🎭 Cultural Events
-            </a>
+              🎌 15 Aug Programme
+            </Link>
             <Link
               href="/celebrate"
               className="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 border border-white/20 text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors"

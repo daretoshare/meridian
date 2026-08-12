@@ -9,6 +9,7 @@ const SPORT_ICON: Record<string, string> = {
   badminton: '🏸',
   'table-tennis': '🏓',
   schedule: '📅',
+  programme: '🎌',
 }
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
@@ -83,57 +84,6 @@ export default function ScoresPage() {
             })}
           </div>
         )}
-
-        {/* 15 August Celebration Programme tile */}
-        <div className="bg-gradient-to-br from-green-700 to-emerald-600 rounded-2xl p-6 text-white shadow-sm">
-          <div className="flex items-start justify-between gap-3 mb-4">
-            <div className="flex items-center gap-3">
-              <span className="text-3xl leading-none">🎌</span>
-              <div>
-                <h2 className="font-bold text-white text-lg leading-tight">15 August Celebration Programme</h2>
-                <p className="text-xs text-green-100 mt-0.5">A Day of Pride · Joy · Togetherness</p>
-                <p className="text-xs font-medium text-green-200 mt-0.5">Independence Day · Sat 15 Aug · from 8:30 AM</p>
-              </div>
-            </div>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap bg-white text-green-700">
-              Upcoming
-            </span>
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-start gap-3 bg-white/10 border border-white/15 rounded-xl px-4 py-3">
-              <span className="text-lg leading-none mt-0.5">🇮🇳</span>
-              <div>
-                <p className="text-sm font-bold text-white">Flag Hoisting <span className="font-semibold text-green-200">· 8:30 AM</span></p>
-                <p className="text-xs text-green-100 mt-0.5">Followed by Kids' Performance &amp; Freedom Speech</p>
-                <span className="inline-block text-[10px] font-semibold text-green-900 bg-green-200 rounded-full px-2 py-0.5 mt-2">COMPLIMENTARY BREAKFAST FOR ALL</span>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 bg-white/10 border border-white/15 rounded-xl px-4 py-3">
-              <span className="text-lg leading-none mt-0.5">🛍️</span>
-              <div>
-                <p className="text-sm font-bold text-white">Flea Market</p>
-                <p className="text-xs text-green-100 mt-0.5">Discover festive stalls, handmade finds, fashion, food &amp; more!</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 bg-white/10 border border-white/15 rounded-xl px-4 py-3">
-              <span className="text-lg leading-none mt-0.5">🎭</span>
-              <div>
-                <p className="text-sm font-bold text-white">Cultural Programme &amp; Prize Distribution <span className="font-semibold text-green-200">· 3:30 PM – 8:00 PM</span></p>
-                <p className="text-xs text-green-100 mt-0.5">Prize distribution during the cultural programme</p>
-                <span className="inline-block text-[10px] font-semibold text-green-900 bg-green-200 rounded-full px-2 py-0.5 mt-2">
-                  SPECIAL EVENING FUN FOR KIDS · ALL COMPLIMENTARY: BOUNCY · CHOCOLATE FOUNTAIN · POPCORN
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <p className="text-[11px] text-green-100/70 mt-4">
-            All complimentary offerings are on a first-come, first-served basis.
-          </p>
-        </div>
       </main>
     </div>
   )

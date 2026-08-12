@@ -796,6 +796,72 @@ export default async function TournamentPage({ params }: { params: Promise<{ slu
     year: 'numeric',
   })
 
+  if (t.sport === 'programme') {
+    type ProgrammeItem = { icon: string; title: string; time: string; description: string; badge?: string }
+    type Programme = { programme?: ProgrammeItem[]; note?: string }
+    const prog = t as unknown as Programme
+    const items = prog.programme ?? []
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
+        <header className="border-b border-white/80 bg-white/70 backdrop-blur-md sticky top-0 z-50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center">
+            <Link href="/scores" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors">
+              <ArrowLeft size={14} />
+              Back to Scores
+            </Link>
+          </div>
+        </header>
+        <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-6">
+          {/* Header */}
+          <div className="bg-gradient-to-br from-green-700 to-emerald-600 rounded-2xl p-6 sm:p-8 text-white">
+            <div className="flex items-start gap-4">
+              <span className="text-4xl leading-none">🎌</span>
+              <div>
+                <h1 className="text-2xl font-extrabold text-white">{t.title}</h1>
+                <p className="text-green-100 text-sm mt-1">{t.subtitle}</p>
+                {t.venue && <p className="text-xs text-green-200 mt-0.5">{t.venue}</p>}
+                <div className="flex flex-wrap items-center gap-3 mt-3">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white text-green-700">{badge.label}</span>
+                  <span className="text-xs text-green-100">{date}</span>
+                  {t.event_time && <span className="text-xs font-medium text-green-200">{t.event_time}</span>}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Programme items */}
+          <div className="space-y-4">
+            {items.map((item, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4">
+                <span className="text-2xl leading-none mt-0.5 shrink-0">{item.icon}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <h2 className="font-bold text-slate-800">{item.title}</h2>
+                    <span className="text-xs font-semibold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full">{item.time}</span>
+                  </div>
+                  {item.description && <p className="text-sm text-slate-500 mt-1">{item.description}</p>}
+                  {item.badge && (
+                    <span className="inline-block text-[10px] font-semibold text-green-900 bg-green-100 rounded-full px-2.5 py-1 mt-2.5">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Note */}
+          {prog.note && (
+            <div className="flex items-start gap-2 text-xs text-slate-500 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+              <span className="shrink-0">ℹ️</span>
+              <span>{prog.note}</span>
+            </div>
+          )}
+        </main>
+      </div>
+    )
+  }
+
   if (t.sport === 'schedule') {
     type ScheduleWinner = { rank: string; entries: { name: string; apt?: string }[] }
     type ScheduleEvent = { name: string; age: string; start: string; end: string; report: string; note?: string; winners?: ScheduleWinner[] }
